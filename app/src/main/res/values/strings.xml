@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Locksmith</string>
+    <string name="missing_password">请先添加系统解锁密码</string>
+    <string name="security_tip">安全提示</string>
+    <string name="finger_print">请验证指纹</string>
+    <string name="cancel">取消</string>
+    <string name="fingerprint_not_recognized">指纹验证错误请重试</string>
+    <string name="use_password">使用密码</string>
+    <string name="welcome">欢迎使用</string>
+    <string name="ok">好的</string>
+    <string name="hardward_error">设备硬件安全模块不可用</string>
+    <string name="every_thing_done">一切准备就绪</string>
+    <string name="start_use">开始使用</string>
+
+</resources>

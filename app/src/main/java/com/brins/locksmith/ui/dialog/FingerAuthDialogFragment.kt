@@ -1,0 +1,211 @@
+package com.brins.locksmith.ui.dialog
+
+import android.app.KeyguardManager
+import android.content.Intent
+import android.graphics.Color
+import android.hardware.biometrics.BiometricPrompt
+import android.hardware.fingerprint.FingerprintManager
+import android.os.Build
+import android.view.View
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.fragment.app.FragmentManager
+import com.brins.locksmith.BaseApplication
+import com.brins.locksmith.R
+import com.brins.locksmith.ui.activity.AuthRequestActivity
+import com.brins.locksmith.utils.FingerprintUiHelper
+import kotlinx.android.synthetic.main.dialog_finger_authentication.*
+
+class FingerAuthDialogFragment : BaseDialogFragment(),
+    FingerprintUiHelper.Callback, View.OnClickListener {
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.cancel -> dismissAllowingStateLoss()
+
+            R.id.usePassword -> {
+                val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
+                    "Authentication required",
+                    "password"
+                )
+                if (intent != null) {
+                    startActivityForResult(intent, AUTH_REQUEST_CODE)
+                }
+            }
+        }
+    }
+
+    private val mKeyguardManager: KeyguardManager by lazy {
+        activity?.getSystemService(
+            AppCompatActivity.KEYGUARD_SERVICE
+        ) as KeyguardManager
+    }
+    private val mFingerprintManager by lazy {
+        activity!!.getSystemService(FingerprintManager::class.java)
+    }
+    private lateinit var mFingerprintUiHelper: FingerprintUiHelper
+
+
+    enum class Stage {
+        FINGERPRINT,
+        NEW_FINGERPRINT_ENROLLED,
+        PASSWORD
+    }
+
+    public var mStage = Stage.FINGERPRINT
+    private val mCryptoObject: FingerprintManager.CryptoObject? = null
+
+
+/*    private val mBiometricPrompt by lazy {
+        activity?.getSystemService(BiometricPrompt::class.java)
+
+    }*/
+
+    override fun getLayoutResId(): Int {
+        return R.layout.dialog_finger_authentication
+    }
+
+    companion object {
+        private val ERROR_TIMEOUT_MILLIS: Long = 1300
+        private val SUCCESS_DELAY_MILLIS: Long = 100
+        private val ERROR_MUCH_TIME: Long = 300000
+
+        val AUTH_REQUEST_CODE = 0x32
+
+        fun showSelf(manager: FragmentManager, stage: Stage) {
+            val dialog = FingerAuthDialogFragment()
+            dialog.mStage = stage
+            dialog.show(manager)
+        }
+    }
+
+    override fun onCreateViewAfterBinding(view: View) {
+        super.onCreateViewAfterBinding(view)
+        cancel.setOnClickListener(this)
+        usePassword.setOnClickListener(this)
+        mFingerprintUiHelper = FingerprintUiHelper(mFingerprintManager, this)
+        if (!isFingerprintAuthAvailable()) {
+            //指纹不可用
+            tryPassword()
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        if (mStage == Stage.FINGERPRINT) {
+            mFingerprintUiHelper.startListening()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mFingerprintUiHelper.stopListening()
+    }
+
+    private fun tryPassword() {
+        mStage = Stage.PASSWORD
+        updateStage()
+    }
+
+
+    private fun updateStage() {
+        when (mStage) {
+            Stage.FINGERPRINT -> {
+                cancel.setText(R.string.cancel)
+                usePassword.visibility = View.GONE
+                divider2.visibility = View.GONE
+            }
+            Stage.NEW_FINGERPRINT_ENROLLED,
+                // Intentional fall through
+            Stage.PASSWORD -> {
+                cancel.setText(R.string.cancel)
+                usePassword.visibility = View.VISIBLE
+                divider2.visibility = View.VISIBLE
+            }
+        }
+    }
+
+
+    override fun isCanceledOnTouchOutside(): Boolean {
+        return true
+    }
+
+    override fun isInterceptKeyCodeBack(): Boolean {
+        return true
+    }
+
+    override fun getDialogAnimResId(): Int {
+        return R.style.CustomCenterDialogAnim
+    }
+
+    override fun getDialogWidth(): Int {
+        return WindowManager.LayoutParams.MATCH_PARENT
+    }
+
+    override fun getDialogHeight(): Int {
+        return WindowManager.LayoutParams.MATCH_PARENT
+    }
+
+
+    private fun isFingerprintAuthAvailable(): Boolean {
+        return mFingerprintManager.isHardwareDetected && mFingerprintManager.hasEnrolledFingerprints()
+    }
+
+    override fun onAuthenticated() {
+        cancel.isClickable = false
+        usePassword.isEnabled = false
+        if(activity != null){
+            if (activity is AuthRequestActivity){
+                (activity!! as AuthRequestActivity).authencitatedCallback()
+            }
+        }
+        dismissAllowingStateLoss()
+    }
+
+    override fun onError(errorCode: Int, message: String) {
+        tryPassword()
+        showError(message, errorCode)
+    }
+
+    override fun onHelp(message: String) {
+        showError(message, 0)
+    }
+/*
+    @RequiresApi(Build.VERSION_CODES.P)
+    class FingerprintUiHelperApiP : BiometricPrompt.AuthenticationCallback() {
+
+    }*/
+
+    private fun showError(error: String, errorMsgId: Int) {
+
+        usePassword.visibility = View.VISIBLE
+        divider2.visibility = View.VISIBLE
+        ivFingerprint.setImageResource(R.drawable.ic_fingerprint_error)
+        title.text = error
+        title.setTextColor(
+            ContextCompat.getColor(
+                context!!,
+                R.color.warning_color
+            )
+        )
+        title.removeCallbacks(mResetErrorTextRunnable)
+        //失败过多，30s后重试
+        if (errorMsgId == 7 || errorMsgId == 9) {
+            title.postDelayed(mResetErrorTextRunnable, ERROR_MUCH_TIME)
+        } else
+            title.postDelayed(mResetErrorTextRunnable, ERROR_TIMEOUT_MILLIS)
+    }
+
+    private var mResetErrorTextRunnable = Runnable {
+        if (title != null){
+            title.setTextColor(Color.BLACK)
+            title.text = BaseApplication.context.getString(R.string.finger_print)
+            ivFingerprint.setImageResource(R.drawable.ic_fingerprint_black_24dp)
+        }
+
+    }
+
+}
