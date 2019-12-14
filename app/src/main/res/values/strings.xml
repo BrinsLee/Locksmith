@@ -11,5 +11,9 @@
     <string name="hardward_error">设备硬件安全模块不可用</string>
     <string name="every_thing_done">一切准备就绪</string>
     <string name="start_use">开始使用</string>
+    <string name="about">关于</string>
+    <string name="autofill">如何启用自动填充</string>
+    <string name="passport">密码</string>
+    <string name="bank">银行卡</string>
 
 </resources>

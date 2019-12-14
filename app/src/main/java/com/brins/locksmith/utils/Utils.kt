@@ -1,11 +1,19 @@
 package com.brins.locksmith.utils
 
+import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Typeface
 import android.hardware.fingerprint.FingerprintManager
+import android.os.Build
 import android.os.CancellationSignal
 import android.os.Handler
 import android.os.Message
+import android.util.TypedValue
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.annotation.DimenRes
 import androidx.collection.SimpleArrayMap
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.R
@@ -213,3 +221,74 @@ class WeakHandler constructor(handler : IHandler): Handler() {
         }
     }
 }
+
+
+fun getDimension(context: Context, @DimenRes id: Int): Int {
+    return context.resources.getDimensionPixelSize(id)
+}
+
+fun dpToPx(dp: Float, res: Resources): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp,
+        res.displayMetrics
+    ).toInt()
+}
+
+fun createLayoutParams(width: Int, height: Int): FrameLayout.LayoutParams {
+    return FrameLayout.LayoutParams(width, height)
+}
+
+fun createMatchParams(): FrameLayout.LayoutParams {
+    return createLayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+    )
+}
+
+fun createWrapParams(): FrameLayout.LayoutParams {
+    return createLayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+}
+
+fun createWrapMatchParams(): FrameLayout.LayoutParams {
+    return createLayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+    )
+}
+
+fun createMatchWrapParams(): FrameLayout.LayoutParams {
+    return createLayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+}
+
+/*fun setInsets(context: Activity, view: View) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return
+    val tintManager = SystemBarTintManager(context)
+    val config = tintManager.getConfig()
+    view.setPadding(
+        0,
+        config.getPixelInsetTop(false),
+        config.getPixelInsetRight(),
+        config.getPixelInsetBottom()
+    )
+}
+
+fun getInsetsTop(context: Activity, view: View): Int {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return 0
+    val tintManager = SystemBarTintManager(context)
+    val config = tintManager.getConfig()
+    return config.getPixelInsetTop(false)
+}
+
+fun getInsetsBottom(context: Activity, view: View): Int {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return 0
+    val tintManager = SystemBarTintManager(context)
+    val config = tintManager.getConfig()
+    return config.getPixelInsetBottom()
+}*/

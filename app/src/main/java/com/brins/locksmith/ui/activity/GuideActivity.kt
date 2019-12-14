@@ -3,15 +3,15 @@ package com.brins.locksmith.ui.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.os.Message
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.brins.locksmith.R
 import com.brins.locksmith.ui.dialog.LoadingDialogFragment
 import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
+import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.WeakHandler
-import com.brins.locksmith.viewmodel.PassportViewModel
+import com.brins.locksmith.viewmodel.passport.PassportViewModel
 import kotlinx.android.synthetic.main.activity_guide.*
 import java.lang.Exception
 
@@ -32,7 +32,7 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
     private var mLoadingDialogFragment: LoadingDialogFragment? = null
 
     private val mPassportViewModel: PassportViewModel by lazy {
-        ViewModelProviders.of(this@GuideActivity).get(PassportViewModel::class.java)
+        ViewModelProviders.of(this@GuideActivity, InjectorUtil.getPassportModelFactory()).get(PassportViewModel::class.java)
     }
 
     companion object {

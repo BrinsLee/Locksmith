@@ -35,7 +35,7 @@
         android:text="@string/every_thing_done"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@android:color/black"/>
 
     <TextView
         android:id="@+id/btnStart"

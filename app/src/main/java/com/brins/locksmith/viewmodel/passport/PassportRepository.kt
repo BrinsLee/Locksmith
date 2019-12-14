@@ -1,13 +1,9 @@
-package com.brins.locksmith.viewmodel
+package com.brins.locksmith.viewmodel.passport
 
-import android.app.Application
-import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyInfo
 import android.security.keystore.KeyProperties
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.utils.*
 import org.bouncycastle.util.encoders.Hex
@@ -16,30 +12,87 @@ import java.lang.Exception
 import java.security.*
 import java.security.cert.CertificateException
 import javax.crypto.*
+import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-class PassportViewModel(application: Application) : AndroidViewModel(application) {
+class PassportRepository private constructor() {
 
     private var masterSecretKey: SecretKey? = null
     private var deviceSecretKey: SecretKey? = null
     private val KeyStoreProvider = "AndroidKeyStore"
     private val DeviceKeyAlias = "com.brins.locksmith.locksmith"
-    private val mUserIdLiveData : MutableLiveData<ByteArray> = MutableLiveData()
-
 
     companion object {
         private val PassportPreferenceName = "passport"
         private var userID: ByteArray? = null
         private var deviceID: ByteArray? = null
+
+        private lateinit var instance: PassportRepository
+
+
+        fun getInstance(): PassportRepository {
+            if (!::instance.isInitialized) {
+                synchronized(PassportRepository::class.java) {
+                    if (!::instance.isInitialized) {
+                        instance = PassportRepository()
+                    }
+                }
+            }
+            return instance
+        }
     }
 
-    fun loadPassport(): Boolean {
-        if (isPassportValid()) {
-            return true
-        }
-        if (!loadDeviceSecretKey()) {
+
+    /***判断密钥是都有效*/
+    fun isPassportValid(): Boolean {
+        if (deviceSecretKey == null) {
             return false
         }
+
+        if (userID == null) {
+            return false
+        }
+
+        if (masterSecretKey == null) {
+            return false
+        }
+
+        if (deviceID == null) {
+            return false
+        }
+        return true
+
+    }
+
+    /***加载设备密钥*/
+    fun loadDeviceSecretKey(): Boolean {
+        try {
+            val keyStore = KeyStore.getInstance(KeyStoreProvider)
+            keyStore.load(null)
+            val secretKeyEntry =
+                keyStore.getEntry(DeviceKeyAlias, null) as? KeyStore.SecretKeyEntry ?: return false
+            deviceSecretKey = secretKeyEntry.secretKey
+            return true
+        } catch (e: CertificateException) {
+            Log.e("Passport", "Failed to load device secret key", e)
+            return false
+        } catch (e: NoSuchAlgorithmException) {
+            Log.e("Passport", "Failed to load device secret key", e)
+            return false
+        } catch (e: IOException) {
+            Log.e("Passport", "Failed to load device secret key", e)
+            return false
+        } catch (e: UnrecoverableEntryException) {
+            Log.e("Passport", "Failed to load device secret key", e)
+            return false
+        } catch (e: KeyStoreException) {
+            Log.e("Passport", "Failed to load device secret key", e)
+            return false
+        }
+    }
+
+    /***初始化密钥信息*/
+    fun initPassport(): Boolean {
         return try {
             userID = decryptFromPreference(
                 SpUtils.obtain(PassportPreferenceName).getString(USERID_IV_KEY, "")
@@ -62,7 +115,6 @@ class PassportViewModel(application: Application) : AndroidViewModel(application
         } catch (e: Exception) {
             false
         }
-
     }
 
     @Throws(
@@ -97,63 +149,14 @@ class PassportViewModel(application: Application) : AndroidViewModel(application
 
     /***解密*/
     private fun decryptInKeystore(data: ByteArray?, iv: ByteArray?): ByteArray? {
-        if (data == null || iv == null) {
-            throw IllegalArgumentException("data or iv must not be null")
-        }
+        require(!(data == null || iv == null)) { "data or iv must not be null" }
         val cipher = newAesInKeystore()
-        cipher.init(Cipher.DECRYPT_MODE, deviceSecretKey)
+        cipher.init(Cipher.DECRYPT_MODE, deviceSecretKey, GCMParameterSpec(128, iv))
         return cipher.doFinal(data)
 
     }
 
-    /***判断密钥是都有效*/
-    private fun isPassportValid(): Boolean {
-        if (deviceSecretKey == null) {
-            return false
-        }
-
-        if (userID == null) {
-            return false
-        }
-
-        if (masterSecretKey == null) {
-            return false
-        }
-
-        if (deviceID == null) {
-            false
-        }
-        return true
-
-    }
-
-    private fun loadDeviceSecretKey(): Boolean {
-        try {
-            val keyStore = KeyStore.getInstance(KeyStoreProvider)
-            keyStore.load(null)
-            val secretKeyEntry =
-                keyStore.getEntry(DeviceKeyAlias, null) as? KeyStore.SecretKeyEntry ?: return false
-            deviceSecretKey = secretKeyEntry.secretKey
-            return true
-        } catch (e: CertificateException) {
-            Log.e("Passport", "Failed to load device secret key", e)
-            return false
-        } catch (e: NoSuchAlgorithmException) {
-            Log.e("Passport", "Failed to load device secret key", e)
-            return false
-        } catch (e: IOException) {
-            Log.e("Passport", "Failed to load device secret key", e)
-            return false
-        } catch (e: UnrecoverableEntryException) {
-            Log.e("Passport", "Failed to load device secret key", e)
-            return false
-        } catch (e: KeyStoreException) {
-            Log.e("Passport", "Failed to load device secret key", e)
-            return false
-        }
-
-    }
-
+    /***创建密钥信息*/
     @Throws(
         NoSuchPaddingException::class,
         NoSuchAlgorithmException::class,
@@ -218,8 +221,6 @@ class PassportViewModel(application: Application) : AndroidViewModel(application
             .save(DEVICE_PRIVATE_DATA_KEY, Hex.toHexString(encryptedDevicePrivateKey.data))
 
         return true
-
-
     }
 
     /***判断密钥是否存在硬件模块中*/
@@ -244,5 +245,4 @@ class PassportViewModel(application: Application) : AndroidViewModel(application
             false
         }
     }
-
 }
