@@ -80,9 +80,6 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
         btnStart.isEnabled = true
     }
 
-    override fun getOffsetView(): View? {
-        return toolbar
-    }
     override fun handleMsg(msg: Message) {
         if (!mPassportViewModel.loadPassport()) {
             createPassPort()

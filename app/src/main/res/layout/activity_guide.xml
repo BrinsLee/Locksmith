@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         layout="@layout/view_common_toolbar"/>
 
-    <com.brins.locksmith.ui.customview.FontTextView
+    <com.brins.locksmith.ui.widget.FontTextView
         android:id="@+id/welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         app:font_type="DIN-Bold"
         android:text="@string/welcome" />
 
-    <com.brins.locksmith.ui.customview.FontTextView
+    <com.brins.locksmith.ui.widget.FontTextView
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

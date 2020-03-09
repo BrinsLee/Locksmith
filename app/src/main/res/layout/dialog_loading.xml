@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <com.brins.locksmith.ui.customview.RoundConstraintLayout
+    <com.brins.locksmith.ui.widget.RoundConstraintLayout
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:indeterminateDrawable="@drawable/dialog_loading"
             android:indeterminateOnly="true" />
 
-        <com.brins.locksmith.ui.customview.FontTextView
+        <com.brins.locksmith.ui.widget.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/progressBar1"
@@ -41,5 +41,5 @@
             android:layout_marginBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             />
-    </com.brins.locksmith.ui.customview.RoundConstraintLayout>
+    </com.brins.locksmith.ui.widget.RoundConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

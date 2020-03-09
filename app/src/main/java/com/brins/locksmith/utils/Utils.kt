@@ -3,6 +3,8 @@ package com.brins.locksmith.utils
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Typeface
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
@@ -12,6 +14,8 @@ import android.os.Message
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.annotation.DimenRes
 import androidx.collection.SimpleArrayMap
@@ -96,6 +100,69 @@ private fun getTypefacePath(fontType: Int): String? {
     return typefacePath
 }
 
+
+//状态栏相关
+fun setTranslucent(activity: Activity) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        // 设置状态栏透明
+        val window = activity.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        //            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // 设置根布局的参数
+        /*            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);*/
+        val decorView = window.decorView
+        val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        decorView.systemUiVisibility = option
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = Color.TRANSPARENT
+    }
+}
+
+
+fun setTextDark(window: Window, isDark: Boolean) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        val decorView = window.decorView
+        val systemUiVisibility = decorView.systemUiVisibility;
+        if (isDark) {
+            decorView.systemUiVisibility =
+                systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            decorView.systemUiVisibility =
+                systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+}
+
+fun setColorTranslucent(activity: Activity) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        // 设置状态栏透明
+        val window = activity.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        //            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // 设置根布局的参数
+        /*            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);*/
+        val decorView = window.decorView
+        val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        decorView.systemUiVisibility = option
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = Color.TRANSPARENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+}
+
+fun getStatusBarHeight(context: Context): Int {
+    // 获得状态栏高度
+    val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+    return context.resources.getDimensionPixelSize(resourceId)
+}
+
+
 /***低版本设配*/
 class FingerprintUiHelper constructor(
     var mFingerprintManager: FingerprintManager,
@@ -179,6 +246,7 @@ val DEVICE_PRIVATE_DATA_KEY = "encryptedDevicePrivateKey.data"
 fun newAesInKeystore(): Cipher {
     return Cipher.getInstance("AES/GCM/NoPadding")
 }
+
 /***生成uuid*/
 fun newUUID(): ByteArray {
     val uuid = UUID.randomUUID()
@@ -187,6 +255,7 @@ fun newUUID(): ByteArray {
     bb.putLong(uuid.leastSignificantBits)
     return bb.array()
 }
+
 /***生成AES256密钥*/
 @Throws(NoSuchAlgorithmException::class)
 fun newAes256Key(): SecretKey {
@@ -194,6 +263,7 @@ fun newAes256Key(): SecretKey {
     keyGen.init(256)
     return keyGen.generateKey()
 }
+
 /***生成EC密钥对*/
 @Throws(
     RuntimeException::class,
@@ -207,16 +277,18 @@ fun generateKeyPair(): KeyPair {
     keyPairGenerator.initialize(spec)
     return keyPairGenerator.generateKeyPair()
 }
+
 //WeakHandler
-class WeakHandler constructor(handler : IHandler): Handler() {
-    interface IHandler{
-        fun handleMsg(msg : Message)
+class WeakHandler constructor(handler: IHandler) : Handler() {
+    interface IHandler {
+        fun handleMsg(msg: Message)
     }
-    private val mRef : WeakReference<IHandler> = WeakReference(handler)
+
+    private val mRef: WeakReference<IHandler> = WeakReference(handler)
 
     override fun handleMessage(msg: Message?) {
         val handler = mRef.get()
-        if (handler != null && msg != null){
+        if (handler != null && msg != null) {
             handler.handleMsg(msg)
         }
     }
@@ -292,3 +364,219 @@ fun getInsetsBottom(context: Activity, view: View): Int {
     val config = tintManager.getConfig()
     return config.getPixelInsetBottom()
 }*/
+
+
+//高斯模糊
+fun doBlur(
+    sentBitmap: Bitmap, radius: Int,
+    canReuseInBitmap: Boolean
+): Bitmap? {
+    val bitmap: Bitmap
+    bitmap = if (canReuseInBitmap) {
+        sentBitmap
+    } else {
+        sentBitmap.copy(sentBitmap.config, true)
+    }
+    if (radius < 1) {
+        return null
+    }
+    val w = bitmap.width
+    val h = bitmap.height
+    val pix = IntArray(w * h)
+    bitmap.getPixels(pix, 0, w, 0, 0, w, h)
+    val wm = w - 1
+    val hm = h - 1
+    val wh = w * h
+    val div = radius + radius + 1
+    val r = IntArray(wh)
+    val g = IntArray(wh)
+    val b = IntArray(wh)
+    var rsum: Int
+    var gsum: Int
+    var bsum: Int
+    var x: Int
+    var y: Int
+    var i: Int
+    var p: Int
+    var yp: Int
+    var yi: Int
+    var yw: Int
+    val vmin = IntArray(w.coerceAtLeast(h))
+    var divsum = div + 1 shr 1
+    divsum *= divsum
+    val dv = IntArray(256 * divsum)
+    i = 0
+    while (i < 256 * divsum) {
+        dv[i] = i / divsum
+        i++
+    }
+    yi = 0
+    yw = yi
+    val stack =
+        Array(div) { IntArray(3) }
+    var stackpointer: Int
+    var stackstart: Int
+    var sir: IntArray
+    var rbs: Int
+    val r1 = radius + 1
+    var routsum: Int
+    var goutsum: Int
+    var boutsum: Int
+    var rinsum: Int
+    var ginsum: Int
+    var binsum: Int
+    y = 0
+    while (y < h) {
+        bsum = 0
+        gsum = bsum
+        rsum = gsum
+        boutsum = rsum
+        goutsum = boutsum
+        routsum = goutsum
+        binsum = routsum
+        ginsum = binsum
+        rinsum = ginsum
+        i = -radius
+        while (i <= radius) {
+            p = pix[yi + Math.min(wm, Math.max(i, 0))]
+            sir = stack[i + radius]
+            sir[0] = p and 0xff0000 shr 16
+            sir[1] = p and 0x00ff00 shr 8
+            sir[2] = p and 0x0000ff
+            rbs = r1 - Math.abs(i)
+            rsum += sir[0] * rbs
+            gsum += sir[1] * rbs
+            bsum += sir[2] * rbs
+            if (i > 0) {
+                rinsum += sir[0]
+                ginsum += sir[1]
+                binsum += sir[2]
+            } else {
+                routsum += sir[0]
+                goutsum += sir[1]
+                boutsum += sir[2]
+            }
+            i++
+        }
+        stackpointer = radius
+        x = 0
+        while (x < w) {
+            r[yi] = dv[rsum]
+            g[yi] = dv[gsum]
+            b[yi] = dv[bsum]
+            rsum -= routsum
+            gsum -= goutsum
+            bsum -= boutsum
+            stackstart = stackpointer - radius + div
+            sir = stack[stackstart % div]
+            routsum -= sir[0]
+            goutsum -= sir[1]
+            boutsum -= sir[2]
+            if (y == 0) {
+                vmin[x] = Math.min(x + radius + 1, wm)
+            }
+            p = pix[yw + vmin[x]]
+            sir[0] = p and 0xff0000 shr 16
+            sir[1] = p and 0x00ff00 shr 8
+            sir[2] = p and 0x0000ff
+            rinsum += sir[0]
+            ginsum += sir[1]
+            binsum += sir[2]
+            rsum += rinsum
+            gsum += ginsum
+            bsum += binsum
+            stackpointer = (stackpointer + 1) % div
+            sir = stack[stackpointer % div]
+            routsum += sir[0]
+            goutsum += sir[1]
+            boutsum += sir[2]
+            rinsum -= sir[0]
+            ginsum -= sir[1]
+            binsum -= sir[2]
+            yi++
+            x++
+        }
+        yw += w
+        y++
+    }
+    x = 0
+    while (x < w) {
+        bsum = 0
+        gsum = bsum
+        rsum = gsum
+        boutsum = rsum
+        goutsum = boutsum
+        routsum = goutsum
+        binsum = routsum
+        ginsum = binsum
+        rinsum = ginsum
+        yp = -radius * w
+        i = -radius
+        while (i <= radius) {
+            yi = 0.coerceAtLeast(yp) + x
+            sir = stack[i + radius]
+            sir[0] = r[yi]
+            sir[1] = g[yi]
+            sir[2] = b[yi]
+            rbs = r1 - Math.abs(i)
+            rsum += r[yi] * rbs
+            gsum += g[yi] * rbs
+            bsum += b[yi] * rbs
+            if (i > 0) {
+                rinsum += sir[0]
+                ginsum += sir[1]
+                binsum += sir[2]
+            } else {
+                routsum += sir[0]
+                goutsum += sir[1]
+                boutsum += sir[2]
+            }
+            if (i < hm) {
+                yp += w
+            }
+            i++
+        }
+        yi = x
+        stackpointer = radius
+        y = 0
+        while (y < h) {
+            // Preserve alpha channel: ( 0xff000000 & pix[yi] )
+            pix[yi] = (-0x1000000 and pix[yi] or (dv[rsum] shl 16)
+                    or (dv[gsum] shl 8) or dv[bsum])
+            rsum -= routsum
+            gsum -= goutsum
+            bsum -= boutsum
+            stackstart = stackpointer - radius + div
+            sir = stack[stackstart % div]
+            routsum -= sir[0]
+            goutsum -= sir[1]
+            boutsum -= sir[2]
+            if (x == 0) {
+                vmin[y] = (y + r1).coerceAtMost(hm) * w
+            }
+            p = x + vmin[y]
+            sir[0] = r[p]
+            sir[1] = g[p]
+            sir[2] = b[p]
+            rinsum += sir[0]
+            ginsum += sir[1]
+            binsum += sir[2]
+            rsum += rinsum
+            gsum += ginsum
+            bsum += binsum
+            stackpointer = (stackpointer + 1) % div
+            sir = stack[stackpointer]
+            routsum += sir[0]
+            goutsum += sir[1]
+            boutsum += sir[2]
+            rinsum -= sir[0]
+            ginsum -= sir[1]
+            binsum -= sir[2]
+            yi += w
+            y++
+        }
+        x++
+    }
+    bitmap.setPixels(pix, 0, w, 0, 0, w, h)
+    return bitmap
+}

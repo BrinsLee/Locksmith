@@ -27,7 +27,7 @@
             android:format12Hour="hh:mm"
             />
 
-        <com.brins.locksmith.ui.customview.FontTextView
+        <com.brins.locksmith.ui.widget.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

@@ -15,5 +15,10 @@
     <string name="autofill">如何启用自动填充</string>
     <string name="passport">密码</string>
     <string name="bank">银行卡</string>
+    <string name="toolbar_title">首页</string>
+    <string name="main_tab_title">首页</string>
+    <string name="find_tab_title">搜索</string>
+    <string name="activity_tab_title">发现</string>
+    <string name="my_tab_title">我的</string>
 
 </resources>

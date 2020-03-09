@@ -10,7 +10,7 @@ class MenuItem {
     var label: String? = null
     @ColorRes
     var textColor = android.R.color.white
-    var diameter = 80
+    var diameter = 50
     var onClickListener: View.OnClickListener? = null
 
     constructor(

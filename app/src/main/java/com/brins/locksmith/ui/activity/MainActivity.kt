@@ -2,26 +2,28 @@ package com.brins.locksmith.ui.activity
 
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.brins.locksmith.R
 import com.brins.locksmith.data.customview.OnMenuActionListener
-import com.brins.locksmith.ui.customview.FloatingActionMenu
+import com.brins.locksmith.ui.widget.FloatingActionMenu
+import com.brins.locksmith.ui.widget.MoreWindow
 import com.brins.locksmith.utils.getDimension
+import com.brins.locksmith.utils.getStatusBarHeight
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton.SIZE_MINI
-import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity(), View.OnClickListener {
+class MainActivity : BaseActivity() {
 
-    private val frameAnimRes = intArrayOf(
+/*    private val frameAnimRes = intArrayOf(
         R.mipmap.compose_anim_1,
         R.mipmap.compose_anim_2,
         R.mipmap.compose_anim_3,
@@ -42,12 +44,14 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         R.mipmap.compose_anim_17,
         R.mipmap.compose_anim_18,
         R.mipmap.compose_anim_19
-    )
+    )*/
     private var springFloatingActionMenu: FloatingActionMenu? = null
 
     private val frameDuration = 20
     private var frameAnim: AnimationDrawable? = null
     private var frameReverseAnim: AnimationDrawable? = null
+    var mMoreWindow: MoreWindow? = null
+
 
     companion object {
         fun startThis(activity: AppCompatActivity) {
@@ -61,15 +65,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         return R.layout.activity_main
     }
 
-    override fun getOffsetView(): View? {
-        return toolbar
-    }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        setSupportActionBar(toolbar)
-        val actionbar = supportActionBar
-        actionbar?.let {
+        ButterKnife.bind(this)
+
+/*        actionbar?.let {
             it.setHomeAsUpIndicator(R.drawable.ic_menu_black)
             it.setDisplayHomeAsUpEnabled(true)
         }
@@ -77,18 +78,27 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             it.isChecked = true
             drawable.closeDrawers()
             true
-        }
-        createFabFrameAnim()
+        }*/
+        toolbar.setPadding(0, getStatusBarHeight(this),0,0)
+/*        createFabFrameAnim()
         createFabReverseFrameAnim()
-        initFab()
+        initFab()*/
     }
 
+    private fun showMoreWindow(view: View) {
+        if (null == mMoreWindow) {
+            mMoreWindow = MoreWindow(this)
+        }
+        mMoreWindow!!.showMoreWindow(view, 100)
+    }
+
+
     /***初始化浮动按钮*/
-    private fun initFab() {
+   /* private fun initFab() {
         val fab = FloatingActionButton(this)
 
         fab.size = SIZE_MINI
-        fab.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        fab.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
         fab.setImageDrawable(frameAnim)
         springFloatingActionMenu = FloatingActionMenu.Companion.Builder(this)
             .addFab(fab)
@@ -96,7 +106,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 R.color.password,
                 R.drawable.ic_password_fab,
                 getString(R.string.passport),
-                onClickListener = this@MainActivity
+                onClickListener = View.OnClickListener {
+                    springFloatingActionMenu!!.hide()
+                    EditPassActivity.startThis(this@MainActivity)
+                }
             )
             .addMenuItem(
                 R.color.bank_card,
@@ -141,10 +154,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
             })
             .build()
-    }
+    }*/
 
     /***创建浮动按钮重置的帧动画*/
-    private fun createFabReverseFrameAnim() {
+    /*private fun createFabReverseFrameAnim() {
         frameReverseAnim = AnimationDrawable()
         val resources = resources
         frameReverseAnim?.let {
@@ -156,7 +169,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     }
 
-    /***创建浮动按钮打开的帧动画*/
+    *//***创建浮动按钮打开的帧动画*//*
     private fun createFabFrameAnim() {
         frameAnim = AnimationDrawable()
         val resources = resources
@@ -166,10 +179,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 it.addFrame(resources.getDrawable(res, null), frameDuration)
             }
         }
-    }
+    }*/
 
-    override fun onClick(v: View?) {
-
+    @OnClick(R.id.tab_photo_ll,R.id.tab_photo_btn)
+     fun onClick(v: View) {
+        showMoreWindow(v)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

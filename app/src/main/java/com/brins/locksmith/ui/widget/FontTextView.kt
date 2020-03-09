@@ -1,4 +1,4 @@
-package com.brins.locksmith.ui.customview
+package com.brins.locksmith.ui.widget
 
 import android.annotation.SuppressLint
 import android.content.Context

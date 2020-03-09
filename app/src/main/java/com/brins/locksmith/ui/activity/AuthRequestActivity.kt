@@ -39,7 +39,6 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener {
 
     override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
         super.onCreateBeforeBinding(savedInstanceState)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT // 禁用横屏
     }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {

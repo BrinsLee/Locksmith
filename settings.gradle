@@ -1,0 +1,2 @@
+rootProject.name='LockSmith'
+include ':app'
