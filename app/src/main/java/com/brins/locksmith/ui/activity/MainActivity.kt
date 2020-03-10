@@ -1,59 +1,36 @@
 package com.brins.locksmith.ui.activity
 
 import android.content.Intent
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.locksmith.R
-import com.brins.locksmith.data.customview.OnMenuActionListener
-import com.brins.locksmith.ui.widget.FloatingActionMenu
+import com.brins.locksmith.adapter.MainPagerAdapter
+import com.brins.locksmith.ui.main.MainFragment
 import com.brins.locksmith.ui.widget.MoreWindow
-import com.brins.locksmith.utils.getDimension
 import com.brins.locksmith.utils.getStatusBarHeight
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton.SIZE_MINI
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.bottom_bar.*
+import kotlinx.android.synthetic.main.view_common_toolbar.*
 
 class MainActivity : BaseActivity() {
 
-/*    private val frameAnimRes = intArrayOf(
-        R.mipmap.compose_anim_1,
-        R.mipmap.compose_anim_2,
-        R.mipmap.compose_anim_3,
-        R.mipmap.compose_anim_4,
-        R.mipmap.compose_anim_5,
-        R.mipmap.compose_anim_6,
-        R.mipmap.compose_anim_7,
-        R.mipmap.compose_anim_8,
-        R.mipmap.compose_anim_9,
-        R.mipmap.compose_anim_10,
-        R.mipmap.compose_anim_11,
-        R.mipmap.compose_anim_12,
-        R.mipmap.compose_anim_13,
-        R.mipmap.compose_anim_14,
-        R.mipmap.compose_anim_15,
-        R.mipmap.compose_anim_15,
-        R.mipmap.compose_anim_16,
-        R.mipmap.compose_anim_17,
-        R.mipmap.compose_anim_18,
-        R.mipmap.compose_anim_19
-    )*/
-    private var springFloatingActionMenu: FloatingActionMenu? = null
-
-    private val frameDuration = 20
-    private var frameAnim: AnimationDrawable? = null
-    private var frameReverseAnim: AnimationDrawable? = null
     var mMoreWindow: MoreWindow? = null
+    private var list = mutableListOf<Fragment>()
+    private val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
 
 
     companion object {
+        private val TAB_MAIN = 0
+        private val TAB_FIND = 1
+        private val TAB_MESSAGE = 2
+        private val TAB_MINE = 3
         fun startThis(activity: AppCompatActivity) {
             val intent = Intent(activity, MainActivity::class.java)
             activity.startActivity(intent)
@@ -69,20 +46,22 @@ class MainActivity : BaseActivity() {
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         ButterKnife.bind(this)
+        toolbar.setPadding(0, getStatusBarHeight(this), 0, 0)
+        initData()
+        initView()
+    }
 
-/*        actionbar?.let {
-            it.setHomeAsUpIndicator(R.drawable.ic_menu_black)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
-        navigator.setNavigationItemSelectedListener {
-            it.isChecked = true
-            drawable.closeDrawers()
-            true
-        }*/
-        toolbar.setPadding(0, getStatusBarHeight(this),0,0)
-/*        createFabFrameAnim()
-        createFabReverseFrameAnim()
-        initFab()*/
+    private fun initData() {
+        list.add(MainFragment())
+        list.add(MainFragment())
+        list.add(MainFragment())
+        list.add(MainFragment())
+    }
+
+    private fun initView() {
+        viewpager.adapter = adapter
+        viewpager.offscreenPageLimit = 3
+        changeTab(0)
     }
 
     private fun showMoreWindow(view: View) {
@@ -93,97 +72,21 @@ class MainActivity : BaseActivity() {
     }
 
 
-    /***初始化浮动按钮*/
-   /* private fun initFab() {
-        val fab = FloatingActionButton(this)
-
-        fab.size = SIZE_MINI
-        fab.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        fab.setImageDrawable(frameAnim)
-        springFloatingActionMenu = FloatingActionMenu.Companion.Builder(this)
-            .addFab(fab)
-            .addMenuItem(
-                R.color.password,
-                R.drawable.ic_password_fab,
-                getString(R.string.passport),
-                onClickListener = View.OnClickListener {
-                    springFloatingActionMenu!!.hide()
-                    EditPassActivity.startThis(this@MainActivity)
-                }
-            )
-            .addMenuItem(
-                R.color.bank_card,
-                R.drawable.ic_bank_card,
-                getString(R.string.bank),
-                onClickListener = this@MainActivity
-            )
-            .addMenuItem(
-                R.color.password,
-                R.drawable.ic_password_fab,
-                getString(R.string.passport),
-                onClickListener = this@MainActivity
-            )
-            .addMenuItem(
-                R.color.bank_card,
-                R.drawable.ic_bank_card,
-                getString(R.string.bank),
-                onClickListener = this@MainActivity
-            )
-            .revealColor(R.color.colorPrimary)
-            .gravity(Gravity.RIGHT or Gravity.BOTTOM)
-            .addMargin(
-                intArrayOf(
-                    0,
-                    0,
-                    getDimension(this, R.dimen.fab_margin),
-                    getDimension(this, R.dimen.fab_margin)
-                )
-            )
-            .onMenuActionListner(object : OnMenuActionListener {
-                override fun onMenuOpen() {
-                    fab.setImageDrawable(frameAnim)
-                    frameReverseAnim?.stop()
-                    frameAnim?.start()
-                }
-
-                override fun onMenuClose() {
-                    fab.setImageDrawable(frameReverseAnim)
-                    frameAnim?.stop()
-                    frameReverseAnim?.start()
-                }
-
-            })
-            .build()
-    }*/
-
-    /***创建浮动按钮重置的帧动画*/
-    /*private fun createFabReverseFrameAnim() {
-        frameReverseAnim = AnimationDrawable()
-        val resources = resources
-        frameReverseAnim?.let {
-            it.isOneShot = true
-            for (i in frameAnimRes.indices.reversed()) {
-                it.addFrame(resources.getDrawable(frameAnimRes[i], null), frameDuration)
-            }
+    @OnClick(
+        R.id.tab_add_ll, R.id.tab_add_btn,
+        R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv,
+        R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv,
+        R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv,
+        R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv
+    )
+    fun onClick(v: View) {
+        when (v.id) {
+            R.id.tab_add_ll, R.id.tab_add_btn -> showMoreWindow(v)
+            R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv -> changeTab(TAB_MAIN)
+            R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv -> changeTab(TAB_FIND)
+            R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv -> changeTab(TAB_MESSAGE)
+            R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv -> changeTab(TAB_MINE)
         }
-
-    }
-
-    *//***创建浮动按钮打开的帧动画*//*
-    private fun createFabFrameAnim() {
-        frameAnim = AnimationDrawable()
-        val resources = resources
-        frameAnim?.let {
-            it.isOneShot = true
-            for (res in frameAnimRes) {
-                it.addFrame(resources.getDrawable(res, null), frameDuration)
-            }
-        }
-    }*/
-
-    @OnClick(R.id.tab_photo_ll,R.id.tab_photo_btn)
-     fun onClick(v: View) {
-        showMoreWindow(v)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -194,5 +97,41 @@ class MainActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun changeTab(position: Int) {
+        tab_main_btn.isSelected = false
+        tab_main_tv.isSelected = false
+        tab_find_btn.isSelected = false
+        tab_find_tv.isSelected = false
+        tab_message_btn.isSelected = false
+        tab_message_tv.isSelected = false
+        tab_my_btn.isSelected = false
+        tab_my_tv.isSelected = false
+
+        when (position) {
+            0 -> {
+                tab_main_btn.isSelected = true
+                tab_main_tv.isSelected = true
+                toolbar.text = getString(R.string.main_tab_title)
+            }
+            1 -> {
+                tab_find_tv.isSelected = true
+                tab_find_btn.isSelected = true
+                toolbar.text = getString(R.string.find_tab_title)
+            }
+            2 -> {
+                tab_message_btn.isSelected = true
+                tab_message_tv.isSelected = true
+                toolbar.text = getString(R.string.message_tab_title)
+
+            }
+            3 -> {
+                tab_my_btn.isSelected = true
+                tab_my_tv.isSelected = true
+                toolbar.text = getString(R.string.my_tab_title)
+            }
+        }
+        viewpager.currentItem = position
     }
 }

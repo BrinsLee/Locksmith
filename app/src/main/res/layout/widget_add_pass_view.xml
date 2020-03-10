@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
-        android:text="密码" />
+        android:text="@string/password" />
 
     <TextView
         android:id="@+id/more_window_bank"
@@ -36,7 +36,7 @@
         android:gravity="center_horizontal"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
-        android:text="银行卡"/>
+        android:text="@string/bank_card"/>
 
     <TextView
         android:id="@+id/more_window_certificate"
@@ -51,7 +51,7 @@
         android:gravity="center_horizontal"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
-        android:text="证件"/>
+        android:text="@string/certificate"/>
 
     <TextView
         android:id="@+id/more_window_document"
@@ -61,15 +61,15 @@
         android:clickable="true"
         app:layout_constraintTop_toBottomOf="@id/more_window_password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/more_window_note"
+        app:layout_constraintEnd_toStartOf="@id/more_database"
         android:drawableTop="@drawable/tabbar_compose_camera"
         android:gravity="center_horizontal"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
-        android:text="文档"/>
+        android:text="@string/document"/>
 
     <TextView
-        android:id="@+id/more_window_note"
+        android:id="@+id/more_database"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/more_window_bank"
@@ -77,26 +77,26 @@
         android:drawableTop="@drawable/tabbar_compose_camera"
         android:gravity="center_horizontal"
         app:layout_constraintStart_toEndOf="@id/more_window_document"
-        app:layout_constraintEnd_toStartOf="@id/more_window_external"
+        app:layout_constraintEnd_toStartOf="@id/more_server"
         app:layout_constraintTop_toBottomOf="@id/more_window_password"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
-        android:text="备注"/>
+        android:text="@string/data_base"/>
 
     <TextView
-        android:id="@+id/more_window_external"
+        android:id="@+id/more_server"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/more_window_certificate"
         android:clickable="true"
         android:drawableTop="@drawable/tabbar_compose_camera"
         android:gravity="center_horizontal"
-        app:layout_constraintStart_toEndOf="@id/more_window_note"
+        app:layout_constraintStart_toEndOf="@id/more_database"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/more_window_password"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
-        android:text="更多"/>
+        android:text="@string/server"/>
 
     <ImageView
         android:id="@+id/center_music_window_close"

@@ -73,7 +73,7 @@
 
 
         <LinearLayout
-            android:id="@+id/tab_photo_ll"
+            android:id="@+id/tab_add_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -82,7 +82,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/tab_photo_btn"
+                android:id="@+id/tab_add_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -94,7 +94,7 @@
 
 
         <LinearLayout
-            android:id="@+id/tab_activity_ll"
+            android:id="@+id/tab_message_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -102,26 +102,22 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="23dp"
-                android:layout_height="23dp">
 
                 <ImageButton
-                    android:id="@+id/tab_activity_btn"
+                    android:id="@+id/tab_message_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/tab_activity_selected"
                     android:clickable="false" />
 
-            </FrameLayout>
 
             <TextView
-                android:id="@+id/tab_activity_tv"
+                android:id="@+id/tab_message_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:clickable="false"
-                android:text="@string/activity_tab_title"
+                android:text="@string/message_tab_title"
                 android:textColor="@drawable/tab_main_text_selected"
                 android:textSize="10sp" />
 
@@ -137,9 +133,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
                 <ImageButton
                     android:id="@+id/tab_my_btn"
@@ -155,7 +148,6 @@
                     android:layout_gravity="top|right"
                     android:background="@drawable/red_point_bg"
                     android:visibility="gone" />-->
-            </FrameLayout>
 
             <TextView
                 android:id="@+id/tab_my_tv"

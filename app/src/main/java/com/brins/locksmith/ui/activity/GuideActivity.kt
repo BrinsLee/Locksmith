@@ -82,6 +82,7 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
 
     override fun handleMsg(msg: Message) {
         if (!mPassportViewModel.loadPassport()) {
+            //若无密钥信息，创建密钥
             createPassPort()
         }
     }

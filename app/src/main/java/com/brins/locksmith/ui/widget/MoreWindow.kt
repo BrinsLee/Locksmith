@@ -25,9 +25,11 @@ import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.brins.locksmith.R
+import com.brins.locksmith.ui.activity.BaseActivity
+import com.brins.locksmith.ui.activity.EditPassActivity
 import com.brins.locksmith.utils.doBlur
 
-class MoreWindow(var mContext: Activity) : PopupWindow(), View.OnClickListener {
+class MoreWindow(var mContext: BaseActivity) : PopupWindow(), View.OnClickListener {
 
     private val TAG = MoreWindow::class.java.simpleName
     private var mWidth = 0
@@ -177,8 +179,12 @@ class MoreWindow(var mContext: Activity) : PopupWindow(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
-
+    override fun onClick(v: View) {
+        when(v.id){
+            R.id.more_window_password ->
+                { closeAnimation(v.parent as ConstraintLayout)
+                    EditPassActivity.startThis(mContext)}
+        }
     }
 
     fun destroy() {
