@@ -15,5 +15,23 @@
     <string name="autofill">如何启用自动填充</string>
     <string name="passport">密码</string>
     <string name="bank">银行卡</string>
+    <string name="toolbar_title">首页</string>
+    <string name="main_tab_title">首页</string>
+    <string name="find_tab_title">搜索</string>
+    <string name="message_tab_title">发现</string>
+    <string name="my_tab_title">我的</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="data_base">数据库</string>
+    <string name="document">文档</string>
+    <string name="certificate">证件</string>
+    <string name="bank_card">银行卡</string>
+    <string name="server">服务器</string>
+    <string name="name">名称</string>
+    <string name="password">密码</string>
+    <string name="account">账户</string>
+    <string name="note">备注</string>
+    <string name="save">保存</string>
 
 </resources>

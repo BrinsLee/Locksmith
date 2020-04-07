@@ -28,7 +28,7 @@ class MainViewModel(private val repository: PassportRepository) : ViewModel() {
 
         val calendar = Calendar.getInstance()
         val weekString: String = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
-        mDate = DateBean("" , "$dateString $weekString")
+        mDate = DateBean("", "$dateString $weekString")
         mDateLiveData.value = mDate
     }
 
@@ -46,5 +46,4 @@ class MainViewModel(private val repository: PassportRepository) : ViewModel() {
 
         }
     }
-
 }

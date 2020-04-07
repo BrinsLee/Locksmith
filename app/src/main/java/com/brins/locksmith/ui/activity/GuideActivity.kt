@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.brins.locksmith.R
 import com.brins.locksmith.ui.dialog.LoadingDialogFragment
 import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
 import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.WeakHandler
+import com.brins.locksmith.utils.getStatusBarHeight
 import com.brins.locksmith.viewmodel.passport.PassportViewModel
 import kotlinx.android.synthetic.main.activity_guide.*
 import java.lang.Exception
@@ -32,7 +34,8 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
     private var mLoadingDialogFragment: LoadingDialogFragment? = null
 
     private val mPassportViewModel: PassportViewModel by lazy {
-        ViewModelProviders.of(this@GuideActivity, InjectorUtil.getPassportModelFactory()).get(PassportViewModel::class.java)
+        ViewModelProvider(this@GuideActivity, InjectorUtil.getPassportModelFactory())
+            .get(PassportViewModel::class.java)
     }
 
     companion object {
@@ -46,6 +49,7 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         btnStart.setOnClickListener(this)
+        toolbar.setPadding(0, getStatusBarHeight(this), 0, 0)
         mLoadingDialogFragment = LoadingDialogFragment.showSelf(supportFragmentManager)
         val message = mHandler.obtainMessage()
         mHandler.sendMessageDelayed(message, 1500)
@@ -80,11 +84,9 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
         btnStart.isEnabled = true
     }
 
-    override fun getOffsetView(): View? {
-        return toolbar
-    }
     override fun handleMsg(msg: Message) {
         if (!mPassportViewModel.loadPassport()) {
+            //若无密钥信息，创建密钥
             createPassPort()
         }
     }

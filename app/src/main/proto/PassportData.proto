@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package tech.bluespace.id_guard;
+
+enum PassportInfoVersion {
+    passportInfoV20200314 = 0;
+};
+
+message PassportInfo {
+    PassportInfoVersion version = 1;
+
+    // passportInfoV20200314 BEGIN
+    bytes userID = 11;
+    bytes masterKey = 12;
+    bytes passportPrivateKey = 13;
+    bytes passportPublicKey = 14;
+
+    bytes deviceID = 21;
+    bytes devicePrivateKey =22;
+    bytes devicePublicKey = 23;
+    // passportInfoV20200314 END
+};
+
+enum ProtectedPassportInfoVersion {
+    protectedPassportInfoV20200314 = 0;
+}
+
+message ProtectedPassportInfo {
+    ProtectedPassportInfoVersion version = 1;
+
+    // protectedPassportInfoV20200314 BEGIN
+    enum ProtectionMethod {
+        none = 0;
+        password = 1;
+        biometric = 2;
+    };
+    ProtectionMethod method = 10;
+    // Used by PASSWORD protected passport
+    bytes deriveKeySalt = 11;
+    bytes encryptIV = 12;
+    bytes encryptedData = 13;
+    bytes authenticationTag = 14;
+    // protectedPassportInfoV20200314 END
+};

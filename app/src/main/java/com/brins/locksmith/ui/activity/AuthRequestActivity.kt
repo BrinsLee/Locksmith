@@ -1,11 +1,11 @@
 package com.brins.locksmith.ui.activity
 
 import android.app.KeyguardManager
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.brins.locksmith.R
 import com.brins.locksmith.databinding.ActivityAuthRequestBinding
 import com.brins.locksmith.ui.dialog.FingerAuthDialogFragment
@@ -15,17 +15,17 @@ import com.brins.locksmith.viewmodel.main.MainViewModel
 import com.brins.locksmith.viewmodel.passport.PassportViewModel
 import kotlinx.android.synthetic.main.activity_auth_request.*
 
-class AuthRequestActivity : BaseActivity(), View.OnClickListener {
+class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStoreOwner {
     override fun onClick(v: View?) {
         launchFingerAuth()
     }
 
     private val mPassportViewModel: PassportViewModel by lazy {
-        ViewModelProviders.of(this@AuthRequestActivity, InjectorUtil.getPassportModelFactory()).get(PassportViewModel::class.java)
+        ViewModelProvider(this@AuthRequestActivity, InjectorUtil.getPassportModelFactory()).get(PassportViewModel::class.java)
     }
 
     private val mMainViewModel : MainViewModel by lazy {
-        ViewModelProviders.of(this@AuthRequestActivity, InjectorUtil.getMainModelFactory()).get(MainViewModel::class.java)
+        ViewModelProvider(this@AuthRequestActivity, InjectorUtil.getMainModelFactory()).get(MainViewModel::class.java)
     }
     private val binding by lazy { DataBindingUtil.setContentView<ActivityAuthRequestBinding>(this, R.layout.activity_auth_request) }
 
@@ -39,7 +39,6 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener {
 
     override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
         super.onCreateBeforeBinding(savedInstanceState)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT // 禁用横屏
     }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {

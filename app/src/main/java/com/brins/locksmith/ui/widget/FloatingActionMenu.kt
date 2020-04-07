@@ -1,4 +1,4 @@
-package com.brins.locksmith.ui.customview
+package com.brins.locksmith.ui.widget
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.os.Build
 import android.os.Handler
 import android.util.AttributeSet
 import android.view.Gravity
@@ -17,7 +16,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.annotation.ColorRes
-import androidx.annotation.IntDef
 import androidx.core.content.ContextCompat
 import com.brins.locksmith.R
 import com.brins.locksmith.data.customview.DestroySelfSpringListener
@@ -34,8 +32,6 @@ import com.tumblr.backboard.imitator.Imitator
 import com.tumblr.backboard.imitator.SpringImitator
 import com.tumblr.backboard.performer.MapPerformer
 import com.tumblr.backboard.performer.Performer
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 import java.util.ArrayList
 
 class FloatingActionMenu(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -228,7 +224,7 @@ class FloatingActionMenu(context: Context, attrs: AttributeSet? = null, defStyle
         if (mEnableFollowAnimation) {
             mFollowCircles = generateFollowCircles()
             for (i in mFollowCircles!!.indices.reversed()) {
-                // note follow circles is not added in container view, is just added in this SpringFloatingActionMenu
+                // NOTE follow circles is not added in container view, is just added in this SpringFloatingActionMenu
                 addView(mFollowCircles!![i])
             }
         }
@@ -270,6 +266,15 @@ class FloatingActionMenu(context: Context, attrs: AttributeSet? = null, defStyle
             }
         })
     }
+
+    fun show(){
+        showMenu()
+    }
+
+    fun hide(){
+        hideMenu()
+    }
+
 
     private fun showMenu() {
         applyOpenAniamtion()

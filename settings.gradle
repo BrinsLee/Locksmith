@@ -1,2 +1,3 @@
-include ':app'
+include ':app', ':recyclerlib'
 rootProject.name='Locksmith'
+project(':recyclerlib').projectDir = new File('recycler_lib')

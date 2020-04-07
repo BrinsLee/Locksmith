@@ -1,4 +1,4 @@
-package com.brins.locksmith.ui.customview
+package com.brins.locksmith.ui.widget
 
 import android.content.Context
 import android.graphics.*

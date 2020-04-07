@@ -7,7 +7,7 @@
     android:paddingStart="47dp"
     android:paddingEnd="47dp">
 
-    <com.brins.locksmith.ui.customview.RoundConstraintLayout
+    <com.brins.locksmith.ui.widget.RoundConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white_80"
@@ -25,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="50dp"
             />
-        <com.brins.locksmith.ui.customview.FontTextView
+        <com.brins.locksmith.ui.widget.FontTextView
             android:id="@+id/title"
             app:font_type="DIN-Bold"
             android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
         </LinearLayout>
 
         
-    </com.brins.locksmith.ui.customview.RoundConstraintLayout>
+    </com.brins.locksmith.ui.widget.RoundConstraintLayout>
 
     
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,19 +13,23 @@ import java.security.*
 import java.security.cert.CertificateException
 import javax.crypto.*
 import javax.crypto.spec.GCMParameterSpec
+import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 class PassportRepository private constructor() {
 
+    /***主密钥*/
     private var masterSecretKey: SecretKey? = null
+    /***设备密钥*/
     private var deviceSecretKey: SecretKey? = null
-    private val KeyStoreProvider = "AndroidKeyStore"
-    private val DeviceKeyAlias = "com.brins.locksmith.locksmith"
+
 
     companion object {
         private val PassportPreferenceName = "passport"
         private var userID: ByteArray? = null
         private var deviceID: ByteArray? = null
+        private val KeyStoreProvider = "AndroidKeyStore"
+        private val DeviceKeyAlias = "com.brins.locksmith.locksmith"
 
         private lateinit var instance: PassportRepository
 
@@ -64,7 +68,7 @@ class PassportRepository private constructor() {
 
     }
 
-    /***加载设备密钥*/
+    /***从KeyStore加载设备密钥*/
     fun loadDeviceSecretKey(): Boolean {
         try {
             val keyStore = KeyStore.getInstance(KeyStoreProvider)
@@ -140,7 +144,7 @@ class PassportRepository private constructor() {
         BadPaddingException::class,
         IllegalBlockSizeException::class
     )
-    /***加密*/
+    /***使用设备密钥进行加密*/
     private fun encryptInKeystore(data: ByteArray): AesEncryptedData {
         val cipher = newAesInKeystore()
         cipher.init(Cipher.ENCRYPT_MODE, deviceSecretKey)
@@ -169,15 +173,18 @@ class PassportRepository private constructor() {
         if (!createHardwareDeviceKey()) {
             return false
         }
+        /***生成UserUUId*/
         userID = newUUID()
         masterSecretKey = newAes256Key()
         val passportKeyPair = generateKeyPair()
-        /***生成deviceUUid*/
 
+        /***生成deviceUUid*/
         deviceID = newUUID()
         val deviceKeyPair = generateKeyPair()
+        /***加密UserUUid*/
         val encryptedUserID = encryptInKeystore(userID!!)
-        val encryptedMasterKey = encryptInKeystore(masterSecretKey!!.getEncoded())
+        /***加密主密钥*/
+        val encryptedMasterKey = encryptInKeystore(masterSecretKey!!.encoded)
 
         val encryptedPassportPublicKey = encryptInKeystore(passportKeyPair.public.encoded)
         val encryptedPassportPrivateKey = encryptInKeystore(passportKeyPair.private.encoded)
@@ -219,30 +226,54 @@ class PassportRepository private constructor() {
             .save(DEVICE_PRIVATE_IV_KEY, Hex.toHexString(encryptedDevicePrivateKey.iv))
         SpUtils.obtain(PassportPreferenceName)
             .save(DEVICE_PRIVATE_DATA_KEY, Hex.toHexString(encryptedDevicePrivateKey.data))
-
         return true
     }
 
     /***判断密钥是否存在硬件模块中*/
     private fun createHardwareDeviceKey(): Boolean {
         return try {
-            val keyGenerator =
-                KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KeyStoreProvider)
-            val keyGenParameterSpec = KeyGenParameterSpec.Builder(
-                DeviceKeyAlias,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-            )
+            /***创建密钥生成器*/
+            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, KeyStoreProvider)
+            /***配置密钥生成器参数*/
+            val keyGenParameterSpec = KeyGenParameterSpec.Builder(DeviceKeyAlias,
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build()
             keyGenerator.init(keyGenParameterSpec)
+            /***生成设备密钥*/
             deviceSecretKey = keyGenerator.generateKey()
 
-            val factory =
-                SecretKeyFactory.getInstance(deviceSecretKey?.algorithm, KeyStoreProvider)
+            val factory = SecretKeyFactory.getInstance(deviceSecretKey?.algorithm, KeyStoreProvider)
             val keyInfo = factory.getKeySpec(deviceSecretKey, KeyInfo::class.java) as KeyInfo
+            /***判断设备是否支持硬件安全模块*/
             keyInfo.isInsideSecureHardware
         } catch (e: Exception) {
             false
         }
+    }
+
+    @Throws(
+        InvalidKeyException::class,
+        BadPaddingException::class,
+        IllegalBlockSizeException::class
+    )
+    internal fun encryptData(data: ByteArray): AesEncryptedData {
+        val cipher = newAesCipher()!!
+        cipher.init(Cipher.ENCRYPT_MODE, masterSecretKey)
+        val iv = cipher.iv
+        return AesEncryptedData(cipher.doFinal(data), iv)
+    }
+
+    @Throws(
+        InvalidAlgorithmParameterException::class,
+        InvalidKeyException::class,
+        BadPaddingException::class,
+        IllegalBlockSizeException::class
+    )
+    internal fun decryptData(data: ByteArray, iv: ByteArray): ByteArray {
+        val cipher = newAesCipher()!!
+        Log.d("masterSecretKey value", Hex.toHexString(masterSecretKey!!.encoded))
+        cipher.init(Cipher.DECRYPT_MODE, masterSecretKey, IvParameterSpec(iv))
+        return cipher.doFinal(data)
     }
 }

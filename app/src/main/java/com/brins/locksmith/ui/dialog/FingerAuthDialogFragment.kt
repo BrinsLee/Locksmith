@@ -28,7 +28,7 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
             R.id.usePassword -> {
                 val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
                     "Authentication required",
-                    "password"
+                    "PASSWORD"
                 )
                 if (intent != null) {
                     startActivityForResult(intent, AUTH_REQUEST_CODE)

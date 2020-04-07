@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package tech.bluespace.id_guard;
+
+enum AccountItemVersion {
+    accountItemV20200314 = 0;
+};
+
+message AesEncryptedData {
+    bytes iv = 1;
+    bytes data = 2;
+    bytes tag = 3;
+}
+
+message AccountItem {
+    AccountItemVersion version = 1;
+
+    // accountItemV20200314 BEGIN
+
+    // meta.data = Encrypt(masterKey, meta.iv, AccountItemMeta)
+    AesEncryptedData meta = 11;
+    // general.data = Encrypt(accountKey, general.iv, AccountGeneralData)
+    AesEncryptedData general = 12;
+    // secret.data = Encrypt(accountKey, secret.iv, AccountSecretData)
+    AesEncryptedData secret = 13;
+
+    // accountItemV20200314 END
+}
+
+message AccountItemMeta {
+    enum AccountSource {
+        unknownSource = 0;
+        create = 1;
+        signup = 2;
+        imported = 3;
+    };
+
+    enum AccountType {
+        unknownType = 0;    // create manually
+        website = 1;
+        app = 2;
+    };
+
+    enum PasswordCharset {
+        noneCharset = 0;
+        numeric = 1;            // 0123456789
+        mixalpha = 2;           // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+        symbols = 3;            // !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+        unicode = 4;            // 😄🦐🌹
+    }
+
+    bytes accountID = 1;
+    bytes accountKey = 2;
+    int64 creationDate = 3;
+    repeated int64 updatedDates = 4;
+    repeated string originalUrls = 5;
+
+    AccountSource source = 10;
+    AccountType type = 11;
+    int32 passwordCharset = 12; // [8][8][8][0000xxxx]
+
+    string importFilename = 13;
+    string appIdentifier = 14;
+    string appVersion = 15;
+    string appActivity = 16;
+
+    int32 iconBackgroundColor = 20;
+    int32 iconTextColor = 21;
+    int32 labelBackgroundColor = 22;
+    int32 labelTextColor = 23;
+};
+
+message GeneralItem {
+    string key = 1;
+    string value = 2;
+};
+
+message AccountGeneralData {
+    repeated GeneralItem items = 1;
+};
+
+message SecretItem {
+    string key = 1;
+    bytes value = 2;
+};
+
+message AccountSecretData {
+    repeated SecretItem items = 1;
+};
