@@ -21,11 +21,7 @@ class EditPassActivity : BaseActivity() {
     private var mPassword: String = ""
     private var mName: String = ""
     private var mAccountName: String = ""
-    private val mSavePasswordViewModel: SavePasswordViewModel by lazy {
-        ViewModelProvider(this@EditPassActivity, InjectorUtil.getPassWordFactory()).get(
-            SavePasswordViewModel::class.java
-        )
-    }
+
 
     companion object {
         private val passwordlength = 20
@@ -63,7 +59,7 @@ class EditPassActivity : BaseActivity() {
 
     private fun saveAccount() {
         if (isInfoComplete()) {
-            mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote, this)
+            mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote, ::finish)
         } else {
 
         }

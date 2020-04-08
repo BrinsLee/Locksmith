@@ -25,6 +25,7 @@
     <color name="white_90">#E6FFFFFF</color>
 
     <color name="background">#f69aaab6</color>
+    <color name="background_1">#F6EBEDEF</color>
     <color name="navigator">#bbffffff</color>
     <color name="translucent">#aa000000</color>
 

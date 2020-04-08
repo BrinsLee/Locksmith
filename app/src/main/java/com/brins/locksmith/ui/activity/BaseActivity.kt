@@ -5,16 +5,21 @@ import android.os.Bundle
 import android.os.Looper
 import android.view.View
 import androidx.annotation.Nullable
-import com.brins.locksmith.utils.registerEventBus
-import com.brins.locksmith.utils.setTextDark
-import com.brins.locksmith.utils.setTranslucent
-import com.brins.locksmith.utils.unregisterEventBus
+import androidx.lifecycle.ViewModelProvider
+import com.brins.locksmith.utils.*
+import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import com.jaeger.library.StatusBarUtil
 
 abstract class BaseActivity : AppCompatActivity() {
 
     protected open val TAG = this::class.java.simpleName
     private val mMainThread = Looper.getMainLooper().thread
+
+    protected val mSavePasswordViewModel: SavePasswordViewModel by lazy {
+        ViewModelProvider(this@BaseActivity, InjectorUtil.getPassWordFactory()).get(
+            SavePasswordViewModel::class.java
+        )
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onCreateBeforeBinding(savedInstanceState)

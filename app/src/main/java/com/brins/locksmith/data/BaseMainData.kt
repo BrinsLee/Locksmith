@@ -1,7 +1,6 @@
 package com.brins.locksmith.data
 
 import android.graphics.Color
-import android.os.Build
 import android.util.Log
 import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.AppConfig.NOTE
@@ -21,6 +20,9 @@ open class BaseMainData(
     protected var password: String,
     protected var mNote: String = ""
 ) : Serializable, BaseData() {
+
+
+
     override fun isAutoIndex(): Boolean {
         return false
     }

@@ -14,6 +14,7 @@ import com.brins.locksmith.adapter.MainPagerAdapter
 import com.brins.locksmith.ui.main.MainFragment
 import com.brins.locksmith.ui.widget.MoreWindow
 import com.brins.locksmith.utils.getStatusBarHeight
+import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.bottom_bar.*
@@ -133,5 +134,9 @@ class MainActivity : BaseActivity() {
             }
         }
         viewpager.currentItem = position
+    }
+
+    fun getSavePasswordViewModel(): SavePasswordViewModel {
+        return mSavePasswordViewModel
     }
 }
