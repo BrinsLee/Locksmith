@@ -357,6 +357,16 @@ fun dpToPx(dp: Float, res: Resources): Int {
     ).toInt()
 }
 
+fun dip2px(context: Context, dpValue: Float): Int {
+    val scale = context.resources.displayMetrics.density
+    return (dpValue * scale + 0.5f).toInt()
+}
+
+fun dip2px(dipValue: Float): Int {
+    return (dipValue * 1.0 + 0.5f).toInt()
+}
+
+
 fun createLayoutParams(width: Int, height: Int): FrameLayout.LayoutParams {
     return FrameLayout.LayoutParams(width, height)
 }

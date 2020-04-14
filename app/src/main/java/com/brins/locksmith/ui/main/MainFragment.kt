@@ -3,6 +3,7 @@ package com.brins.locksmith.ui.main
 import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.locksmith.R
 import com.brins.locksmith.adapter.BaseMainAdapter
@@ -11,7 +12,10 @@ import com.brins.locksmith.databinding.FragmentMainBinding
 import com.brins.locksmith.ui.activity.MainActivity
 import com.brins.locksmith.ui.activity.MainActivity_ViewBinding
 import com.brins.locksmith.ui.base.BaseDBFragment
+import com.brins.locksmith.ui.widget.GridSpacingItemDecoration
 import com.brins.locksmith.utils.InjectorUtil
+import com.brins.locksmith.utils.dip2px
+import com.brins.locksmith.utils.dpToPx
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import com.chad.library.adapter.base.OnLoadDataCompleteCallback
 import com.chad.library.adapter.base.OnLoadDataListener
@@ -35,7 +39,16 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>() {
     }
 
     override fun initEventAndData() {
-        main_recycler.layoutManager = LinearLayoutManager(context)
+        main_recycler.layoutManager =
+            GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
+/*        main_recycler.addItemDecoration(
+            GridSpacingItemDecoration(
+                4,
+                dip2px(10f), true
+            )
+        )*/
+        mAdapter.setEnableRefresh(true)
+        main_recycler.setHasFixedSize(true)
         mAdapter.setOnLoadDataListener { _, _, onLoadDataCompleteCallback ->
             val data = mSavePasswordViewModel.loadPasswordItem()
             onLoadDataCompleteCallback.onLoadDataSuccess(data as List<BaseData>?)
