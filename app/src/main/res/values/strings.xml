@@ -2,7 +2,7 @@
     <string name="app_name">Locksmith</string>
     <string name="missing_password">请先添加系统解锁密码</string>
     <string name="security_tip">安全提示</string>
-    <string name="finger_print">请验证指纹</string>
+    <string name="finger_print">锁匠 触控ID</string>
     <string name="cancel">取消</string>
     <string name="fingerprint_not_recognized">指纹验证错误请重试</string>
     <string name="use_password">使用密码</string>

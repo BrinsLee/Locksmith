@@ -12,6 +12,7 @@ import butterknife.OnClick
 import com.brins.locksmith.R
 import com.brins.locksmith.adapter.MainPagerAdapter
 import com.brins.locksmith.ui.main.MainFragment
+import com.brins.locksmith.ui.main.PasswordFragment
 import com.brins.locksmith.ui.widget.MoreWindow
 import com.brins.locksmith.utils.getStatusBarHeight
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
@@ -54,9 +55,9 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         list.add(MainFragment())
-        list.add(MainFragment())
-        list.add(MainFragment())
-        list.add(MainFragment())
+        list.add(PasswordFragment())
+        list.add(PasswordFragment())
+        list.add(PasswordFragment())
     }
 
     private fun initView() {

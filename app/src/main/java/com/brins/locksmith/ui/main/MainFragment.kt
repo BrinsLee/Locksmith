@@ -1,33 +1,30 @@
 package com.brins.locksmith.ui.main
 
 import android.content.Context
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.brins.locksmith.R
 import com.brins.locksmith.adapter.BaseMainAdapter
-import com.brins.locksmith.data.PassWordItem
+import com.brins.locksmith.data.GeneralTitleItem
 import com.brins.locksmith.databinding.FragmentMainBinding
 import com.brins.locksmith.ui.activity.MainActivity
-import com.brins.locksmith.ui.activity.MainActivity_ViewBinding
 import com.brins.locksmith.ui.base.BaseDBFragment
-import com.brins.locksmith.ui.widget.GridSpacingItemDecoration
-import com.brins.locksmith.utils.InjectorUtil
-import com.brins.locksmith.utils.dip2px
-import com.brins.locksmith.utils.dpToPx
+import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
-import com.chad.library.adapter.base.OnLoadDataCompleteCallback
-import com.chad.library.adapter.base.OnLoadDataListener
 import com.chad.library.adapter.base.model.BaseData
 import kotlinx.android.synthetic.main.fragment_main.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import java.util.*
 
 
-class MainFragment : BaseDBFragment<FragmentMainBinding>() {
+class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener,
+    GeneralTitleItem.onExpendListener {
 
 
     private lateinit var mSavePasswordViewModel: SavePasswordViewModel
     private val mAdapter = BaseMainAdapter()
+    private val mData: LinkedList<in BaseData> = LinkedList()
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_main
@@ -50,10 +47,38 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>() {
         mAdapter.setEnableRefresh(true)
         main_recycler.setHasFixedSize(true)
         mAdapter.setOnLoadDataListener { _, _, onLoadDataCompleteCallback ->
-            val data = mSavePasswordViewModel.loadPasswordItem()
-            onLoadDataCompleteCallback.onLoadDataSuccess(data as List<BaseData>?)
+            if (mData.isNotEmpty()) {
+                mData.clear()
+            }
+            mData.add(GeneralTitleItem(getString(R.string.password)).setListener(this))
+            mData.addAll(mSavePasswordViewModel.loadPasswordItem())
+            onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
         main_recycler.adapter = mAdapter
+    }
+
+    override fun isRegisterEventBus(): Boolean {
+        return true
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun refreshPassWordData(message: EventMessage<*>) {
+        when (message.code) {
+            EventMessage.CODE_UPDATE_PASSWORD -> initEventAndData()
+
+        }
+    }
+
+    override fun onClick(v: View) {
+
+    }
+
+    override fun onExpend(view: View, expend: Boolean) {
+        if (expend) {
+            mData.remove(mSavePasswordViewModel.mPassWordData.value)
+        }else {
+//            mData.addAll(mSavePasswordViewModel.mPassWordData.value)
+        }
     }
 
 }

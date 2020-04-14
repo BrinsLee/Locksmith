@@ -3,15 +3,12 @@ package com.brins.locksmith.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.locksmith.R
-import com.brins.locksmith.data.PassWordItem
-import com.brins.locksmith.utils.InjectorUtil
+import com.brins.locksmith.utils.EventBusUtils
+import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.getStatusBarHeight
-import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import kotlinx.android.synthetic.main.activity_edit_pass.*
 
 class EditPassActivity : BaseActivity() {
@@ -59,7 +56,10 @@ class EditPassActivity : BaseActivity() {
 
     private fun saveAccount() {
         if (isInfoComplete()) {
-            mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote, ::finish)
+            mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote) {
+                EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, null))
+                finish()
+            }
         } else {
 
         }

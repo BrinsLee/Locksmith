@@ -103,7 +103,7 @@ abstract class BaseDBFragment<T : ViewDataBinding> : Fragment() {
         return mContext
     }
 
-    protected fun isRegisterEventBus(): Boolean {
+    protected open fun isRegisterEventBus(): Boolean {
         return false
     }
 

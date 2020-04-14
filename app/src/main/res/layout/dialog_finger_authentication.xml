@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="25dp"
             />
         <com.brins.locksmith.ui.widget.FontTextView
             android:id="@+id/title"
@@ -34,23 +34,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textColor="@android:color/black"
             android:text="@string/finger_print"
-            android:textSize="25sp"
+            android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@id/ivFingerprint"
             android:layout_marginTop="20dp"
+            />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@android:color/darker_gray"
+            android:text="请验证已有手机指纹"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            android:layout_marginTop="15dp"
             />
 
     
         <ImageView
             android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray"
-            app:layout_constraintTop_toBottomOf="@id/title"
+            android:layout_height="1px"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="15dp"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -64,7 +75,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:id="@+id/cancel"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/black_loading"
                 android:text="@string/cancel"
                 android:textStyle="bold"
                 android:textSize="18sp"

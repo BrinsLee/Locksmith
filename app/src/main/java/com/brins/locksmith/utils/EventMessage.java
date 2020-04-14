@@ -25,4 +25,6 @@ public class EventMessage<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+    public static int CODE_UPDATE_PASSWORD = 1;
 }
