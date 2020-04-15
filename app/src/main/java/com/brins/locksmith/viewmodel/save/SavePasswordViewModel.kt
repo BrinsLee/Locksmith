@@ -276,4 +276,8 @@ class SavePasswordViewModel(private val repository: PassportRepository) : ViewMo
         }
         return generals
     }
+
+    fun hasPassword(): Boolean {
+        return !mPassWordData.value.isNullOrEmpty()
+    }
 }

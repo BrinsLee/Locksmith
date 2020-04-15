@@ -1,6 +1,7 @@
 package com.brins.locksmith.ui.main
 
 import android.content.Context
+import android.util.SparseArray
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brins.locksmith.R
@@ -24,7 +25,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
 
     private lateinit var mSavePasswordViewModel: SavePasswordViewModel
     private val mAdapter = BaseMainAdapter()
-    private val mData: LinkedList<in BaseData> = LinkedList()
+    private val mData: MutableList<in BaseData> = mutableListOf()
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_main
@@ -74,10 +75,16 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
     }
 
     override fun onExpend(view: View, expend: Boolean) {
-        if (expend) {
-            mData.remove(mSavePasswordViewModel.mPassWordData.value)
-        }else {
-//            mData.addAll(mSavePasswordViewModel.mPassWordData.value)
+        if (mSavePasswordViewModel.hasPassword()) {
+            if (expend) {
+                for (password in mSavePasswordViewModel.mPassWordData.value!!) {
+                    mData.remove(password)
+                }
+            } else {
+                mData.addAll(mSavePasswordViewModel.mPassWordData.value!!)
+            }
+            mAdapter.setNewData(mData as? List<BaseData>)
+            mAdapter.notifyDataSetChanged()
         }
     }
 
