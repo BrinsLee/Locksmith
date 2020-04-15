@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.setTextDark
 import com.brins.locksmith.utils.setTranslucent
+import com.brins.locksmith.viewmodel.card.SaveCardViewModel
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import java.util.*
 import java.util.concurrent.Executors
@@ -38,6 +39,11 @@ abstract class BaseActivity : AppCompatActivity() {
     protected val mSavePasswordViewModel: SavePasswordViewModel by lazy {
         ViewModelProvider(this@BaseActivity, InjectorUtil.getPassWordFactory()).get(
             SavePasswordViewModel::class.java
+        )
+    }
+    protected val mSaveCardViewModel: SaveCardViewModel by lazy {
+        ViewModelProvider(this@BaseActivity, InjectorUtil.getCardFactory()).get(
+            SaveCardViewModel::class.java
         )
     }
 

@@ -11,6 +11,7 @@ import com.brins.locksmith.databinding.FragmentMainBinding
 import com.brins.locksmith.ui.activity.MainActivity
 import com.brins.locksmith.ui.base.BaseDBFragment
 import com.brins.locksmith.utils.EventMessage
+import com.brins.locksmith.viewmodel.card.SaveCardViewModel
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import com.chad.library.adapter.base.model.BaseData
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -24,6 +25,8 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
 
 
     private lateinit var mSavePasswordViewModel: SavePasswordViewModel
+    private lateinit var mSaveCardViewModel: SaveCardViewModel
+
     private val mAdapter = BaseMainAdapter()
     private val mData: MutableList<in BaseData> = mutableListOf()
 
@@ -34,6 +37,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mSavePasswordViewModel = (activity as MainActivity).getSavePasswordViewModel()
+        mSaveCardViewModel = (activity as MainActivity).getSaveCardViewModel()
     }
 
     override fun initEventAndData() {
@@ -53,6 +57,8 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             }
             mData.add(GeneralTitleItem(getString(R.string.password)).setListener(this))
             mData.addAll(mSavePasswordViewModel.loadPasswordItem())
+            mData.add(GeneralTitleItem(getString(R.string.bank)).setListener(this))
+//            mData.addAll(mSaveCardViewModel.loadPasswordItem())
             onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
         main_recycler.adapter = mAdapter
@@ -81,7 +87,9 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
                     mData.remove(password)
                 }
             } else {
-                mData.addAll(mSavePasswordViewModel.mPassWordData.value!!)
+                for ((i, password) in mSavePasswordViewModel.mPassWordData.value!!.withIndex()) {
+                    mData.add(i + 1, password)
+                }
             }
             mAdapter.setNewData(mData as? List<BaseData>)
             mAdapter.notifyDataSetChanged()

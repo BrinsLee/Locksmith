@@ -180,10 +180,15 @@ class MoreWindow(var mContext: BaseActivity) : PopupWindow(), View.OnClickListen
     }
 
     override fun onClick(v: View) {
-        when(v.id){
-            R.id.more_window_password ->
-                { closeAnimation(v.parent as ConstraintLayout)
-                    EditPassActivity.startThis(mContext)}
+        when (v.id) {
+            R.id.more_window_password -> {
+                closeAnimation(v.parent as ConstraintLayout)
+                EditPassActivity.startThis(mContext)
+            }
+            R.id.more_window_bank -> {
+                closeAnimation(v.parent as ConstraintLayout)
+                EditPassActivity.startThis(mContext, EditPassActivity.TYPE_FROM_CARD)
+            }
         }
     }
 

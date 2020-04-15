@@ -1,5 +1,6 @@
 package com.brins.locksmith.utils
 
+import com.brins.locksmith.viewmodel.card.SaveCardModelFactory
 import com.brins.locksmith.viewmodel.main.MainModelFactory
 import com.brins.locksmith.viewmodel.passport.PassportModelFactory
 import com.brins.locksmith.viewmodel.passport.PassportRepository
@@ -22,6 +23,9 @@ object InjectorUtil {
     fun getMainModelFactory() = MainModelFactory(getPassportRepository())
 
     fun getPassWordFactory() = SavePasswordModelFactory(getPassportRepository())
+
+    fun getCardFactory() = SaveCardModelFactory(getPassportRepository())
+
 
 
 

@@ -10,6 +10,8 @@ import com.brins.locksmith.utils.EventBusUtils
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.getStatusBarHeight
 import kotlinx.android.synthetic.main.activity_edit_pass.*
+import kotlinx.android.synthetic.main.activity_edit_pass.header_layout
+import kotlinx.android.synthetic.main.header.*
 
 class EditPassActivity : BaseActivity() {
 
@@ -18,23 +20,47 @@ class EditPassActivity : BaseActivity() {
     private var mPassword: String = ""
     private var mName: String = ""
     private var mAccountName: String = ""
+    private var mType = 0
 
 
     companion object {
+
+        @JvmStatic
+        val TYPE_FROM_CARD = 1
+        @JvmStatic
+        val TYPE_FROM_PASSWORD = 2
+
+        val TYPE_FROM_WHERE = "TYPE_FROM_WHERE"
+
         private val passwordlength = 20
         fun startThis(activity: BaseActivity) {
             val intent = Intent(activity, EditPassActivity::class.java)
             activity.startActivity(intent)
         }
+
+        fun startThis(activity: BaseActivity, fromWhere: Int) {
+            val intent = Intent(activity, EditPassActivity::class.java)
+            intent.putExtra(TYPE_FROM_WHERE, fromWhere)
+            activity.startActivity(intent)
+        }
     }
 
     override fun getLayoutResId(): Int {
-        return R.layout.activity_edit_pass
+        mType = intent.getIntExtra(TYPE_FROM_WHERE, 0)
+        return when (mType) {
+            0, 1 -> R.layout.activity_edit_pass
+            2 -> R.layout.activity_edit_card
+            else -> R.layout.activity_edit_pass
+        }
     }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         header_layout.setPadding(0, getStatusBarHeight(this), 0, 0)
+        when (mType) {
+            0, 1 -> title_tv.text = "密码"
+            2 -> title_tv.text = "银行卡"
+        }
         ButterKnife.bind(this)
         setListener()
     }
@@ -56,10 +82,21 @@ class EditPassActivity : BaseActivity() {
 
     private fun saveAccount() {
         if (isInfoComplete()) {
-            mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote) {
-                EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, null))
-                finish()
+            when (mType) {
+                0, 1 -> {
+                    mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote) {
+                        EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, null))
+                        finish()
+                    }
+                }
+                2 -> {
+                    mSaveCardViewModel.savePassWord(mName,mAccountName,mPassword,mNote){
+                        EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, null))
+                        finish()
+                    }
+                }
             }
+
         } else {
 
         }

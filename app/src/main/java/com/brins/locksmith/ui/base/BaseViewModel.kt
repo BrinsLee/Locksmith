@@ -1,4 +1,5 @@
-package com.brins.ncov_2019.ui.base
+
+package com.brins.locksmith.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

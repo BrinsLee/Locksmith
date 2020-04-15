@@ -15,6 +15,7 @@ import com.brins.locksmith.ui.main.MainFragment
 import com.brins.locksmith.ui.main.PasswordFragment
 import com.brins.locksmith.ui.widget.MoreWindow
 import com.brins.locksmith.utils.getStatusBarHeight
+import com.brins.locksmith.viewmodel.card.SaveCardViewModel
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
@@ -139,5 +140,9 @@ class MainActivity : BaseActivity() {
 
     fun getSavePasswordViewModel(): SavePasswordViewModel {
         return mSavePasswordViewModel
+    }
+
+    fun getSaveCardViewModel(): SaveCardViewModel {
+        return mSaveCardViewModel
     }
 }
