@@ -9,8 +9,12 @@ import com.brins.locksmith.R
 import com.brins.locksmith.utils.EventBusUtils
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.getStatusBarHeight
-import kotlinx.android.synthetic.main.activity_edit_pass.*
+import kotlinx.android.synthetic.main.activity_edit_card.*
+import kotlinx.android.synthetic.main.activity_edit_pass.account_edit_et
 import kotlinx.android.synthetic.main.activity_edit_pass.header_layout
+import kotlinx.android.synthetic.main.activity_edit_pass.name_edit_et
+import kotlinx.android.synthetic.main.activity_edit_pass.note_edit_et
+import kotlinx.android.synthetic.main.activity_edit_pass.password_edit_et
 import kotlinx.android.synthetic.main.header.*
 
 class EditPassActivity : BaseActivity() {
@@ -26,9 +30,9 @@ class EditPassActivity : BaseActivity() {
     companion object {
 
         @JvmStatic
-        val TYPE_FROM_CARD = 1
+        val TYPE_FROM_CARD = 2
         @JvmStatic
-        val TYPE_FROM_PASSWORD = 2
+        val TYPE_FROM_PASSWORD = 1
 
         val TYPE_FROM_WHERE = "TYPE_FROM_WHERE"
 
@@ -85,13 +89,30 @@ class EditPassActivity : BaseActivity() {
             when (mType) {
                 0, 1 -> {
                     mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote) {
-                        EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, null))
+                        EventBusUtils.sendEnvent(
+                            EventMessage(
+                                EventMessage.CODE_UPDATE_PASSWORD,
+                                null
+                            )
+                        )
                         finish()
                     }
                 }
                 2 -> {
-                    mSaveCardViewModel.savePassWord(mName,mAccountName,mPassword,mNote){
-                        EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, null))
+                    mSaveCardViewModel.saveCard(
+                        mName,
+                        mAccountName,
+                        mPassword,
+                        mNote,
+                        location_edit_et.text?.trim().toString(),
+                        phone_edit_et.text?.trim().toString()
+                    ) {
+                        EventBusUtils.sendEnvent(
+                            EventMessage(
+                                EventMessage.CODE_UPDATE_PASSWORD,
+                                null
+                            )
+                        )
                         finish()
                     }
                 }

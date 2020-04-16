@@ -58,7 +58,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             mData.add(GeneralTitleItem(getString(R.string.password)).setListener(this))
             mData.addAll(mSavePasswordViewModel.loadPasswordItem())
             mData.add(GeneralTitleItem(getString(R.string.bank)).setListener(this))
-//            mData.addAll(mSaveCardViewModel.loadPasswordItem())
+            mData.addAll(mSaveCardViewModel.loadCardItem())
             onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
         main_recycler.adapter = mAdapter

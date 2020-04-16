@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package tech.bluespace.id_guard;
+package com.brins.locksmith;
 
 enum PassportInfoVersion {
     passportInfoV20200314 = 0;

@@ -6,6 +6,9 @@ object AppConfig {
     val USERNAME = "USERNAME"
     val NOTE = "NOTE"
 
+    val LOCATION = "LOCATION"
+    val PHONE = "PHONE"
+
     val PASSWORD = "PASSWORD"
 
     val TYPE_ITEM_PASSWOED = 1001

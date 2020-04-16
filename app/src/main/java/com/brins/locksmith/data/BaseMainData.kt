@@ -14,7 +14,7 @@ import java.io.Serializable
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-open class BaseMainData(
+abstract class BaseMainData(
     protected var name: String = "",
     protected var accountName: String,
     protected var password: String,
@@ -46,7 +46,7 @@ open class BaseMainData(
 
     init {
         background = Color.parseColor("#669999")
-        makeMetaData()
+        this.makeMetaData()
         generalItems[APPNAME] = name
         generalItems[USERNAME] = accountName
         if (mNote.isNotEmpty()) {
@@ -61,7 +61,7 @@ open class BaseMainData(
     }
 
     /***创建元数据*/
-    private fun makeMetaData() {
+    fun makeMetaData(){
         val accountKey = newAes256Key().encoded
         val builder: AccountItemOuterClass.AccountItemMeta.Builder =
             AccountItemOuterClass.AccountItemMeta.newBuilder()
