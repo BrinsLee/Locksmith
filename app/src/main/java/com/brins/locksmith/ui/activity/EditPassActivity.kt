@@ -3,12 +3,15 @@ package com.brins.locksmith.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.locksmith.R
 import com.brins.locksmith.utils.EventBusUtils
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.getStatusBarHeight
+import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.android.synthetic.main.activity_edit_card.*
 import kotlinx.android.synthetic.main.activity_edit_pass.account_edit_et
 import kotlinx.android.synthetic.main.activity_edit_pass.header_layout
@@ -35,6 +38,7 @@ class EditPassActivity : BaseActivity() {
         val TYPE_FROM_PASSWORD = 1
 
         val TYPE_FROM_WHERE = "TYPE_FROM_WHERE"
+
 
         private val passwordlength = 20
         fun startThis(activity: BaseActivity) {
@@ -71,7 +75,20 @@ class EditPassActivity : BaseActivity() {
 
 
     private fun setListener() {
+        nested_root.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
+            override fun onScrollChange(
+                v: NestedScrollView?,
+                scrollX: Int,
+                scrollY: Int,
+                oldScrollX: Int,
+                oldScrollY: Int
+            ) {
 
+                header_layout.y = scrollY.toFloat()
+            }
+
+
+        })
     }
 
     @OnClick(R.id.return_img, R.id.save_account)

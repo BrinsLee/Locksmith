@@ -40,5 +40,6 @@
     <string name="input_location">请输入开户行</string>
     <string name="phone">预留手机号</string>
     <string name="input_phone">请输入预留手机号</string>
+    <string name="input_account">请输入账户名</string>
 
 </resources>

@@ -3,15 +3,11 @@ package com.brins.locksmith.ui.dialog
 import android.app.KeyguardManager
 import android.content.Intent
 import android.graphics.Color
-import android.hardware.biometrics.BiometricPrompt
 import android.hardware.fingerprint.FingerprintManager
-import android.os.Build
 import android.view.View
 import android.view.WindowManager
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.fragment.app.FragmentManager
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.R
@@ -20,22 +16,10 @@ import com.brins.locksmith.utils.FingerprintUiHelper
 import kotlinx.android.synthetic.main.dialog_finger_authentication.*
 
 class FingerAuthDialogFragment : BaseDialogFragment(),
-    FingerprintUiHelper.Callback, View.OnClickListener {
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.cancel -> dismissAllowingStateLoss()
+    FingerprintUiHelper.Callback {
 
-            R.id.usePassword -> {
-                val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
-                    "Authentication required",
-                    "PASSWORD"
-                )
-                if (intent != null) {
-                    startActivityForResult(intent, AUTH_REQUEST_CODE)
-                }
-            }
-        }
-    }
+
+    private var listener: View.OnClickListener? = null
 
     private val mKeyguardManager: KeyguardManager by lazy {
         activity?.getSystemService(
@@ -54,7 +38,7 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
         PASSWORD
     }
 
-    public var mStage = Stage.FINGERPRINT
+    var mStage = Stage.FINGERPRINT
     private val mCryptoObject: FingerprintManager.CryptoObject? = null
 
 
@@ -74,17 +58,18 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
 
         val AUTH_REQUEST_CODE = 0x32
 
-        fun showSelf(manager: FragmentManager, stage: Stage) {
+        fun showSelf(manager: FragmentManager, stage: Stage, listener: View.OnClickListener) : FingerAuthDialogFragment {
             val dialog = FingerAuthDialogFragment()
             dialog.mStage = stage
-            dialog.show(manager)
+            dialog.listener = listener
+            return dialog.show(manager) as FingerAuthDialogFragment
         }
     }
 
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
-        cancel.setOnClickListener(this)
-        usePassword.setOnClickListener(this)
+        cancel.setOnClickListener(listener)
+        usePassword.setOnClickListener(listener)
         mFingerprintUiHelper = FingerprintUiHelper(mFingerprintManager, this)
         if (!isFingerprintAuthAvailable()) {
             //指纹不可用
@@ -157,8 +142,8 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
     override fun onAuthenticated() {
         cancel.isClickable = false
         usePassword.isEnabled = false
-        if(activity != null){
-            if (activity is AuthRequestActivity){
+        if (activity != null) {
+            if (activity is AuthRequestActivity) {
                 (activity!! as AuthRequestActivity).authencitatedCallback()
             }
         }
@@ -200,12 +185,13 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
     }
 
     private var mResetErrorTextRunnable = Runnable {
-        if (title != null){
+        if (title != null) {
             title.setTextColor(Color.BLACK)
             title.text = BaseApplication.context.getString(R.string.finger_print)
             ivFingerprint.setImageResource(R.drawable.ic_fingerprint_black_24dp)
         }
 
     }
+
 
 }

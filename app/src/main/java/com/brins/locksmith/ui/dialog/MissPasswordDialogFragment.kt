@@ -1,5 +1,6 @@
 package com.brins.locksmith.ui.dialog
 
+import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
@@ -24,7 +25,9 @@ class MissPasswordDialogFragment : BaseDialogFragment(), View.OnClickListener {
         const val CONTENT = "CONTENT"
         fun showSelf(manager: FragmentManager, content: String = "") {
             val dialog = MissPasswordDialogFragment()
-            dialog.arguments?.putString(CONTENT, content)
+            val bundle = Bundle()
+            bundle.putString(CONTENT, content)
+            dialog.arguments = bundle
             dialog.show(manager)
         }
     }
@@ -52,7 +55,7 @@ class MissPasswordDialogFragment : BaseDialogFragment(), View.OnClickListener {
     override fun onCreateViewAfterBinding(view: View) {
         super.onCreateViewAfterBinding(view)
         if (arguments != null) {
-            if (!arguments!!.getString(CONTENT).isNullOrEmpty()) {
+            if (arguments!!.getString(CONTENT).isNotEmpty()) {
                 content.text = arguments!!.getString(CONTENT)
             }
         }

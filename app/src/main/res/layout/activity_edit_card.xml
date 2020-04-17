@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nested_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -10,11 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.EditPassActivity">
-
-
-        <include
-            android:id="@+id/header_layout"
-            layout="@layout/header" />
 
         <TextView
             android:id="@+id/name_title_tv"
@@ -194,24 +190,8 @@
             </androidx.appcompat.widget.AppCompatEditText>
         </com.brins.locksmith.ui.widget.RoundConstraintLayout>
 
-        <Button
-            android:id="@+id/save_account"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_bg_selected"
-            android:enabled="true"
-            android:clickable="true"
-            android:text="@string/save"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="50dp"
-            app:layout_constraintTop_toBottomOf="@+id/note_layout_rl" />
-
+        <include
+            android:id="@+id/header_layout"
+            layout="@layout/header" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

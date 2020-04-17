@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:layout_marginTop="50dp"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:textColor="@android:color/black"
         app:font_type="DIN-Bold"
         android:text="@string/welcome" />
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:font_type="DIN-Bold"
-        android:textSize="40sp"
+        android:textSize="20sp"
         android:text="@string/every_thing_done"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="30dp"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:text="@string/start_use"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
@@ -53,8 +53,8 @@
         android:paddingBottom="5dp"
         android:clickable="false"
         android:enabled="false"
-        android:background="@drawable/bg_text_selector"
-        android:textColor="@drawable/bg_text_color_selector"
+        android:background="@drawable/bg_text_unclick"
+        android:textColor="@android:color/darker_gray"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
