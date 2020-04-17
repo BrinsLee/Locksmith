@@ -32,7 +32,6 @@ class BaseMainAdapter :
             )
 
             else -> {
-
                 return BaseTitleHolder(
                     getItemView(
                         R.layout.item_general_title,
@@ -51,7 +50,7 @@ class BaseMainAdapter :
             val gridManager = manager
             gridManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return if (!mData.isEmpty && BaseMainItemType.ITEM_TITLE == mData[position].itemType) {
+                    return if (!mData.isEmpty && BaseMainItemType.ITEM_NORMAL != mData[position].itemType) {
                         gridManager.spanCount
                     } else {
                         1

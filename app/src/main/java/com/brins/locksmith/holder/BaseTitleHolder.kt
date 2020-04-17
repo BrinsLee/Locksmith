@@ -27,7 +27,7 @@ class BaseTitleHolder(view: View) : BaseViewHolder<GeneralTitleItem>(view) {
             if (data.expend) ivIcon.setImageResource(R.drawable.ic_up) else ivIcon.setImageResource(
                 R.drawable.ic_down
             )
-            data.getListener()?.onExpend(it, data.expend)
+            data.getListener()?.onExpend(it, data.expend, data.type)
         }
     }
 }

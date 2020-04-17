@@ -6,6 +6,7 @@ package com.brins.locksmith.ui.base
  */
 object BaseMainItemType {
 
-    val ITEM_TITLE = 1000
+    val ITEM_TITLE_PASS = 1000
+    val ITEM_TITLE_CARD = 1002
     val ITEM_NORMAL = 1001
 }

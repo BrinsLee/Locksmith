@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.model.BaseData
  * @author lipeilin
  * @date 2020/4/14
  */
-class GeneralTitleItem(var title: String, var expend: Boolean = false) : BaseData() {
+class GeneralTitleItem(var title: String, var expend: Boolean = false, var type: Int) : BaseData() {
 
 
     private var listener: onExpendListener? = null
@@ -35,11 +35,11 @@ class GeneralTitleItem(var title: String, var expend: Boolean = false) : BaseDat
     }
 
     override fun getItemType(): Int {
-        return BaseMainItemType.ITEM_TITLE
+        return type
     }
 
     interface onExpendListener {
-        fun onExpend(view: View, expend: Boolean)
+        fun onExpend(view: View, expend: Boolean, type: Int)
     }
 
 }

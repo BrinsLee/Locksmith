@@ -70,8 +70,6 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
     }
 
 
-
-
 /*    private fun notifyData(
         password: PassWordItem,
         activity: AppCompatActivity
@@ -87,8 +85,6 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
     }*/
 
 
-
-
     /***获取文件保存路径*/
     private fun getAccountDirectory(): File {
         val directory = File(path)
@@ -99,9 +95,6 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
         }
         return directory
     }
-
-
-
 
 
     fun loadCardItem(): ArrayList<CardItem> {
@@ -225,5 +218,9 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
 
     fun hasPassword(): Boolean {
         return !mCardData.value.isNullOrEmpty()
+    }
+
+    fun dataSize(): Int {
+        return mCardData.value?.size ?: 0
     }
 }

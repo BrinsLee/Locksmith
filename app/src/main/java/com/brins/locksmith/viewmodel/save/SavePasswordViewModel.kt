@@ -68,7 +68,6 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
     }
 
 
-
     /***获取文件保存路径*/
     private fun getAccountDirectory(): File {
         val directory = File(path)
@@ -202,5 +201,9 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
 
     fun hasPassword(): Boolean {
         return !mPassWordData.value.isNullOrEmpty()
+    }
+
+    fun dataSize(): Int {
+        return mPassWordData.value?.size ?: 0
     }
 }

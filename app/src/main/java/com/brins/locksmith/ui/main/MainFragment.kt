@@ -10,6 +10,8 @@ import com.brins.locksmith.data.GeneralTitleItem
 import com.brins.locksmith.databinding.FragmentMainBinding
 import com.brins.locksmith.ui.activity.MainActivity
 import com.brins.locksmith.ui.base.BaseDBFragment
+import com.brins.locksmith.ui.base.BaseMainItemType
+import com.brins.locksmith.ui.base.BaseMainItemType.ITEM_TITLE_CARD
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.viewmodel.card.SaveCardViewModel
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
@@ -29,6 +31,8 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
 
     private val mAdapter = BaseMainAdapter()
     private val mData: MutableList<in BaseData> = mutableListOf()
+    private lateinit var mPassTitleItem : GeneralTitleItem
+    private lateinit var mCardTitleItem : GeneralTitleItem
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_main
@@ -49,15 +53,23 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
                 dip2px(10f), true
             )
         )*/
+        mPassTitleItem = GeneralTitleItem(
+            getString(R.string.password),
+            type = BaseMainItemType.ITEM_TITLE_PASS
+        ).setListener(this)
+        mCardTitleItem = GeneralTitleItem(
+            getString(R.string.bank),
+            type = ITEM_TITLE_CARD
+        ).setListener(this)
         mAdapter.setEnableRefresh(true)
         main_recycler.setHasFixedSize(true)
         mAdapter.setOnLoadDataListener { _, _, onLoadDataCompleteCallback ->
             if (mData.isNotEmpty()) {
                 mData.clear()
             }
-            mData.add(GeneralTitleItem(getString(R.string.password)).setListener(this))
+            mData.add(mPassTitleItem)
             mData.addAll(mSavePasswordViewModel.loadPasswordItem())
-            mData.add(GeneralTitleItem(getString(R.string.bank)).setListener(this))
+            mData.add(mCardTitleItem)
             mData.addAll(mSaveCardViewModel.loadCardItem())
             onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
@@ -80,20 +92,39 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
 
     }
 
-    override fun onExpend(view: View, expend: Boolean) {
-        if (mSavePasswordViewModel.hasPassword()) {
-            if (expend) {
-                for (password in mSavePasswordViewModel.mPassWordData.value!!) {
-                    mData.remove(password)
-                }
-            } else {
-                for ((i, password) in mSavePasswordViewModel.mPassWordData.value!!.withIndex()) {
-                    mData.add(i + 1, password)
+    override fun onExpend(view: View, expend: Boolean, type: Int) {
+        when (type) {
+            BaseMainItemType.ITEM_TITLE_PASS -> {
+                if (mSavePasswordViewModel.hasPassword()) {
+                    if (expend) {
+                        for (password in mSavePasswordViewModel.mPassWordData.value!!) {
+                            mData.remove(password)
+                        }
+                    } else {
+                        for ((i, password) in mSavePasswordViewModel.mPassWordData.value!!.withIndex()) {
+                            mData.add(i + 1, password)
+                        }
+                    }
                 }
             }
-            mAdapter.setNewData(mData as? List<BaseData>)
-            mAdapter.notifyDataSetChanged()
+            BaseMainItemType.ITEM_TITLE_CARD -> {
+                if (mSaveCardViewModel.hasPassword()) {
+                    if (expend) {
+                        for (password in mSaveCardViewModel.mCardData.value!!) {
+                            mData.remove(password)
+                        }
+                    } else {
+                        for ((i, password) in mSaveCardViewModel.mCardData.value!!.withIndex()) {
+                            mData.add(i + 1 + mData.indexOf(mCardTitleItem), password)
+                        }
+                    }
+                }
+            }
         }
-    }
 
+        mAdapter.setNewData(mData as? List<BaseData>)
+        mAdapter.notifyDataSetChanged()
+    }
 }
+
+

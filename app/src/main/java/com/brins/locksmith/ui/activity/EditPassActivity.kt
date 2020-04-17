@@ -1,9 +1,12 @@
 package com.brins.locksmith.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.widget.NestedScrollView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -11,7 +14,6 @@ import com.brins.locksmith.R
 import com.brins.locksmith.utils.EventBusUtils
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.getStatusBarHeight
-import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.android.synthetic.main.activity_edit_card.*
 import kotlinx.android.synthetic.main.activity_edit_pass.account_edit_et
 import kotlinx.android.synthetic.main.activity_edit_pass.header_layout
@@ -19,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_edit_pass.name_edit_et
 import kotlinx.android.synthetic.main.activity_edit_pass.note_edit_et
 import kotlinx.android.synthetic.main.activity_edit_pass.password_edit_et
 import kotlinx.android.synthetic.main.header.*
+
 
 class EditPassActivity : BaseActivity() {
 
@@ -75,19 +78,10 @@ class EditPassActivity : BaseActivity() {
 
 
     private fun setListener() {
-        nested_root.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
-            override fun onScrollChange(
-                v: NestedScrollView?,
-                scrollX: Int,
-                scrollY: Int,
-                oldScrollX: Int,
-                oldScrollY: Int
-            ) {
 
-                header_layout.y = scrollY.toFloat()
-            }
-
-
+        showSoftInputFromWindow(name_edit_et)
+        nested_root.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            header_layout.y = scrollY.toFloat()
         })
     }
 
@@ -99,6 +93,14 @@ class EditPassActivity : BaseActivity() {
                 saveAccount()
             }
         }
+    }
+
+    private fun showSoftInputFromWindow(editText: EditText) {
+        editText.isFocusable = true
+        editText.isFocusableInTouchMode = true
+        editText.requestFocus()
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+
     }
 
     private fun saveAccount() {
