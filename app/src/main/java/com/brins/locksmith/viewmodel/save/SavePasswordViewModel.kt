@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.data.AesEncryptedData
+import com.brins.locksmith.data.AppConfig
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.data.password.PassWordItem
 import com.brins.locksmith.utils.aes256Decrypt
@@ -155,6 +156,7 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
         }
         base.meta = decryptMeta(item)
         base.generalItems = decryptGeneralItems(item, base.meta!!)
+        base.setAppName(base.generalItems[AppConfig.APPNAME])
         base.secretData = AesEncryptedData(
             item.secret.data.toByteArray()
             , item.secret.iv.toByteArray()

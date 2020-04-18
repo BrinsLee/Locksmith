@@ -49,7 +49,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
                 dip2px(10f), true
             )
         )*/
-        mAdapter.setEnableRefresh(true)
+        mAdapter.setEnableRefresh(false)
         main_recycler.setHasFixedSize(true)
         mAdapter.setOnLoadDataListener { _, _, onLoadDataCompleteCallback ->
             if (mData.isNotEmpty()) {

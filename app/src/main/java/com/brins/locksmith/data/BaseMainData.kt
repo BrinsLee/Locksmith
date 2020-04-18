@@ -1,6 +1,5 @@
 package com.brins.locksmith.data
 
-import android.graphics.Color
 import android.util.Log
 import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.AppConfig.NOTE
@@ -22,7 +21,6 @@ abstract class BaseMainData(
 ) : Serializable, BaseData() {
 
 
-
     override fun isAutoIndex(): Boolean {
         return false
     }
@@ -39,13 +37,24 @@ abstract class BaseMainData(
         return 0
     }
 
+    fun getAppName(): String {
+        return name
+    }
+
+    fun setAppName(name : String?){
+        this.name = name?:""
+    }
+
+
     var background = -1
     var meta: AccountItemOuterClass.AccountItemMeta? = null
     var generalItems: MutableMap<String, String> = HashMap()
     var secretData: AesEncryptedData? = null
 
     init {
-        background = Color.parseColor("#669999")
+        if (!isKnownAppName(name)) {
+            background = backgroundcolor(name)
+        }
         this.makeMetaData()
         generalItems[APPNAME] = name
         generalItems[USERNAME] = accountName
@@ -61,7 +70,7 @@ abstract class BaseMainData(
     }
 
     /***创建元数据*/
-    fun makeMetaData(){
+    fun makeMetaData() {
         val accountKey = newAes256Key().encoded
         val builder: AccountItemOuterClass.AccountItemMeta.Builder =
             AccountItemOuterClass.AccountItemMeta.newBuilder()
@@ -71,8 +80,9 @@ abstract class BaseMainData(
                 .setAccountKey(ByteString.copyFrom(accountKey))
                 .setIconTextColor(0xFFFFFFFF.toInt())
                 .setCreationDate(Date().time / 1000)
-                .setIconBackgroundColor(background)
                 .setAppVersion(getVersionCode().toString())
+        if (background != -1)
+            builder.setIconBackgroundColor(background)
         meta = builder.build()
     }
 
@@ -124,6 +134,11 @@ abstract class BaseMainData(
             Log.e(TAG, "Failed to decrypt secret data", e)
         }
         return secrets
+    }
+
+    fun getUnifiedName(): String {
+        val unifiedName = KnownAppNames.knownNames[name]
+        return unifiedName ?: DomainUtil.getDomainName(name)
     }
 
 }

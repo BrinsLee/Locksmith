@@ -5,6 +5,7 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.data.AesEncryptedData
+import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.data.card.CardItem
 import com.brins.locksmith.utils.aes256Decrypt
@@ -70,8 +71,6 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
     }
 
 
-
-
 /*    private fun notifyData(
         password: PassWordItem,
         activity: AppCompatActivity
@@ -87,8 +86,6 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
     }*/
 
 
-
-
     /***获取文件保存路径*/
     private fun getAccountDirectory(): File {
         val directory = File(path)
@@ -99,9 +96,6 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
         }
         return directory
     }
-
-
-
 
 
     fun loadCardItem(): ArrayList<CardItem> {
@@ -178,6 +172,7 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
         }
         base.meta = decryptMeta(item)
         base.generalItems = decryptGeneralItems(item, base.meta!!)
+        base.setAppName(base.generalItems[APPNAME])
         base.secretData = AesEncryptedData(
             item.secret.data.toByteArray()
             , item.secret.iv.toByteArray()

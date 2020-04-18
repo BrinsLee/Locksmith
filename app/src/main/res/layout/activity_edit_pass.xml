@@ -9,6 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         tools:context=".ui.activity.EditPassActivity">
 
 
@@ -85,7 +87,7 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/bg_edit_text_selector"
             android:hint="@string/input_pass"
-            android:inputType="textVisiblePassword"
+            android:inputType="textPassword"
             android:paddingStart="5dp"
             android:textCursorDrawable="@drawable/edit_cursor_color"
             app:layout_constraintTop_toBottomOf="@id/password_title_tv">
