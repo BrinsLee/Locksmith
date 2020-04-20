@@ -154,4 +154,13 @@ abstract class BaseMainData(
         }
         return ""
     }
+
+    fun setPasswordData(password: String) {
+        val secretItems =
+            decryptSecret()
+        secretItems?.let {
+            it[PASSWORD] = password.toByteArray(StandardCharsets.UTF_8)
+            secretData = encryptSecret(it)
+        }
+    }
 }

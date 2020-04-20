@@ -2,11 +2,9 @@ package com.brins.locksmith.viewmodel.base
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.utils.aes256Encrypt
-import com.brins.locksmith.viewmodel.card.SaveCardViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
 import com.google.protobuf.ByteString
 import org.bouncycastle.util.encoders.Hex
@@ -19,12 +17,13 @@ import java.io.IOException
  * @author lipeilin
  * @date 2020/4/15
  */
-open class BaseViewModel (protected val repository: PassportRepository) : ViewModel() {
+open class BaseViewModel(protected val repository: PassportRepository) : ViewModel() {
 
 
     companion object {
         val TAG = this::class.java.simpleName
     }
+
     private var filePath: File? = null
 
     @Throws(IOException::class)
@@ -48,6 +47,13 @@ open class BaseViewModel (protected val repository: PassportRepository) : ViewMo
         fos.close()
         f()
     }
+
+/*    protected fun updateData(item: BaseMainData, directory: File) {
+        val encryptedMeta = encryptMeta(item.meta)
+        val encryptedGeneral = encryptGeneral(item.meta!!, item.generalItems)
+        filePath = File(directory, Hex.toHexString(getAccountId(item.meta)) + ".data")
+
+    }*/
 
     private fun toBuilder(data: AesEncryptedData): AccountItemOuterClass.AesEncryptedData.Builder {
         return AccountItemOuterClass.AesEncryptedData.newBuilder()
@@ -89,6 +95,7 @@ open class BaseViewModel (protected val repository: PassportRepository) : ViewMo
         }
 
     }
+
 
     private fun getAccountId(meta: AccountItemOuterClass.AccountItemMeta?): ByteArray {
         return meta!!.accountID.toByteArray()

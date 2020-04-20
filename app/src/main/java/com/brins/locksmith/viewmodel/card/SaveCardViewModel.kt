@@ -51,6 +51,11 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
         saveData(getAccountDirectory(), password, finish)
     }
 
+
+    fun updateCard(item: CardItem, finish: () -> Unit) {
+        saveData(getAccountDirectory(), item, finish)
+    }
+
     /***创建密码对象*/
     private fun createItem(
         mName: String,

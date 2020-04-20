@@ -11,8 +11,10 @@ import androidx.core.widget.NestedScrollView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.locksmith.R
+import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.AppConfig.LOCATION
 import com.brins.locksmith.data.AppConfig.NOTE
+import com.brins.locksmith.data.AppConfig.PASSWORD
 import com.brins.locksmith.data.AppConfig.PHONE
 import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.ui.base.BaseMainItemType
@@ -38,6 +40,9 @@ class EditPassActivity : BaseActivity() {
     private var mPassword: String = ""
     private var mName: String = ""
     private var mAccountName: String = ""
+    private var mPhone: String = ""
+    private var mLocation: String = ""
+
     private var mType = 0
     private var mPos = -1
     private var isOpenEye = false
@@ -129,7 +134,8 @@ class EditPassActivity : BaseActivity() {
 
     @OnClick(
         R.id.return_img,
-        R.id.save_account)
+        R.id.save_account
+    )
     fun onClick(v: View) {
         when (v.id) {
             R.id.return_img -> finish()
@@ -139,7 +145,7 @@ class EditPassActivity : BaseActivity() {
         }
     }
 
-    fun onVisibleClick(v : View){
+    fun onVisibleClick(v: View) {
         if (!isOpenEye) {
             iv_password_visible.isSelected = true
             isOpenEye = true
@@ -155,7 +161,7 @@ class EditPassActivity : BaseActivity() {
         }
     }
 
-    fun onCardVisibleClick(v : View){
+    fun onCardVisibleClick(v: View) {
         if (!isOpenEye) {
             iv_password_visible_card.isSelected = true
             isOpenEye = true
@@ -182,33 +188,75 @@ class EditPassActivity : BaseActivity() {
     private fun saveAccount() {
         if (isInfoComplete()) {
             when (mType) {
-                0, 1 -> {
-                    mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote) {
-                        EventBusUtils.sendEnvent(
-                            EventMessage(
-                                EventMessage.CODE_UPDATE_PASSWORD,
-                                null
+                0, BaseMainItemType.ITEM_NORMAL_PASS -> {
+                    if (mPos == -1) {
+                        mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote) {
+                            EventBusUtils.sendEnvent(
+                                EventMessage(
+                                    EventMessage.CODE_UPDATE_PASSWORD,
+                                    null
+                                )
                             )
-                        )
-                        finish()
+                            finish()
+                        }
+                    } else {
+                        val data = mSavePasswordViewModel.mPassWordData.value?.get(mPos)
+                        data?.let {
+                            it.generalItems[APPNAME] = mName
+                            it.generalItems[USERNAME] = mAccountName
+                            it.setPasswordData(mPassword)
+                            it.generalItems[NOTE] = mNote
+                            mSavePasswordViewModel.updatePassWord(it) {
+                                EventBusUtils.sendEnvent(
+                                    EventMessage(
+                                        EventMessage.CODE_UPDATE_PASSWORD,
+                                        null
+                                    )
+                                )
+                                finish()
+                            }
+
+                        }
                     }
                 }
-                2 -> {
-                    mSaveCardViewModel.saveCard(
-                        mName,
-                        mAccountName,
-                        mPassword,
-                        mNote,
-                        location_edit_et.text?.trim().toString(),
-                        phone_edit_et.text?.trim().toString()
-                    ) {
-                        EventBusUtils.sendEnvent(
-                            EventMessage(
-                                EventMessage.CODE_UPDATE_PASSWORD,
-                                null
+                BaseMainItemType.ITEM_NORMAL_CARD -> {
+                    if (mPos == -1) {
+                        mSaveCardViewModel.saveCard(
+                            mName,
+                            mAccountName,
+                            mPassword,
+                            mNote,
+                            location_edit_et.text?.trim().toString(),
+                            phone_edit_et.text?.trim().toString()
+                        ) {
+                            EventBusUtils.sendEnvent(
+                                EventMessage(
+                                    EventMessage.CODE_UPDATE_PASSWORD,
+                                    null
+                                )
                             )
-                        )
-                        finish()
+                            finish()
+                        }
+                    } else {
+                        val data = mSaveCardViewModel.mCardData.value?.get(mPos)
+                        data?.let {
+                            it.generalItems[APPNAME] = mName
+                            it.generalItems[USERNAME] = mAccountName
+                            it.setPasswordData(mPassword)
+                            it.generalItems[NOTE] = mNote
+                            it.generalItems[PHONE] = phone_edit_et.text.toString()
+                            it.generalItems[LOCATION] = location_edit_et.text.toString()
+                            mSaveCardViewModel.updateCard(it) {
+                                EventBusUtils.sendEnvent(
+                                    EventMessage(
+                                        EventMessage.CODE_UPDATE_PASSWORD,
+                                        null
+                                    )
+                                )
+                                finish()
+                            }
+
+                        }
                     }
                 }
             }

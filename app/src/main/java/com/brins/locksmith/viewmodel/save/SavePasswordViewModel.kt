@@ -3,24 +3,20 @@ package com.brins.locksmith.viewmodel.save
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.AppConfig
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.data.password.PassWordItem
 import com.brins.locksmith.utils.aes256Decrypt
-import com.brins.locksmith.utils.aes256Encrypt
 import com.brins.locksmith.viewmodel.base.BaseViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
-import com.google.protobuf.ByteString
 import com.google.protobuf.InvalidProtocolBufferException
 import org.bouncycastle.util.encoders.Hex
 import tech.bluespace.id_guard.AccountItemOuterClass
 import tech.bluespace.id_guard.AccountItemOuterClass.AccountGeneralData
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
@@ -28,7 +24,6 @@ import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.IllegalBlockSizeException
 import kotlin.collections.ArrayList
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 
 class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repository) {
@@ -51,6 +46,10 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
     ) {
         val password = createItem(mName, mAccountName, mPassword, mNote)
         saveData(getAccountDirectory(), password, finish)
+    }
+
+    fun updatePassWord(item: PassWordItem, finish: () -> Unit) {
+        saveData(getAccountDirectory(), item, finish)
     }
 
     /***创建密码对象*/
