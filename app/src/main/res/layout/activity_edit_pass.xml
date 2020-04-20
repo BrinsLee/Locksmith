@@ -33,7 +33,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/bg_edit_text_selector"
-            android:hint="请输入名称"
+            android:hint="@string/input_name"
             android:inputType="text"
             android:paddingStart="5dp"
             android:textCursorDrawable="@drawable/edit_cursor_color"
@@ -78,7 +78,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/account_edit_et" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <EditText
             android:id="@+id/password_edit_et"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -89,10 +89,23 @@
             android:hint="@string/input_pass"
             android:inputType="textPassword"
             android:paddingStart="5dp"
+            android:paddingEnd="@dimen/dp_10"
             android:textCursorDrawable="@drawable/edit_cursor_color"
             app:layout_constraintTop_toBottomOf="@id/password_title_tv">
 
-        </androidx.appcompat.widget.AppCompatEditText>
+        </EditText>
+
+        <ImageView
+            android:id="@+id/iv_password_visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_password_visible"
+            app:layout_constraintEnd_toEndOf="@id/password_edit_et"
+            app:layout_constraintTop_toTopOf="@id/password_edit_et"
+            app:layout_constraintBottom_toBottomOf="@id/password_edit_et"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:onClick="onVisibleClick"
+            />
 
         <LinearLayout
             android:id="@+id/date_layout"

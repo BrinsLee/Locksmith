@@ -17,7 +17,13 @@ class PassWordItem(
 ) : BaseMainData(name,accountName, password, /*createDate, modifyDate,*/ note){
 
     override fun getItemType(): Int {
-        return BaseMainItemType.ITEM_NORMAL
+        return BaseMainItemType.ITEM_NORMAL_PASS
+    }
+
+
+    fun setPosition(pos : Int) : PassWordItem{
+        this.pos = pos
+        return this
     }
 
 

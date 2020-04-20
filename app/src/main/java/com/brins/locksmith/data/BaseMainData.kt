@@ -15,9 +15,9 @@ import java.util.*
 
 abstract class BaseMainData(
     protected var name: String = "",
-    protected var accountName: String,
-    protected var password: String,
-    protected var mNote: String = ""
+    var accountName: String,
+    var password: String,
+    var mNote: String = ""
 ) : Serializable, BaseData() {
 
 
@@ -44,6 +44,9 @@ abstract class BaseMainData(
     fun setAppName(name : String?){
         this.name = name?:""
     }
+
+
+    var pos = -1
 
 
     var background = -1
@@ -141,4 +144,14 @@ abstract class BaseMainData(
         return unifiedName ?: DomainUtil.getDomainName(name)
     }
 
+    fun getPasswordData(): String {
+        val secretItems: Map<String, ByteArray>? = decryptSecret()
+        secretItems?.let {
+            return String(
+                it[PASSWORD] ?: error(""),
+                StandardCharsets.UTF_8
+            )
+        }
+        return ""
+    }
 }

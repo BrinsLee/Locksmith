@@ -121,7 +121,7 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
         for (file in mFiles) {
             try {
                 val item = getCardItem(file)
-                mCardData.value!!.add(item)
+                mCardData.value!!.add(item.setPosition(mCardData.value!!.size))
             } catch (e: Exception) {
                 e.printStackTrace()
             }

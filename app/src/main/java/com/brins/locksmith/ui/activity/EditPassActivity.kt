@@ -1,20 +1,28 @@
 package com.brins.locksmith.ui.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.widget.NestedScrollView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.locksmith.R
+import com.brins.locksmith.data.AppConfig.LOCATION
+import com.brins.locksmith.data.AppConfig.NOTE
+import com.brins.locksmith.data.AppConfig.PHONE
+import com.brins.locksmith.data.AppConfig.USERNAME
+import com.brins.locksmith.ui.base.BaseMainItemType
+import com.brins.locksmith.ui.widget.DrawableEditText
 import com.brins.locksmith.utils.EventBusUtils
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.getStatusBarHeight
 import kotlinx.android.synthetic.main.activity_edit_card.*
+import kotlinx.android.synthetic.main.activity_edit_card.nested_root
+import kotlinx.android.synthetic.main.activity_edit_pass.*
 import kotlinx.android.synthetic.main.activity_edit_pass.account_edit_et
 import kotlinx.android.synthetic.main.activity_edit_pass.header_layout
 import kotlinx.android.synthetic.main.activity_edit_pass.name_edit_et
@@ -31,16 +39,15 @@ class EditPassActivity : BaseActivity() {
     private var mName: String = ""
     private var mAccountName: String = ""
     private var mType = 0
+    private var mPos = -1
+    private var isOpenEye = false
 
 
     companion object {
 
-        @JvmStatic
-        val TYPE_FROM_CARD = 2
-        @JvmStatic
-        val TYPE_FROM_PASSWORD = 1
 
         val TYPE_FROM_WHERE = "TYPE_FROM_WHERE"
+        val DATA_POS = "DATA_POS"
 
 
         private val passwordlength = 20
@@ -54,13 +61,15 @@ class EditPassActivity : BaseActivity() {
             intent.putExtra(TYPE_FROM_WHERE, fromWhere)
             activity.startActivity(intent)
         }
+
     }
 
     override fun getLayoutResId(): Int {
         mType = intent.getIntExtra(TYPE_FROM_WHERE, 0)
+        mPos = intent.getIntExtra(DATA_POS, -1)
         return when (mType) {
-            0, 1 -> R.layout.activity_edit_pass
-            2 -> R.layout.activity_edit_card
+            0, BaseMainItemType.ITEM_NORMAL_PASS -> R.layout.activity_edit_pass
+            BaseMainItemType.ITEM_NORMAL_CARD -> R.layout.activity_edit_card
             else -> R.layout.activity_edit_pass
         }
     }
@@ -68,30 +77,97 @@ class EditPassActivity : BaseActivity() {
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         header_layout.setPadding(0, getStatusBarHeight(this), 0, 0)
-        when (mType) {
-            0, 1 -> title_tv.text = "密码"
-            2 -> title_tv.text = "银行卡"
-        }
+        initView()
         ButterKnife.bind(this)
         setListener()
     }
 
+    private fun initView() {
+        when (mType) {
+            0, BaseMainItemType.ITEM_NORMAL_PASS -> {
+                title_tv.text = "密码"
+                if (mPos != -1) {
+                    mSavePasswordViewModel.loadPasswordItem()
+                    val data = mSavePasswordViewModel.mPassWordData.value?.get(mPos)
+                    data?.let {
+                        name_edit_et.setText(it.getAppName())
+                        account_edit_et.setText(it.generalItems[USERNAME])
+                        password_edit_et.setText(it.getPasswordData())
+                        note_edit_et.setText(it.generalItems[NOTE])
 
-    private fun setListener() {
+                    }
+                }
+            }
+            BaseMainItemType.ITEM_NORMAL_CARD -> {
+                title_tv.text = "银行卡"
+                if (mPos != -1) {
+                    mSaveCardViewModel.loadCardItem()
+                    val data = mSaveCardViewModel.mCardData.value?.get(mPos)
+                    data?.let {
+                        name_edit_et.setText(it.getAppName())
+                        account_edit_et.setText(it.generalItems[USERNAME])
+                        password_edit_et.setText(it.getPasswordData())
+                        phone_edit_et.setText(it.generalItems[PHONE])
+                        location_edit_et.setText(it.generalItems[LOCATION])
+                        note_edit_et.setText(it.generalItems[NOTE])
 
-        showSoftInputFromWindow(name_edit_et)
-        nested_root.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            header_layout.y = scrollY.toFloat()
-        })
+                    }
+                }
+            }
+        }
     }
 
-    @OnClick(R.id.return_img, R.id.save_account)
+
+    private fun setListener() {
+        if (mPos == -1) {
+            showSoftInputFromWindow(name_edit_et)
+            nested_root.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                header_layout.y = scrollY.toFloat()
+            })
+        }
+    }
+
+    @OnClick(
+        R.id.return_img,
+        R.id.save_account)
     fun onClick(v: View) {
         when (v.id) {
             R.id.return_img -> finish()
             R.id.save_account -> {
                 saveAccount()
             }
+        }
+    }
+
+    fun onVisibleClick(v : View){
+        if (!isOpenEye) {
+            iv_password_visible.isSelected = true
+            isOpenEye = true
+            password_edit_et.transformationMethod =
+                HideReturnsTransformationMethod.getInstance()
+
+        } else {
+            iv_password_visible.isSelected = false
+            isOpenEye = false
+            password_edit_et.transformationMethod =
+                PasswordTransformationMethod.getInstance()
+
+        }
+    }
+
+    fun onCardVisibleClick(v : View){
+        if (!isOpenEye) {
+            iv_password_visible_card.isSelected = true
+            isOpenEye = true
+            password_edit_et.transformationMethod =
+                HideReturnsTransformationMethod.getInstance()
+
+        } else {
+            iv_password_visible_card.isSelected = false
+            isOpenEye = false
+            password_edit_et.transformationMethod =
+                PasswordTransformationMethod.getInstance()
+
         }
     }
 

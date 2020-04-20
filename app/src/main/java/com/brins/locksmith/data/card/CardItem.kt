@@ -29,7 +29,12 @@ class CardItem(
     }
 
     override fun getItemType(): Int {
-        return BaseMainItemType.ITEM_NORMAL
+        return BaseMainItemType.ITEM_NORMAL_CARD
+    }
+
+    fun setPosition(size: Int): CardItem {
+        pos = size
+        return this
     }
 
 }

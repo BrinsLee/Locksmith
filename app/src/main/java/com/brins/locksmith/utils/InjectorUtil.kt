@@ -13,7 +13,6 @@ object InjectorUtil {
 //    private fun getPlaceRepository() = PlaceRepository.getInstance(CoolWeatherDatabase.getPlaceDao(), CoolWeatherNetwork.getInstance())
 
     private fun getPassportRepository() = PassportRepository.getInstance()
-    private fun getSaveDataRepository() = SaveDataRepository.getInstance()
 
 
 //    fun getChooseAreaModelFactory() = ChooseAreaModelFactory(getPlaceRepository())

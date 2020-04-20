@@ -24,7 +24,7 @@ class BaseMainAdapter :
             else ->
         }*/
         when (viewType) {
-            BaseMainItemType.ITEM_NORMAL -> return BasePasswordHolder(
+            BaseMainItemType.ITEM_NORMAL_PASS, BaseMainItemType.ITEM_NORMAL_CARD -> return BasePasswordHolder(
                 getItemView(
                     R.layout.item_password_recycler,
                     parent
@@ -50,7 +50,7 @@ class BaseMainAdapter :
             val gridManager = manager
             gridManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return if (!mData.isEmpty && BaseMainItemType.ITEM_NORMAL != mData[position].itemType) {
+                    return if (!mData.isEmpty && BaseMainItemType.ITEM_NORMAL_PASS != mData[position].itemType && BaseMainItemType.ITEM_NORMAL_CARD != mData[position].itemType) {
                         gridManager.spanCount
                     } else {
                         1

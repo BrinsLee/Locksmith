@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.brins.locksmith.R
 import com.brins.locksmith.ui.activity.BaseActivity
 import com.brins.locksmith.ui.activity.EditPassActivity
+import com.brins.locksmith.ui.base.BaseMainItemType
 import com.brins.locksmith.utils.doBlur
 
 class MoreWindow(var mContext: BaseActivity) : PopupWindow(), View.OnClickListener {
@@ -187,7 +188,7 @@ class MoreWindow(var mContext: BaseActivity) : PopupWindow(), View.OnClickListen
             }
             R.id.more_window_bank -> {
                 closeAnimation(v.parent as ConstraintLayout)
-                EditPassActivity.startThis(mContext, EditPassActivity.TYPE_FROM_CARD)
+                EditPassActivity.startThis(mContext, BaseMainItemType.ITEM_NORMAL_CARD)
             }
         }
     }

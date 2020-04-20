@@ -104,7 +104,7 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
         for (file in mFiles) {
             try {
                 val item = getPasswordItem(file)
-                mPassWordData.value!!.add(item)
+                mPassWordData.value!!.add(item.setPosition(mPassWordData.value!!.size))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
