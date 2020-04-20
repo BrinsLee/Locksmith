@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Locksmith</string>
+    <string name="app_name">锁匠</string>
     <string name="missing_password">请先添加系统解锁密码</string>
     <string name="security_tip">安全提示</string>
     <string name="finger_print">锁匠 触控ID</string>
