@@ -3,11 +3,12 @@ package com.brins.locksmith.holder
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.brins.locksmith.BaseApplication.Companion.context
 import com.brins.locksmith.R
 import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.data.BaseMainData
-import com.brins.locksmith.data.password.PassWordItem
+import com.brins.locksmith.utils.AccountIconUtil
 import com.chad.library.adapter.base.BaseViewHolder
 
 class BasePasswordHolder(view: View) : BaseViewHolder<BaseMainData>(view) {
@@ -18,6 +19,8 @@ class BasePasswordHolder(view: View) : BaseViewHolder<BaseMainData>(view) {
 
     override fun setData(data: BaseMainData) {
         super.setData(data)
+        val image = AccountIconUtil.generateBitmap(data, mContext)
+        ivIcon.setImageDrawable(image)
         tvName.text = data.generalItems[APPNAME]
         tvAccount.text = data.generalItems[USERNAME]
     }

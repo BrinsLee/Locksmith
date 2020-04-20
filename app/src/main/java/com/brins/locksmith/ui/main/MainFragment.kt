@@ -61,7 +61,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             getString(R.string.bank),
             type = ITEM_TITLE_CARD
         ).setListener(this)
-        mAdapter.setEnableRefresh(true)
+        mAdapter.setEnableRefresh(false)
         main_recycler.setHasFixedSize(true)
         mAdapter.setOnLoadDataListener { _, _, onLoadDataCompleteCallback ->
             if (mData.isNotEmpty()) {
