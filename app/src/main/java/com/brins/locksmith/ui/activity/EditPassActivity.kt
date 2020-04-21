@@ -7,6 +7,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -14,13 +15,12 @@ import com.brins.locksmith.R
 import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.AppConfig.LOCATION
 import com.brins.locksmith.data.AppConfig.NOTE
-import com.brins.locksmith.data.AppConfig.PASSWORD
 import com.brins.locksmith.data.AppConfig.PHONE
 import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.ui.base.BaseMainItemType
-import com.brins.locksmith.ui.widget.DrawableEditText
 import com.brins.locksmith.utils.EventBusUtils
 import com.brins.locksmith.utils.EventMessage
+import com.brins.locksmith.utils.TimeUtils
 import com.brins.locksmith.utils.getStatusBarHeight
 import kotlinx.android.synthetic.main.activity_edit_card.*
 import kotlinx.android.synthetic.main.activity_edit_card.nested_root
@@ -40,8 +40,6 @@ class EditPassActivity : BaseActivity() {
     private var mPassword: String = ""
     private var mName: String = ""
     private var mAccountName: String = ""
-    private var mPhone: String = ""
-    private var mLocation: String = ""
 
     private var mType = 0
     private var mPos = -1
@@ -99,6 +97,8 @@ class EditPassActivity : BaseActivity() {
                         account_edit_et.setText(it.generalItems[USERNAME])
                         password_edit_et.setText(it.getPasswordData())
                         note_edit_et.setText(it.generalItems[NOTE])
+                        create_date_tv.text =
+                            "创建日期：${TimeUtils.getDateByCurrentTime(it.meta!!.creationDate * 1000)}"
 
                     }
                 }
@@ -272,7 +272,8 @@ class EditPassActivity : BaseActivity() {
         mAccountName = account_edit_et.text.toString()
         mPassword = password_edit_et.text.toString()
         return if (mName.isNullOrEmpty() || mAccountName.isNullOrEmpty() || mPassword.isNullOrEmpty()) {
-            //todo 自定义Toast显示信息不全
+            Toast.makeText(this, getString(R.string.information_not_complete), Toast.LENGTH_SHORT)
+                .show()
             false
         } else {
             mNote = note_edit_et.text.toString()

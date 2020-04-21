@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">锁匠</string>
+    <string name="app_name">Locksmith</string>
     <string name="missing_password">请先添加系统解锁密码</string>
     <string name="security_tip">安全提示</string>
     <string name="finger_print">锁匠 触控ID</string>
@@ -41,5 +41,6 @@
     <string name="phone">预留手机号</string>
     <string name="input_phone">请输入预留手机号</string>
     <string name="input_account">请输入账户名</string>
+    <string name="information_not_complete">请输入完整信息,名称、用户名、密码</string>
 
 </resources>

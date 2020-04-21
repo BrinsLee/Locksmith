@@ -55,7 +55,7 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStore
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         binding.mData = mMainViewModel.mDateLiveData.value
-        lockContainer.setOnClickListener(this)
+        fingerprint_icon.setOnClickListener(this)
         if (mKeyguardManager.isKeyguardSecure) {
             launchFingerAuth()
         } else {
