@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_auth_request.*
 
 class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStoreOwner {
 
-    private var mFingerDialog: FingerAuthDialogFragment? = null
+    //    private var mFingerDialog: FingerAuthDialogFragment? = null
     private val mPassportViewModel: PassportViewModel by lazy {
         ViewModelProvider(this@AuthRequestActivity, InjectorUtil.getPassportModelFactory()).get(
             PassportViewModel::class.java
@@ -41,7 +41,6 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStore
 
     private var mNoSecuredialog: MissPasswordDialogFragment? = null
     private val mWallpaperManager: WallpaperManager by lazy { WallpaperManager.getInstance(this) }
-    private val mKeyguardManager: KeyguardManager by lazy { getSystemService(KEYGUARD_SERVICE) as KeyguardManager }
     private lateinit var mAuthenticalDialogFragment: FingerAuthDialogFragment
 
     override fun getLayoutResId(): Int {
@@ -60,18 +59,11 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStore
             launchFingerAuth()
         } else {
             MissPasswordDialogFragment.showSelf(supportFragmentManager)
-
         }
     }
 
     /***开始指纹识别*/
-    private fun launchFingerAuth() {
-        mFingerDialog = FingerAuthDialogFragment.showSelf(
-            supportFragmentManager,
-            FingerAuthDialogFragment.Stage.FINGERPRINT
-            , this
-        )
-    }
+
 
     fun authencitatedCallback() {
         mFingerDialog?.dismiss()
@@ -86,24 +78,26 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStore
 
     override fun onClick(v: View) {
         when (v.id) {
+            R.id.fingerprint_icon -> {
+                launchFingerAuth()
+            }
             R.id.cancel -> mFingerDialog?.dismissAllowingStateLoss()
 
             R.id.usePassword -> {
-                val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
-                    "Authentication required",
-                    "PASSWORD"
-                )
-                if (intent != null) {
-                    startActivityForResult(intent, FingerAuthDialogFragment.AUTH_REQUEST_CODE)
-                }
-            }
-
-            R.id.fingerprint_icon -> {
-                launchFingerAuth()
+                onClickUsePassword()
             }
         }
     }
 
+    override fun onClickUsePassword() {
+        val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
+            "Authentication required",
+            "PASSWORD"
+        )
+        if (intent != null) {
+            startActivityForResult(intent, AUTH_REQUEST_CODE)
+        }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == AUTH_REQUEST_CODE && resultCode == RESULT_OK) {

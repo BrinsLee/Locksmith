@@ -15,4 +15,11 @@ object AppConfig {
     val TYPE_ITEM_CARD = 1002
     val TYPE_ITEM_ = 1003
 
+    val FROMAPP = "app"
+    val FROMWEBSITE = "web"
+
+    val PACKAGE_NAME = "com.brins.locksmith"
+
+    val AUTO_FILL_URL = "autofillFrameworkUrl"
+    val AUTO_FILL_FROM_WHERE = "fromwhere"
 }

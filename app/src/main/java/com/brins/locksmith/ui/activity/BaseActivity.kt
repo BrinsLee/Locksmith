@@ -2,13 +2,19 @@ package com.brins.locksmith.ui.activity
 
 import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
+import android.app.KeyguardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
 import android.os.Process
+import android.view.View
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.brins.locksmith.R
+import com.brins.locksmith.ui.dialog.FingerAuthDialogFragment
+import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
 import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.setTextDark
 import com.brins.locksmith.utils.setTranslucent
@@ -20,17 +26,21 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
 
     protected open val TAG = this::class.java.simpleName
     private val mMainThread = Looper.getMainLooper().thread
     private var mScheduledExecutorService: ScheduledExecutorService? = null
+    protected var needAuthRequest = false
+    protected var mFingerDialog: FingerAuthDialogFragment? = null
+    protected val mKeyguardManager: KeyguardManager by lazy { getSystemService(KEYGUARD_SERVICE) as KeyguardManager }
 
 
     private val mTimerTask: TimerTask = object : TimerTask() {
         override fun run() {
             if (!isInForeground()) {
-                ActivityCollector.finishall()
+//                ActivityCollector.finishall()
+                needAuthRequest = true
             }
             stopTimer()
         }
@@ -92,12 +102,31 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    protected fun launchFingerAuth() {
+        mFingerDialog = FingerAuthDialogFragment.showSelf(
+            supportFragmentManager,
+            FingerAuthDialogFragment.Stage.FINGERPRINT
+            , this
+        )
+    }
+
     private fun isInForeground(): Boolean {
         val manager =
             getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val info = manager.runningAppProcesses
         val processInfo = info[0]
         return applicationInfo.packageName == processInfo.processName && processInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (needAuthRequest) {
+            if (mKeyguardManager.isKeyguardSecure) {
+                launchFingerAuth()
+            } else {
+                MissPasswordDialogFragment.showSelf(supportFragmentManager)
+            }
+        }
     }
 
     override fun onStop() {
@@ -114,6 +143,23 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.cancel -> {
+                mFingerDialog?.dismissAllowingStateLoss()
+                ActivityCollector.finishall()
+            }
+
+            R.id.usePassword -> {
+                onClickUsePassword()
+            }
+        }
+    }
+
+    protected open fun onClickUsePassword() {
+        mFingerDialog?.dismiss()
     }
 
     protected open fun onCreateBeforeBinding(@Nullable savedInstanceState: Bundle?) {}

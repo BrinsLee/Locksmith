@@ -12,6 +12,11 @@ import android.os.Build
 import android.os.CancellationSignal
 import android.os.Handler
 import android.os.Message
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -27,7 +32,6 @@ import com.brins.locksmith.R
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.BaseMainData
 import org.greenrobot.eventbus.EventBus
-import tech.bluespace.id_guard.AccountItemOuterClass
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -352,6 +356,30 @@ class WeakHandler constructor(handler: IHandler) : Handler() {
     }
 }
 
+fun getScreenHeight(): Int {
+    val windowManager =
+        BaseApplication.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val dm = DisplayMetrics()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        windowManager.defaultDisplay.getRealMetrics(dm)
+    } else {
+        windowManager.defaultDisplay.getMetrics(dm)
+    }
+    return dm.heightPixels
+}
+
+fun getScreenWeight(): Int {
+    val windowManager =
+        BaseApplication.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val dm = DisplayMetrics()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        windowManager.defaultDisplay.getRealMetrics(dm)
+    } else {
+        windowManager.defaultDisplay.getMetrics(dm)
+    }
+    return dm.widthPixels
+}
+
 
 fun getDimension(context: Context, @DimenRes id: Int): Int {
     return context.resources.getDimensionPixelSize(id)
@@ -649,6 +677,20 @@ fun doBlur(
     return bitmap
 }
 
+
+fun doBlur(context: Context, sentBitmap: Bitmap, radius: Int): Bitmap? {
+    val bitmap = sentBitmap.copy(sentBitmap.config, true)
+    val  rs = RenderScript.create(context)
+    val input = Allocation.createFromBitmap(rs,sentBitmap, Allocation.MipmapControl.MIPMAP_NONE,Allocation.USAGE_SCRIPT)
+    val output = Allocation.createTyped(rs,input.getType())
+    val script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
+    script.setRadius(radius.toFloat())/* e.g. 3.f */
+    script.setInput(input)
+    script.forEach(output)
+    output.copyTo(bitmap)
+    return bitmap
+
+}
 
 fun getVersionCode(): Int {
 
@@ -1144,7 +1186,8 @@ class DomainUtil {
                             1
                         ) else uri
                     } else {
-                        val previousDotPosition = normalizedUri.lastIndexOf(".", lastDotPosition - 1)
+                        val previousDotPosition =
+                            normalizedUri.lastIndexOf(".", lastDotPosition - 1)
                         if (previousDotPosition == -1) {
                             return normalizedUri
                         } else {

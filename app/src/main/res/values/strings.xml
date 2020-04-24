@@ -42,5 +42,12 @@
     <string name="input_phone">请输入预留手机号</string>
     <string name="input_account">请输入账户名</string>
     <string name="information_not_complete">请输入完整信息,名称、用户名、密码</string>
+    <string name="auto_hint_phone">手机号</string>
+    <string name="auto_hint_email">邮箱</string>
+    <string name="auto_hint_username">用户名</string>
+    <string name="auto_hint_account">账号</string>
+    <string name="auto_hint_member">会员名</string>
+    <string name="auto_hint_password">密码</string>
+    <string name="auto_fill_prompt">使用锁匠自动填充</string>
 
 </resources>

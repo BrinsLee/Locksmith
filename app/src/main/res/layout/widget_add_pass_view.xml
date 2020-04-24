@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:drawableTop="@drawable/tabbar_compose_camera"
+        android:drawableTop="@drawable/tabbar_compose_lock"
         android:gravity="center_horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/more_window_bank"

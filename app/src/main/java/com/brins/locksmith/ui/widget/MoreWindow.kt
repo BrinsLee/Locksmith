@@ -58,7 +58,6 @@ class MoreWindow(var mContext: BaseActivity) : PopupWindow(), View.OnClickListen
         if (null != overlay) {
             return overlay!!
         }
-        val startMs = System.currentTimeMillis()
         val view = mContext.window.decorView
         view.isDrawingCacheEnabled = true
         view.buildDrawingCache(true)
@@ -80,7 +79,6 @@ class MoreWindow(var mContext: BaseActivity) : PopupWindow(), View.OnClickListen
         paint.flags = Paint.FILTER_BITMAP_FLAG
         canvas.drawBitmap(mBitmap, 0f, 0f, paint)
         overlay = doBlur(overlay!!, radius.toInt(), true)
-        Log.i(TAG, "blur time is:" + (System.currentTimeMillis() - startMs))
         return overlay!!
     }
 

@@ -136,7 +136,7 @@ class EditPassActivity : BaseActivity() {
         R.id.return_img,
         R.id.save_account
     )
-    fun onClick(v: View) {
+    fun onClickView(v: View) {
         when (v.id) {
             R.id.return_img -> finish()
             R.id.save_account -> {

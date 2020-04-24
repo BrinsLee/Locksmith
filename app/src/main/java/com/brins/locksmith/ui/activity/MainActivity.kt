@@ -82,7 +82,7 @@ class MainActivity : BaseActivity() {
         R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv,
         R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv
     )
-    fun onClick(v: View) {
+    fun onClickView(v: View) {
         when (v.id) {
             R.id.tab_add_ll, R.id.tab_add_btn -> showMoreWindow(v)
             R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv -> changeTab(TAB_MAIN)

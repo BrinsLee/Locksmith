@@ -21,7 +21,7 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
 
     private val mHandler = WeakHandler(this)
 
-    override fun onClick(v: View?) {
+    fun onClickView(v: View?) {
         if (mPassportViewModel.loadPassport()) {
             MainActivity.startThis(this@GuideActivity)
         }
@@ -48,7 +48,6 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
-        btnStart.setOnClickListener(this)
         toolbar.setPadding(0, getStatusBarHeight(this), 0, 0)
         mLoadingDialogFragment = LoadingDialogFragment.showSelf(supportFragmentManager)
         val message = mHandler.obtainMessage()
