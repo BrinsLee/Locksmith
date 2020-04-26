@@ -12,7 +12,7 @@ import butterknife.OnClick
 import com.brins.locksmith.R
 import com.brins.locksmith.adapter.MainPagerAdapter
 import com.brins.locksmith.ui.main.MainFragment
-import com.brins.locksmith.ui.main.PasswordFragment
+import com.brins.locksmith.ui.main.MineFragment
 import com.brins.locksmith.ui.widget.MoreWindow
 import com.brins.locksmith.utils.getStatusBarHeight
 import com.brins.locksmith.viewmodel.card.SaveCardViewModel
@@ -20,7 +20,6 @@ import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.bottom_bar.*
-import kotlinx.android.synthetic.main.view_common_toolbar.*
 
 class MainActivity : BaseActivity() {
 
@@ -31,8 +30,8 @@ class MainActivity : BaseActivity() {
 
     companion object {
         private val TAB_MAIN = 0
-        private val TAB_FIND = 1
-        private val TAB_MESSAGE = 2
+//        private val TAB_FIND = 1
+//        private val TAB_MESSAGE = 2
         private val TAB_MINE = 3
         fun startThis(activity: AppCompatActivity) {
             val intent = Intent(activity, MainActivity::class.java)
@@ -56,9 +55,7 @@ class MainActivity : BaseActivity() {
 
     private fun initData() {
         list.add(MainFragment())
-        list.add(PasswordFragment())
-        list.add(PasswordFragment())
-        list.add(PasswordFragment())
+        list.add(MineFragment())
     }
 
     private fun initView() {
@@ -86,8 +83,8 @@ class MainActivity : BaseActivity() {
         when (v.id) {
             R.id.tab_add_ll, R.id.tab_add_btn -> showMoreWindow(v)
             R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv -> changeTab(TAB_MAIN)
-            R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv -> changeTab(TAB_FIND)
-            R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv -> changeTab(TAB_MESSAGE)
+/*            R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv ->
+            R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv ->*/
             R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv -> changeTab(TAB_MINE)
         }
     }

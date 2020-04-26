@@ -8,16 +8,16 @@ import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 
 
-class PasswordFragment: BaseFragment() {
+class MineFragment: BaseFragment() {
 
     private val mSavePasswordViewModel: SavePasswordViewModel by lazy {
-        ViewModelProvider(this@PasswordFragment, InjectorUtil.getPassWordFactory()).get(
+        ViewModelProvider(this@MineFragment, InjectorUtil.getPassWordFactory()).get(
             SavePasswordViewModel::class.java
         )
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.fragment_password
+        return R.layout.fragment_mine
     }
 
     override fun initEventAndData() {

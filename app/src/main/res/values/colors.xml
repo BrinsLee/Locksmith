@@ -29,6 +29,7 @@
     <color name="background_1">#F6EBEDEF</color>
     <color name="navigator">#bbffffff</color>
     <color name="translucent">#aa000000</color>
+    <color name="common_black_second">#333333</color>
 
     <color name="chat">#559fca</color>
     <color name="quote">#f0983c</color>

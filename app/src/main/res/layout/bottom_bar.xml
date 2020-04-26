@@ -50,6 +50,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <ImageButton
@@ -99,6 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:visibility="gone"
             android:gravity="center"
             android:orientation="vertical">
 

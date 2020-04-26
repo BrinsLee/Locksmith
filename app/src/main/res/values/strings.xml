@@ -49,5 +49,14 @@
     <string name="auto_hint_member">会员名</string>
     <string name="auto_hint_password">密码</string>
     <string name="auto_fill_prompt">使用锁匠自动填充</string>
+    <string name="title_how_to_protect">锁匠如何保护您的数据</string>
+    <string name="title_benefit">锁匠优势</string>
+    <string name="title_turn_on_autofill">如何启用自动填充</string>
+    <string name="faq">常见问题</string>
+    <string name="title_safe_practice">安全实践</string>
+    <string name="title_service_contact">服务协议</string>
+    <string name="title_privacy_policy">隐私政策</string>
+    <string name="title_version">版本</string>
+    <string name="title_saved_data">已存数据</string>
 
 </resources>
