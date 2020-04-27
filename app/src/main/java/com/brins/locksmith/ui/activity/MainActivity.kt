@@ -15,6 +15,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.locksmith.R
 import com.brins.locksmith.adapter.MainPagerAdapter
+import com.brins.locksmith.ui.base.BaseMainItemType
 import com.brins.locksmith.ui.main.MainFragment
 import com.brins.locksmith.ui.main.MineFragment
 import com.brins.locksmith.ui.widget.KickBackAnimator
@@ -129,7 +130,8 @@ class MainActivity : BaseActivity() {
         R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv,
         R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv,
         R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv,
-        R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv, R.id.center_music_window_close
+        R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv, R.id.center_music_window_close,
+        R.id.more_window_password,R.id.more_window_bank
     )
     fun onClickView(v: View) {
         when (v.id) {
@@ -137,6 +139,14 @@ class MainActivity : BaseActivity() {
             R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv -> changeTab(TAB_MAIN)
 /*            R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv ->
             R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv ->*/
+            R.id.more_window_password -> {
+                closeAnimation()
+                EditPassActivity.startThis(this)
+            }
+            R.id.more_window_bank -> {
+                closeAnimation()
+                EditPassActivity.startThis(this, BaseMainItemType.ITEM_NORMAL_CARD)
+            }
             R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv -> changeTab(TAB_MINE)
             R.id.center_music_window_close -> closeAnimation()
         }

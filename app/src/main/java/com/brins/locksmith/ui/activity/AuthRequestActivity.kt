@@ -65,8 +65,8 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStore
     /***开始指纹识别*/
 
 
-    fun authencitatedCallback() {
-        mFingerDialog?.dismiss()
+    public override fun authencitatedCallback() {
+        super.authencitatedCallback()
         if (mPassportViewModel.loadPassport()) {
             MainActivity.startThis(this@AuthRequestActivity)
         } else {
@@ -89,20 +89,6 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStore
         }
     }
 
-    override fun onClickUsePassword() {
-        val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
-            "Authentication required",
-            "PASSWORD"
-        )
-        if (intent != null) {
-            startActivityForResult(intent, AUTH_REQUEST_CODE)
-        }
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == AUTH_REQUEST_CODE && resultCode == RESULT_OK) {
-            authencitatedCallback()
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
+
 }

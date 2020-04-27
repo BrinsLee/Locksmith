@@ -158,8 +158,19 @@ abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    protected open fun onClickUsePassword() {
+    protected open fun authencitatedCallback() {
         mFingerDialog?.dismiss()
+    }
+
+
+    protected open fun onClickUsePassword() {
+        val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
+            "Authentication required",
+            "PASSWORD"
+        )
+        if (intent != null) {
+            startActivityForResult(intent, FingerAuthDialogFragment.AUTH_REQUEST_CODE)
+        }
     }
 
     protected open fun onCreateBeforeBinding(@Nullable savedInstanceState: Bundle?) {}
@@ -176,5 +187,10 @@ abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
         setTextDark(this.window, true)
     }
 
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == FingerAuthDialogFragment.AUTH_REQUEST_CODE && resultCode == RESULT_OK) {
+            authencitatedCallback()
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 }

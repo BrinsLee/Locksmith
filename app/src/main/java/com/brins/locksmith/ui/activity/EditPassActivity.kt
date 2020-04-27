@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.NestedScrollView
@@ -68,6 +70,7 @@ class EditPassActivity : BaseActivity() {
     }
 
     override fun getLayoutResId(): Int {
+        window.setFlags(FLAG_SECURE, FLAG_SECURE)
         mType = intent.getIntExtra(TYPE_FROM_WHERE, 0)
         mPos = intent.getIntExtra(DATA_POS, -1)
         return when (mType) {

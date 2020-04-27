@@ -25,7 +25,7 @@
              android:layout_height="54dp"
              android:layout_marginStart="20dp"
              android:layout_marginTop="20dp"
-             android:layout_marginBottom="25dp"
+             android:layout_marginBottom="@dimen/dp_10"
              android:src="@drawable/icon_user_unknown" />
 
          <LinearLayout
@@ -46,38 +46,17 @@
                 android:textColor="@color/common_black_second"
                 android:textSize="16sp"
                 android:text="@string/name" />
-
          </LinearLayout>
 
       </RelativeLayout>
 
    </LinearLayout>
 
-   <LinearLayout
-       android:id="@+id/mine_data_layout"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_below="@id/mine_info_layout"
-       android:layout_marginStart="15dp"
-       android:layout_marginEnd="15dp"
-       android:background="@drawable/bg_shape_title"
-       android:orientation="vertical">
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="8dp"
-          android:textSize="14sp"
-          android:textColor="@color/common_black_second"
-          android:text="@string/title_saved_data" />
-
-   </LinearLayout>
-
-
-   <LinearLayout
+    <LinearLayout
         android:id="@+id/mine_safe_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mine_data_layout"
+        android:layout_below="@id/mine_info_layout"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"

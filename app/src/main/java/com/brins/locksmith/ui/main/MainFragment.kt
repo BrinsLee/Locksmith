@@ -1,7 +1,6 @@
 package com.brins.locksmith.ui.main
 
 import android.content.Context
-import android.util.SparseArray
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brins.locksmith.R
@@ -12,6 +11,7 @@ import com.brins.locksmith.ui.activity.MainActivity
 import com.brins.locksmith.ui.base.BaseDBFragment
 import com.brins.locksmith.ui.base.BaseMainItemType
 import com.brins.locksmith.ui.base.BaseMainItemType.ITEM_TITLE_CARD
+import com.brins.locksmith.ui.base.BaseMainItemType.ITEM_TITLE_CERTIFICATE
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.viewmodel.card.SaveCardViewModel
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
@@ -19,7 +19,6 @@ import com.chad.library.adapter.base.model.BaseData
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.*
 
 
 class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener,
@@ -31,8 +30,9 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
 
     private val mAdapter = BaseMainAdapter()
     private val mData: MutableList<in BaseData> = mutableListOf()
-    private lateinit var mPassTitleItem : GeneralTitleItem
-    private lateinit var mCardTitleItem : GeneralTitleItem
+    private lateinit var mPassTitleItem: GeneralTitleItem
+    private lateinit var mCardTitleItem: GeneralTitleItem
+    private lateinit var mCertificate: GeneralTitleItem
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_main
@@ -47,12 +47,6 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
     override fun initEventAndData() {
         main_recycler.layoutManager =
             GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
-/*        main_recycler.addItemDecoration(
-            GridSpacingItemDecoration(
-                4,
-                dip2px(10f), true
-            )
-        )*/
         mPassTitleItem = GeneralTitleItem(
             getString(R.string.password),
             type = BaseMainItemType.ITEM_TITLE_PASS
@@ -60,6 +54,10 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
         mCardTitleItem = GeneralTitleItem(
             getString(R.string.bank),
             type = ITEM_TITLE_CARD
+        ).setListener(this)
+        mCertificate = GeneralTitleItem(
+            getString(R.string.certificate),
+            type = ITEM_TITLE_CERTIFICATE
         ).setListener(this)
         mAdapter.setEnableRefresh(false)
         main_recycler.setHasFixedSize(true)
@@ -71,6 +69,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             mData.addAll(mSavePasswordViewModel.loadPasswordItem())
             mData.add(mCardTitleItem)
             mData.addAll(mSaveCardViewModel.loadCardItem())
+            mData.add(mCertificate)
             onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
         main_recycler.adapter = mAdapter
