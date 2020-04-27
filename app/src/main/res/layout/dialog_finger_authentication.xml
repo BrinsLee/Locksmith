@@ -6,20 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.brins.locksmith.ui.widget.BlurringView
+    <com.github.mmin18.widget.RealtimeBlurView
         android:id="@+id/blur_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:blur_radius="25"
-        app:overlay_color="@color/white_70"
-        app:sample_factor="10" />
+        android:layout_height="match_parent"/>
+
 
     <com.brins.locksmith.ui.widget.RoundConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="47dp"
         android:layout_marginEnd="47dp"
-        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,10 +25,10 @@
 
         <ImageView
             android:id="@+id/ivFingerprint"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="25dp"
-            android:src="@drawable/ic_fingerprint_black_24dp"
+            android:src="@drawable/ic_finger"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -61,22 +58,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
-
-        <ImageView
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginTop="15dp"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/divider">
+            app:layout_constraintTop_toBottomOf="@id/content">
 
             <TextView
                 android:id="@+id/cancel"

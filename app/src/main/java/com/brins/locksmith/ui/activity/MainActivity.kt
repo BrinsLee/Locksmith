@@ -1,7 +1,11 @@
 package com.brins.locksmith.ui.activity
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -13,26 +17,29 @@ import com.brins.locksmith.R
 import com.brins.locksmith.adapter.MainPagerAdapter
 import com.brins.locksmith.ui.main.MainFragment
 import com.brins.locksmith.ui.main.MineFragment
-import com.brins.locksmith.ui.widget.MoreWindow
+import com.brins.locksmith.ui.widget.KickBackAnimator
+import com.brins.locksmith.utils.getScreenHeight
 import com.brins.locksmith.utils.getStatusBarHeight
 import com.brins.locksmith.viewmodel.card.SaveCardViewModel
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.bottom_bar.*
+import kotlinx.android.synthetic.main.widget_add_pass_view.*
 
 class MainActivity : BaseActivity() {
 
-    var mMoreWindow: MoreWindow? = null
     private var list = mutableListOf<Fragment>()
     private val adapter by lazy { MainPagerAdapter(supportFragmentManager, list) }
+    private val mHandler = Handler()
 
 
     companion object {
         private val TAB_MAIN = 0
-//        private val TAB_FIND = 1
+        //        private val TAB_FIND = 1
 //        private val TAB_MESSAGE = 2
         private val TAB_MINE = 3
+
         fun startThis(activity: AppCompatActivity) {
             val intent = Intent(activity, MainActivity::class.java)
             activity.startActivity(intent)
@@ -64,28 +71,74 @@ class MainActivity : BaseActivity() {
         changeTab(0)
     }
 
-    private fun showMoreWindow(view: View) {
-        if (null == mMoreWindow) {
-            mMoreWindow = MoreWindow(this)
+
+    private fun showAnimation() {
+        for (i in 0 until add_view_root.childCount) {
+            val child = add_view_root.getChildAt(i)
+            mHandler.postDelayed({
+                add_view_root.visibility = View.VISIBLE
+                child.visibility = View.VISIBLE
+                val fadeAnim: ValueAnimator =
+                    ObjectAnimator.ofFloat(child, "translationY", 600f, 0f)
+                fadeAnim.duration = 300
+                val kickAnimator = KickBackAnimator()
+                kickAnimator.setDuration(150f)
+                fadeAnim.setEvaluator(kickAnimator)
+                fadeAnim.start()
+            }, i * 50.toLong())
         }
-        mMoreWindow!!.showMoreWindow(view, 100)
     }
 
+    private fun closeAnimation() {
+        add_view_root.visibility = View.VISIBLE
+        for (i in 0 until add_view_root.childCount) {
+            val child = add_view_root.getChildAt(i)
+            mHandler.postDelayed({
+                val fadeAnim: ValueAnimator =
+                    ObjectAnimator.ofFloat(child, "translationY", getScreenHeight() / 2f, 600f)
+                fadeAnim.duration = 200
+                val kickAnimator = KickBackAnimator()
+                kickAnimator.setDuration(100f)
+                fadeAnim.setEvaluator(kickAnimator)
+                fadeAnim.start()
+                fadeAnim.addListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) { // TODO Auto-generated method stub
+                    }
+
+                    override fun onAnimationRepeat(animation: Animator) { // TODO Auto-generated method stub
+                    }
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        child.visibility = View.INVISIBLE
+                        if (child.id == R.id.center_music_window_close) {
+                            add_view_root.visibility = View.INVISIBLE
+
+                        }
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) { // TODO Auto-generated method stub
+                    }
+                })
+
+            }, (add_view_root.childCount - i - 1) * 30.toLong())
+        }
+    }
 
     @OnClick(
         R.id.tab_add_ll, R.id.tab_add_btn,
         R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv,
         R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv,
         R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv,
-        R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv
+        R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv, R.id.center_music_window_close
     )
     fun onClickView(v: View) {
         when (v.id) {
-            R.id.tab_add_ll, R.id.tab_add_btn -> showMoreWindow(v)
+            R.id.tab_add_ll, R.id.tab_add_btn -> showAnimation()
             R.id.tab_main_ll, R.id.tab_main_btn, R.id.tab_main_tv -> changeTab(TAB_MAIN)
 /*            R.id.tab_find_ll, R.id.tab_find_btn, R.id.tab_find_tv ->
             R.id.tab_message_btn, R.id.tab_message_ll, R.id.tab_message_tv ->*/
             R.id.tab_my_ll, R.id.tab_my_btn, R.id.tab_my_tv -> changeTab(TAB_MINE)
+            R.id.center_music_window_close -> closeAnimation()
         }
     }
 

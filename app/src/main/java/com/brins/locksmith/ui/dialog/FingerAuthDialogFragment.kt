@@ -76,42 +76,10 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
         cancel.setOnClickListener(listener)
         usePassword.setOnClickListener(listener)
         mFingerprintUiHelper = FingerprintUiHelper(mFingerprintManager, this)
-        createBlurBackground()
         if (!isFingerprintAuthAvailable()) {
             //指纹不可用
             tryPassword()
         }
-    }
-
-    private fun createBlurBackground() {
-        blur_view.setBlurredView(activity!!.window.decorView)
-        blur_view.invalidate()
-
-        /*val rad = 8
-        val bitmap : Bitmap
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            val vectorDrawable = context!!.getDrawable(R.drawable.unnamed)
-            bitmap = Bitmap.createBitmap(getScreenWeight(),
-                getScreenWeight(), Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
-            vectorDrawable.draw(canvas)
-        } else {
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.unnamed)
-        }
-
-        var bitmapBlur = Bitmap.createBitmap(
-            getScreenWeight() / rad,
-            getScreenHeight() / rad,
-            Bitmap.Config.RGB_565
-        )
-        val canvas = Canvas(bitmapBlur)
-        val paint = Paint()
-        paint.flags = Paint.FILTER_BITMAP_FLAG
-        canvas.drawBitmap(bitmap, 0f, 0f, paint)
-        bitmapBlur = doBlur(bitmapBlur!!, 10, true)
-        contain_root.background = BitmapDrawable(resources, bitmapBlur)*/
-
     }
 
 

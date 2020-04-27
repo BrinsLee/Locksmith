@@ -27,6 +27,7 @@
 
     <color name="background">#f69aaab6</color>
     <color name="background_1">#F6EBEDEF</color>
+    <color name="background_2">#F6F5F7F8</color>
     <color name="navigator">#bbffffff</color>
     <color name="translucent">#aa000000</color>
     <color name="common_black_second">#333333</color>

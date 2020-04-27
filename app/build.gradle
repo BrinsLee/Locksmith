@@ -45,6 +45,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(':recycler_lib')
+    //realtimeblurview
+    implementation 'com.github.mmin18:realtimeblurview:1.2.1'
     //RoundImageView
     implementation 'com.makeramen:roundedimageview:2.3.0'
     // protobuf

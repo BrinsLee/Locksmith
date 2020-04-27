@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_view_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_centerHorizontal="true"
-    android:background="#90FFFFFF"
+    android:visibility="invisible"
     android:gravity="bottom|center_horizontal">
+
+    <com.github.mmin18.widget.RealtimeBlurView
+        android:id="@+id/blur_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <TextView
         android:id="@+id/more_window_password"
@@ -21,6 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
+        android:visibility="invisible"
         android:text="@string/password" />
 
     <TextView
@@ -36,6 +43,7 @@
         android:gravity="center_horizontal"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
+        android:visibility="invisible"
         android:text="@string/bank_card"/>
 
     <TextView
@@ -51,6 +59,7 @@
         android:gravity="center_horizontal"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
+        android:visibility="invisible"
         android:text="@string/certificate"/>
 
     <TextView
@@ -66,6 +75,7 @@
         android:gravity="center_horizontal"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
+        android:visibility="invisible"
         android:text="@string/document"/>
 
     <TextView
@@ -81,6 +91,7 @@
         app:layout_constraintTop_toBottomOf="@id/more_window_password"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
+        android:visibility="invisible"
         android:text="@string/data_base"/>
 
     <TextView
@@ -96,6 +107,7 @@
         app:layout_constraintTop_toBottomOf="@id/more_window_password"
         android:drawablePadding="5dp"
         android:paddingBottom="10dp"
+        android:visibility="invisible"
         android:text="@string/server"/>
 
     <ImageView
@@ -108,6 +120,7 @@
         android:layout_marginBottom="50dp"
         android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
+        android:visibility="invisible"
         android:src="@drawable/tabbar_compose_background_icon_close" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

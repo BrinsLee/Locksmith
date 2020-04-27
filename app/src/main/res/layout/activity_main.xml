@@ -53,11 +53,7 @@
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigator"
-        android:layout_width="320dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/drawable_head"
-        app:menu="@menu/drawable_menu" />-->
+    <include
+        layout="@layout/widget_add_pass_view"
+        />
 </androidx.drawerlayout.widget.DrawerLayout>
