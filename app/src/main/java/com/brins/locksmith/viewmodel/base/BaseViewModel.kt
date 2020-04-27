@@ -31,7 +31,7 @@ open class BaseViewModel(protected val repository: PassportRepository) : ViewMod
         directory: File,
         password: BaseMainData,
         f: () -> Unit
-    ) {
+    ):Boolean {
         filePath = File(directory, Hex.toHexString(getAccountId(password.meta)) + ".data")
         val encryptedMeta = encryptMeta(password.meta)
         val encryptedGeneral = encryptGeneral(password.meta!!, password.generalItems)
@@ -46,6 +46,7 @@ open class BaseViewModel(protected val repository: PassportRepository) : ViewMod
         fos.write(builder.build().toByteArray())
         fos.close()
         f()
+        return true
     }
 
 /*    protected fun updateData(item: BaseMainData, directory: File) {

@@ -2,10 +2,12 @@ package com.brins.locksmith.ui.main
 
 import android.content.Context
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brins.locksmith.R
 import com.brins.locksmith.adapter.BaseMainAdapter
 import com.brins.locksmith.data.GeneralTitleItem
+import com.brins.locksmith.data.password.PassWordItem
 import com.brins.locksmith.databinding.FragmentMainBinding
 import com.brins.locksmith.ui.activity.MainActivity
 import com.brins.locksmith.ui.base.BaseDBFragment
@@ -73,6 +75,9 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
         main_recycler.adapter = mAdapter
+
+        mSavePasswordViewModel.mPassWordData.observe(this,
+            Observer<ArrayList<PassWordItem>> { })
     }
 
     override fun isRegisterEventBus(): Boolean {

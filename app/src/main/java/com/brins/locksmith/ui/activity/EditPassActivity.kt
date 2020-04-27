@@ -194,12 +194,6 @@ class EditPassActivity : BaseActivity() {
                 0, BaseMainItemType.ITEM_NORMAL_PASS -> {
                     if (mPos == -1) {
                         mSavePasswordViewModel.savePassWord(mName, mAccountName, mPassword, mNote) {
-                            EventBusUtils.sendEnvent(
-                                EventMessage(
-                                    EventMessage.CODE_UPDATE_PASSWORD,
-                                    null
-                                )
-                            )
                             finish()
                         }
                     } else {

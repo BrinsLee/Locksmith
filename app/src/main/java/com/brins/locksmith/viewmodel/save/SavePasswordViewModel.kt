@@ -8,6 +8,7 @@ import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.AppConfig
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.data.password.PassWordItem
+import com.brins.locksmith.data.password.SinglePasswordLiveData
 import com.brins.locksmith.utils.aes256Decrypt
 import com.brins.locksmith.viewmodel.base.BaseViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
@@ -29,7 +30,7 @@ import kotlin.collections.set
 class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repository) {
 
 
-    var mPassWordData = MutableLiveData<ArrayList<PassWordItem>>()
+    var mPassWordData = SinglePasswordLiveData.get()
 
     companion object {
         private val path = BaseApplication.context.applicationInfo.dataDir + "/account_file/"
@@ -45,7 +46,9 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
 
     ) {
         val password = createItem(mName, mAccountName, mPassword, mNote)
-        saveData(getAccountDirectory(), password, finish)
+        if (saveData(getAccountDirectory(), password, finish)){
+            mPassWordData.value?.add(password)
+        }
     }
 
     fun updatePassWord(item: PassWordItem, finish: () -> Unit) {
