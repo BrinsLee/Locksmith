@@ -8,6 +8,7 @@ import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.data.card.CardItem
+import com.brins.locksmith.data.card.SingleCardLiveData
 import com.brins.locksmith.utils.aes256Decrypt
 import com.brins.locksmith.viewmodel.base.BaseViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
@@ -30,7 +31,7 @@ import javax.crypto.IllegalBlockSizeException
 class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(repository) {
 
 
-    var mCardData = MutableLiveData<ArrayList<CardItem>>()
+    var mCardData = SingleCardLiveData.get()
 
     companion object {
         private val path = BaseApplication.context.applicationInfo.dataDir + "/card_file/"
@@ -48,7 +49,12 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
 
     ) {
         val password = createItem(mName, mAccountName, mPassword, mNote, mLocation, mPhone)
-        saveData(getAccountDirectory(), password, finish)
+        if (saveData(getAccountDirectory(), password, finish)) {
+            val list = ArrayList<CardItem>()
+            list.addAll(mCardData.value!!)
+            list.add(password.setPosition(list.size))
+            mCardData.value = list
+        }
     }
 
 

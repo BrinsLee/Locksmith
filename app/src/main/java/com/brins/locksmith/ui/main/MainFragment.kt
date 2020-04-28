@@ -61,6 +61,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             getString(R.string.certificate),
             type = ITEM_TITLE_CERTIFICATE
         ).setListener(this)
+
         mAdapter.setEnableRefresh(false)
         main_recycler.setHasFixedSize(true)
         mAdapter.setOnLoadDataListener { _, _, onLoadDataCompleteCallback ->
@@ -75,21 +76,19 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
         main_recycler.adapter = mAdapter
-
         mSavePasswordViewModel.mPassWordData.observe(this,
-            Observer<ArrayList<PassWordItem>> { })
-    }
-
-    override fun isRegisterEventBus(): Boolean {
-        return true
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun refreshPassWordData(message: EventMessage<*>) {
-        when (message.code) {
-            EventMessage.CODE_UPDATE_PASSWORD -> initEventAndData()
-
-        }
+            Observer {
+                if (mAdapter.data.isNotEmpty()){
+                    mAdapter.addData(it.size, it[it.size - 1])
+                    mData.add(it.size, it[it.size - 1])
+                }
+            })
+        mSaveCardViewModel.mCardData.observe(this, Observer {
+            if (mAdapter.data.isNotEmpty()){
+                mAdapter.addData(mSavePasswordViewModel.dataSize() + it.size + 1, it[it.size - 1])
+                mData.add(mSavePasswordViewModel.dataSize() + it.size + 1, it[it.size - 1])
+            }
+        })
     }
 
     override fun onClick(v: View) {
@@ -111,7 +110,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
                     }
                 }
             }
-            BaseMainItemType.ITEM_TITLE_CARD -> {
+            ITEM_TITLE_CARD -> {
                 if (mSaveCardViewModel.hasPassword()) {
                     if (expend) {
                         for (password in mSaveCardViewModel.mCardData.value!!) {

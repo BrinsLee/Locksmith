@@ -46,8 +46,11 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
 
     ) {
         val password = createItem(mName, mAccountName, mPassword, mNote)
-        if (saveData(getAccountDirectory(), password, finish)){
-            mPassWordData.value?.add(password)
+        if (saveData(getAccountDirectory(), password, finish)) {
+            val list = ArrayList<PassWordItem>()
+            list.addAll(mPassWordData.value!!)
+            list.add(password.setPosition(list.size))
+            mPassWordData.value = list
         }
     }
 

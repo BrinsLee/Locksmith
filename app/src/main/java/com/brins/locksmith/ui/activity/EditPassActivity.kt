@@ -93,7 +93,6 @@ class EditPassActivity : BaseActivity() {
             0, BaseMainItemType.ITEM_NORMAL_PASS -> {
                 title_tv.text = "密码"
                 if (mPos != -1) {
-                    mSavePasswordViewModel.loadPasswordItem()
                     val data = mSavePasswordViewModel.mPassWordData.value?.get(mPos)
                     data?.let {
                         name_edit_et.setText(it.getAppName())
@@ -109,7 +108,6 @@ class EditPassActivity : BaseActivity() {
             BaseMainItemType.ITEM_NORMAL_CARD -> {
                 title_tv.text = "银行卡"
                 if (mPos != -1) {
-                    mSaveCardViewModel.loadCardItem()
                     val data = mSaveCardViewModel.mCardData.value?.get(mPos)
                     data?.let {
                         name_edit_et.setText(it.getAppName())
@@ -204,12 +202,6 @@ class EditPassActivity : BaseActivity() {
                             it.setPasswordData(mPassword)
                             it.generalItems[NOTE] = mNote
                             mSavePasswordViewModel.updatePassWord(it) {
-                                EventBusUtils.sendEnvent(
-                                    EventMessage(
-                                        EventMessage.CODE_UPDATE_PASSWORD,
-                                        null
-                                    )
-                                )
                                 finish()
                             }
 
@@ -226,12 +218,6 @@ class EditPassActivity : BaseActivity() {
                             location_edit_et.text?.trim().toString(),
                             phone_edit_et.text?.trim().toString()
                         ) {
-                            EventBusUtils.sendEnvent(
-                                EventMessage(
-                                    EventMessage.CODE_UPDATE_PASSWORD,
-                                    null
-                                )
-                            )
                             finish()
                         }
                     } else {
@@ -244,12 +230,6 @@ class EditPassActivity : BaseActivity() {
                             it.generalItems[PHONE] = phone_edit_et.text.toString()
                             it.generalItems[LOCATION] = location_edit_et.text.toString()
                             mSaveCardViewModel.updateCard(it) {
-                                EventBusUtils.sendEnvent(
-                                    EventMessage(
-                                        EventMessage.CODE_UPDATE_PASSWORD,
-                                        null
-                                    )
-                                )
                                 finish()
                             }
 
