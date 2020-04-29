@@ -1,8 +1,5 @@
 package com.brins.locksmith.ui.activity
 
-import android.app.KeyguardManager
-import android.app.WallpaperManager
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
@@ -10,8 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.brins.locksmith.R
 import com.brins.locksmith.databinding.ActivityAuthRequestBinding
-import com.brins.locksmith.ui.dialog.FingerAuthDialogFragment
-import com.brins.locksmith.ui.dialog.FingerAuthDialogFragment.Companion.AUTH_REQUEST_CODE
 import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
 import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.viewmodel.main.MainViewModel
@@ -39,17 +34,11 @@ class AuthRequestActivity : BaseActivity(), View.OnClickListener, ViewModelStore
         )
     }
 
-    private var mNoSecuredialog: MissPasswordDialogFragment? = null
-    private val mWallpaperManager: WallpaperManager by lazy { WallpaperManager.getInstance(this) }
-    private lateinit var mAuthenticalDialogFragment: FingerAuthDialogFragment
 
     override fun getLayoutResId(): Int {
         return 0
     }
 
-    override fun onCreateBeforeBinding(savedInstanceState: Bundle?) {
-        super.onCreateBeforeBinding(savedInstanceState)
-    }
 
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)

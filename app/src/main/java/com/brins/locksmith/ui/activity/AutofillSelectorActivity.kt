@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.brins.locksmith.R
 import com.brins.locksmith.data.AppConfig.AUTO_FILL_FROM_WHERE
 import com.brins.locksmith.data.AppConfig.AUTO_FILL_URL
+import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
 
 class AutofillSelectorActivity : BaseActivity() {
 
@@ -18,7 +19,11 @@ class AutofillSelectorActivity : BaseActivity() {
         super.onCreateAfterBinding(savedInstanceState)
         url = intent.getStringExtra(AUTO_FILL_URL)
         fromwhere = intent.getStringExtra(AUTO_FILL_FROM_WHERE)
-        
+        if (mKeyguardManager.isKeyguardSecure) {
+            launchFingerAuth()
+        } else {
+            MissPasswordDialogFragment.showSelf(supportFragmentManager)
+        }
     }
 
 
