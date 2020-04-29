@@ -31,7 +31,6 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
         return R.layout.activity_guide
     }
 
-    private var mLoadingDialogFragment: LoadingDialogFragment? = null
 
     private val mPassportViewModel: PassportViewModel by lazy {
         ViewModelProvider(this@GuideActivity, InjectorUtil.getPassportModelFactory())
@@ -49,10 +48,9 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         toolbar.setPadding(0, getStatusBarHeight(this), 0, 0)
-        mLoadingDialogFragment = LoadingDialogFragment.showSelf(supportFragmentManager)
         val message = mHandler.obtainMessage()
         mHandler.sendMessageDelayed(message, 1500)
-
+        showLoading()
     }
 
 
@@ -77,7 +75,7 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
     }
 
     private fun createPassportDone() {
-        mLoadingDialogFragment?.dismiss()
+        hideLoading()
         done?.visibility = View.VISIBLE
         btnStart.isClickable = true
         btnStart.isEnabled = true

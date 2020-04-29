@@ -3,8 +3,10 @@ package com.brins.locksmith.ui.dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.brins.locksmith.R
 import java.util.*
 
 abstract class BaseDialogFragment : DialogFragment() {
@@ -13,6 +15,7 @@ abstract class BaseDialogFragment : DialogFragment() {
     private var mMapKey: Int = 0
 
     companion object {
+        const val CONTENT = "CONTENT"
         private val sWaitShowDialogMap = HashMap<Int, LinkedList<BaseDialogFragment>>()
         private val sShowingDialogMap = HashMap<Int, BaseDialogFragment>()
         val DEFAULT_DIM_AMOUNT = 0.6f

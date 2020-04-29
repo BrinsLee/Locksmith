@@ -2,17 +2,30 @@ package com.brins.locksmith.viewmodel.save
 
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Lifecycle
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.AppConfig
+import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.data.password.PassWordItem
 import com.brins.locksmith.data.password.SinglePasswordLiveData
+import com.brins.locksmith.ui.activity.BaseActivity
+import com.brins.locksmith.utils.DomainUtil
+import com.brins.locksmith.utils.KnownAppNames
 import com.brins.locksmith.utils.aes256Decrypt
 import com.brins.locksmith.viewmodel.base.BaseViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
+import com.github.promeg.pinyinhelper.Pinyin.toPinyin
 import com.google.protobuf.InvalidProtocolBufferException
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import org.bouncycastle.util.encoders.Hex
 import tech.bluespace.id_guard.AccountItemOuterClass
 import tech.bluespace.id_guard.AccountItemOuterClass.AccountGeneralData
@@ -117,6 +130,58 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
         return mPassWordData.value!!
     }
 
+    fun loadPasswordItemAsync(activity: BaseActivity) {
+        if (mPassWordData.value == null)
+            mPassWordData.value = ArrayList()
+        val provider = AndroidLifecycleScopeProvider.from(activity, Lifecycle.Event.ON_DESTROY)
+        Observable.create(ObservableOnSubscribe<ArrayList<PassWordItem>> {
+            val mFiles = ArrayList<File>()
+            val data = ArrayList<PassWordItem>()
+            val folder = File(path)
+            if (!folder.exists()) {
+                it.onError(Throwable("folder not exists"))
+            }
+            for (file in folder.listFiles()) {
+                if (!file.isDirectory) {
+                    mFiles.add(file)
+                }
+
+            }
+            if (mFiles.isEmpty()) {
+                it.onError(Throwable("files not exists"))
+            }
+            for (file in mFiles) {
+                try {
+                    val item = getPasswordItem(file)
+                    data.add(item.setPosition(mPassWordData.value!!.size))
+                } catch (e: Exception) {
+                    it.onError(e)
+                }
+            }
+            it.onNext(data)
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(provider)
+            .subscribe(object : Observer<ArrayList<PassWordItem>> {
+                override fun onNext(t: ArrayList<PassWordItem>) {
+                    mPassWordData.value = t
+                }
+
+                override fun onError(e: Throwable) {
+
+                }
+
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+            })
+
+    }
+
 /*    fun getPasswordItem(accountId: ByteArray?): PassWordItem? {
         return try {
             getPasswordItem(getAccountFile(accountId))
@@ -212,5 +277,22 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
 
     fun dataSize(): Int {
         return mPassWordData.value?.size ?: 0
+    }
+
+    fun getMatchItems(url: String): ArrayList<PassWordItem> {
+        val matchData = ArrayList<PassWordItem>()
+        if (hasPassword()) {
+            val query = KnownAppNames.knownNames[DomainUtil.getDomainName(url)]
+            for (item in mPassWordData.value!!) {
+//                val str = toPinyin(item.generalItems[AppConfig.APPNAME]!!, "").toLowerCase()
+                if (item.generalItems[AppConfig.APPNAME]!!.matches("[\\u4e00-\\u9fa5]+".toRegex()) &&
+                    query == KnownAppNames.knownNames[item.generalItems[APPNAME]]
+                ) {
+
+                    matchData.add(item)
+                }
+            }
+        }
+        return matchData
     }
 }

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.brins.locksmith.R
 import com.brins.locksmith.ui.dialog.FingerAuthDialogFragment
+import com.brins.locksmith.ui.dialog.LoadingDialogFragment
 import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
 import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.setTextDark
@@ -34,6 +35,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
     protected var needAuthRequest = false
     protected var mFingerDialog: FingerAuthDialogFragment? = null
     protected val mKeyguardManager: KeyguardManager by lazy { getSystemService(KEYGUARD_SERVICE) as KeyguardManager }
+    protected var mLoadingDialogFragment: LoadingDialogFragment? = null
 
 
     private val mTimerTask: TimerTask = object : TimerTask() {
@@ -55,6 +57,17 @@ abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
         ViewModelProvider(this@BaseActivity, InjectorUtil.getCardFactory()).get(
             SaveCardViewModel::class.java
         )
+    }
+
+    protected fun showLoading(content: String? = null) {
+        if (mLoadingDialogFragment == null) {
+            mLoadingDialogFragment = LoadingDialogFragment.showSelf(supportFragmentManager, content)
+        }
+    }
+
+    protected fun hideLoading() {
+        mLoadingDialogFragment?.dismiss()
+        mLoadingDialogFragment = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

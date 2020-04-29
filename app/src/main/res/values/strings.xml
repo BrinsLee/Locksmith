@@ -58,5 +58,8 @@
     <string name="title_privacy_policy">隐私政策</string>
     <string name="title_version">版本</string>
     <string name="title_saved_data">已存数据</string>
+    <string name="loading">加载中...</string>
+    <string name="match_title">你是否要找</string>
+    <string name="all_title">所有账号密码</string>
 
 </resources>

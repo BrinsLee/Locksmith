@@ -1,12 +1,16 @@
 package com.brins.locksmith.viewmodel.base
 
 import android.util.Log
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.utils.aes256Encrypt
 import com.brins.locksmith.viewmodel.passport.PassportRepository
 import com.google.protobuf.ByteString
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import kotlinx.coroutines.launch
 import org.bouncycastle.util.encoders.Hex
 import tech.bluespace.id_guard.AccountItemOuterClass
 import java.io.File
@@ -24,6 +28,9 @@ open class BaseViewModel(protected val repository: PassportRepository) : ViewMod
         val TAG = this::class.java.simpleName
     }
 
+/*    val provider: AndroidLifecycleScopeProvider by lazy {
+        AndroidLifecycleScopeProvider.from(getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+    }*/
     private var filePath: File? = null
 
     @Throws(IOException::class)
@@ -101,4 +108,13 @@ open class BaseViewModel(protected val repository: PassportRepository) : ViewMod
     private fun getAccountId(meta: AccountItemOuterClass.AccountItemMeta?): ByteArray {
         return meta!!.accountID.toByteArray()
     }
+
+    protected fun launch(block: suspend () -> Unit, error: suspend (Throwable) -> Unit) =
+        viewModelScope.launch {
+            try {
+                block()
+            } catch (e: Throwable) {
+                error(e)
+            }
+        }
 }

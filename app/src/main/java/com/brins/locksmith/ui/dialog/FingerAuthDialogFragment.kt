@@ -193,7 +193,7 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
         if (title != null) {
             title.setTextColor(Color.BLACK)
             title.text = BaseApplication.context.getString(R.string.finger_print)
-            ivFingerprint.setImageResource(R.drawable.ic_fingerprint_black_24dp)
+            ivFingerprint.setImageResource(R.drawable.ic_finger)
         }
 
     }

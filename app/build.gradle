@@ -77,6 +77,17 @@ dependencies {
     implementation 'com.facebook.rebound:rebound:0.3.8'
     //backboard
     implementation 'com.tumblr:backboard:0.1.0'
+    //Rx Java2
+    implementation "io.reactivex.rxjava2:rxjava:2.2.9"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    //AutoDispose
+    implementation 'com.uber.autodispose:autodispose-kotlin:0.8.0'
+    implementation 'com.uber.autodispose:autodispose-android-archcomponents-kotlin:0.8.0'
+    //tinypinyin
+    implementation 'com.github.promeg:tinypinyin:2.0.3' // TinyPinyin核心包，约80KB
+    implementation 'com.github.promeg:tinypinyin-lexicons-android-cncity:2.0.3' // 可选，适用于Android的中国地区词典
+
+
 
 
 }

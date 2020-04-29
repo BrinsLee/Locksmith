@@ -22,7 +22,6 @@ class MissPasswordDialogFragment : BaseDialogFragment(), View.OnClickListener {
 
     companion object {
 
-        const val CONTENT = "CONTENT"
         fun showSelf(manager: FragmentManager, content: String = "") {
             val dialog = MissPasswordDialogFragment()
             val bundle = Bundle()

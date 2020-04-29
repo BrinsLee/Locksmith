@@ -15,6 +15,8 @@ import com.brins.locksmith.R
 import com.brins.locksmith.data.AppConfig.AUTO_FILL_FROM_WHERE
 import com.brins.locksmith.data.AppConfig.AUTO_FILL_URL
 import com.brins.locksmith.data.AppConfig.PACKAGE_NAME
+import com.brins.locksmith.data.AppConfig.PASSWORD
+import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.data.password.PassWordItem
 import com.brins.locksmith.ui.activity.AutofillSelectorActivity
 import com.brins.locksmith.ui.activity.MainActivity
@@ -117,7 +119,7 @@ object AutofillHelper {
                     for (autofillFieldMetadata in usernameAutofillMetadataCollection!!) {
                         datasetBuilder.setValue(
                             autofillFieldMetadata.autofillId,
-                            AutofillValue.forText(selectedItem.accountName),
+                            AutofillValue.forText(selectedItem.generalItems[USERNAME]),
                             presentation
                         )
                     }
@@ -127,7 +129,7 @@ object AutofillHelper {
                     for (autofillFieldMetadata in passwordAutofillMetadataCollection!!) {
                         datasetBuilder.setValue(
                             autofillFieldMetadata.autofillId,
-                            AutofillValue.forText(selectedItem.password),
+                            AutofillValue.forText(selectedItem.getPasswordData()),
                             presentation
                         )
                     }
@@ -137,7 +139,7 @@ object AutofillHelper {
                     for (autofillFieldMetadata in usernameAutofillMetadataCollection!!) {
                         datasetBuilder.setValue(
                             autofillFieldMetadata.autofillId,
-                            AutofillValue.forText(selectedItem.accountName),
+                            AutofillValue.forText(selectedItem.generalItems[USERNAME]),
                             presentation
                         )
                     }
@@ -147,7 +149,7 @@ object AutofillHelper {
                     for (autofillFieldMetadata in usernameAutofillMetadataCollection!!) {
                         datasetBuilder.setValue(
                             autofillFieldMetadata.autofillId,
-                            AutofillValue.forText(selectedItem.accountName),
+                            AutofillValue.forText(selectedItem.generalItems[USERNAME]),
                             presentation
                         )
                     }
