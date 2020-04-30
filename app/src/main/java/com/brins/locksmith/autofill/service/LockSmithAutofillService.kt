@@ -2,19 +2,24 @@ package com.brins.locksmith.autofill.service
 
 import android.app.assist.AssistStructure
 import android.app.assist.AssistStructure.ViewNode
+import android.content.Intent
 import android.os.Build
 import android.os.CancellationSignal
 import android.service.autofill.*
 import android.util.Log
 import android.view.View
 import android.view.autofill.AutofillId
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.brins.locksmith.BaseApplication.Companion.context
 import com.brins.locksmith.R
-import com.brins.locksmith.autofill.module.AutofillFieldMetadata
-import com.brins.locksmith.autofill.module.AutofillFieldMetadataCollection
-import com.brins.locksmith.autofill.module.AutofillHelper
+import com.brins.locksmith.autofill.module.*
 import com.brins.locksmith.data.AppConfig.FROMAPP
 import com.brins.locksmith.data.AppConfig.FROMWEBSITE
+import com.brins.locksmith.ui.activity.EditPassActivity
+import com.brins.locksmith.ui.activity.Main2Activity
+import com.brins.locksmith.ui.activity.MainActivity
+import com.brins.locksmith.utils.AccountIconUtil
 
 
 /**
@@ -35,6 +40,7 @@ class LockSmithAutofillService : AutofillService() {
     private var uri: String? = null
 
     private val autofillFields = AutofillFieldMetadataCollection()
+    private val filledAutofillFieldCollection = AutofillFilledFieldCollection()
     private var fromwhere = FROMWEBSITE
 
 
@@ -61,12 +67,20 @@ class LockSmithAutofillService : AutofillService() {
 
         if (uri.isNullOrBlank()
             || uri.equals("androidapp//:com.brins.locksmith")
-            || equals("androidapp://android")) {
+            || equals("androidapp://android")
+        ) {
             return
         }
         if (autofillFields.autofillIds.size > 0) {
             val responseBuilder = FillResponse.Builder()
-            responseBuilder.addDataset(AutofillHelper.buildVaultDataset(this, autofillFields, uri!!, fromwhere))
+            responseBuilder.addDataset(
+                AutofillHelper.buildVaultDataset(
+                    this,
+                    autofillFields,
+                    uri!!,
+                    fromwhere
+                )
+            )
             AddSaveInfo(responseBuilder, autofillFields.autofillIds)
             callback.onSuccess(responseBuilder.build())
 
@@ -77,6 +91,69 @@ class LockSmithAutofillService : AutofillService() {
     }
 
     override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
+        val structure = request.fillContexts[request.fillContexts.size - 1].structure
+        val fields: MutableList<ViewNode> = mutableListOf()
+        val packageName = structure.activityComponent.packageName
+        traverseStructure(structure, fields)
+        val intent = Intent(context, EditPassActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+        intent.putExtra("autofillFrameworkType", autofillFields.saveType)
+        intent.putExtra(
+            "autofillFrameworkUrl", uri
+                ?.replace("https://", "")
+                ?.replace("http://", "")
+        )
+        var username: String
+        var password: String
+        for (hint in autofillFields.allAutofillHints) {
+            val autofillFields = autofillFields.getFieldsForHint(hint) ?: continue
+            for (autofillField in autofillFields) {
+                val autofillId = autofillField.autofillId
+                val autofillType = autofillField.autofillType
+                val savedAutofillValue = filledAutofillFieldCollection.hintMap[hint]
+                when (autofillType) {
+                    SaveInfo.SAVE_DATA_TYPE_USERNAME -> {
+                        when (hint) {
+                            "username" -> {
+                                username = savedAutofillValue?.textValue ?: ""
+                                intent.putExtra("autofillFrameworkUsername", username)
+                            }
+                            "password" -> {
+                                password = savedAutofillValue?.textValue ?: ""
+                                intent.putExtra("autofillFrameworkPassword", password)
+                            }
+                        }
+                    }
+                    SaveInfo.SAVE_DATA_TYPE_PASSWORD -> {
+                        when (hint) {
+                            "username" -> {
+                                username = savedAutofillValue?.textValue ?: ""
+                                intent.putExtra("autofillFrameworkUsername", username)
+                            }
+                            "password" -> {
+                                password = savedAutofillValue?.textValue ?: ""
+                                intent.putExtra("autofillFrameworkPassword", password)
+                            }
+                        }
+
+                    }
+                    else -> {
+                        Log.d("Invalid autofill type", "$autofillType")
+                    }
+
+                }
+            }
+        }
+        startActivity(intent)
+        if (!AccountIconUtil.saveApkIcons(uri ?: "")) {
+            Toast.makeText(
+                this,
+                "Fail to save the app icon: not such apk find on your devices",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        callback.onSuccess()
 
     }
 
@@ -128,6 +205,7 @@ class LockSmithAutofillService : AutofillService() {
                 ) {
                     val hints = arrayOf(View.AUTOFILL_HINT_USERNAME)
                     val autofillFieldMetadata = AutofillFieldMetadata(viewNode, hints)
+                    filledAutofillFieldCollection.add(AutofillFilledField(viewNode, hints))
                     fields.add(viewNode)
                     autofillFields.add(autofillFieldMetadata)
                 } else if (idEntry.contains("password") || idEntry.contains("pwd") || hint.contains(
