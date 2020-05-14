@@ -5,15 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.brins.locksmith.R
-import com.brins.locksmith.ui.dialog.LoadingDialogFragment
 import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
-import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.WeakHandler
 import com.brins.locksmith.utils.getStatusBarHeight
-import com.brins.locksmith.viewmodel.passport.PassportViewModel
 import kotlinx.android.synthetic.main.activity_guide.*
 import java.lang.Exception
 
@@ -31,11 +26,6 @@ class GuideActivity : BaseActivity(), View.OnClickListener, WeakHandler.IHandler
         return R.layout.activity_guide
     }
 
-
-    private val mPassportViewModel: PassportViewModel by lazy {
-        ViewModelProvider(this@GuideActivity, InjectorUtil.getPassportModelFactory())
-            .get(PassportViewModel::class.java)
-    }
 
     companion object {
         fun startThis(activity: AppCompatActivity) {

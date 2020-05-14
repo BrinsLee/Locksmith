@@ -31,6 +31,7 @@ import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.R
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.BaseMainData
+import com.github.promeg.pinyinhelper.Pinyin
 import org.greenrobot.eventbus.EventBus
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -1679,3 +1680,6 @@ class AccountIconUtil {
     }
 }
 
+fun getSortKey(name : Char):String{
+    return Pinyin.toPinyin(name).toLowerCase()
+}

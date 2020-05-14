@@ -1,7 +1,6 @@
 package com.brins.locksmith.viewmodel.base
 
 import android.util.Log
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brins.locksmith.data.AesEncryptedData
@@ -9,7 +8,6 @@ import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.utils.aes256Encrypt
 import com.brins.locksmith.viewmodel.passport.PassportRepository
 import com.google.protobuf.ByteString
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import kotlinx.coroutines.launch
 import org.bouncycastle.util.encoders.Hex
 import tech.bluespace.id_guard.AccountItemOuterClass

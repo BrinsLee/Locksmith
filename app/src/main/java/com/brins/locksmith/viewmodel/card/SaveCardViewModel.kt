@@ -10,6 +10,7 @@ import com.brins.locksmith.data.BaseMainData
 import com.brins.locksmith.data.card.CardItem
 import com.brins.locksmith.data.card.SingleCardLiveData
 import com.brins.locksmith.utils.aes256Decrypt
+import com.brins.locksmith.utils.getSortKey
 import com.brins.locksmith.viewmodel.base.BaseViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
 import com.google.protobuf.InvalidProtocolBufferException
@@ -20,9 +21,10 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
-import java.util.HashMap
+import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.IllegalBlockSizeException
+import kotlin.collections.ArrayList
 
 /**
  * @author lipeilin
@@ -137,7 +139,17 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
                 e.printStackTrace()
             }
         }
+        mCardData.value!!.sortBy { it.getSort() }
         return mCardData.value!!
+    }
+
+    private fun sortValue(value: ArrayList<CardItem>): ArrayList<CardItem> {
+        value.sortWith(Comparator { o1, o2 ->
+            val s1 = o1.generalItems[APPNAME]!!.first().toLowerCase()
+            val s2 = o2.generalItems[APPNAME]!!.first().toLowerCase()
+            s1.compareTo(s2)
+        })
+        return value
     }
 
 /*    fun getPasswordItem(accountId: ByteArray?): PassWordItem? {

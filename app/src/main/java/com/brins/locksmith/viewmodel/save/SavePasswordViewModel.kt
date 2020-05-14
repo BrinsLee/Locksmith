@@ -14,6 +14,7 @@ import com.brins.locksmith.ui.activity.BaseActivity
 import com.brins.locksmith.utils.DomainUtil
 import com.brins.locksmith.utils.KnownAppNames
 import com.brins.locksmith.utils.aes256Decrypt
+import com.brins.locksmith.utils.getSortKey
 import com.brins.locksmith.viewmodel.base.BaseViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
 import com.github.promeg.pinyinhelper.Pinyin.toPinyin
@@ -63,6 +64,7 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
             val list = ArrayList<PassWordItem>()
             list.addAll(mPassWordData.value!!)
             list.add(password.setPosition(list.size))
+//            list.sortBy { getSortKey(it.generalItems[APPNAME]!!.first()) }
             mPassWordData.value = list
         }
     }
@@ -127,6 +129,7 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
                 e.printStackTrace()
             }
         }
+        mPassWordData.value!!.sortBy { it.getSort() }
         return mPassWordData.value!!
     }
 

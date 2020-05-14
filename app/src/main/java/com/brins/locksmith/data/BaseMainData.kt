@@ -45,6 +45,10 @@ abstract class BaseMainData(
         this.name = name?:""
     }
 
+    fun getSort():String{
+        return getSortKey(generalItems[APPNAME]!!.first())
+    }
+
 
     var pos = -1
 

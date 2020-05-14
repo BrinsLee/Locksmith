@@ -20,6 +20,7 @@ import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.setTextDark
 import com.brins.locksmith.utils.setTranslucent
 import com.brins.locksmith.viewmodel.card.SaveCardViewModel
+import com.brins.locksmith.viewmodel.passport.PassportViewModel
 import com.brins.locksmith.viewmodel.save.SavePasswordViewModel
 import java.util.*
 import java.util.concurrent.Executors
@@ -48,13 +49,19 @@ abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    protected val mPassportViewModel: PassportViewModel by lazy {
+        ViewModelProvider(this, InjectorUtil.getPassportModelFactory()).get(
+            PassportViewModel::class.java
+        )
+    }
+
     protected val mSavePasswordViewModel: SavePasswordViewModel by lazy {
-        ViewModelProvider(this@BaseActivity, InjectorUtil.getPassWordFactory()).get(
+        ViewModelProvider(this, InjectorUtil.getPassWordFactory()).get(
             SavePasswordViewModel::class.java
         )
     }
     protected val mSaveCardViewModel: SaveCardViewModel by lazy {
-        ViewModelProvider(this@BaseActivity, InjectorUtil.getCardFactory()).get(
+        ViewModelProvider(this, InjectorUtil.getCardFactory()).get(
             SaveCardViewModel::class.java
         )
     }

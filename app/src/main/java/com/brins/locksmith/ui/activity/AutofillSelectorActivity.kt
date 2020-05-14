@@ -10,7 +10,6 @@ import android.view.View
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.brins.locksmith.BaseApplication.Companion.context
 import com.brins.locksmith.R
@@ -22,9 +21,7 @@ import com.brins.locksmith.data.AppConfig.AUTO_FILL_FROM_WHERE
 import com.brins.locksmith.data.AppConfig.AUTO_FILL_URL
 import com.brins.locksmith.data.password.PassWordItem
 import com.brins.locksmith.ui.dialog.MissPasswordDialogFragment
-import com.brins.locksmith.utils.InjectorUtil
 import com.brins.locksmith.utils.getStatusBarHeight
-import com.brins.locksmith.viewmodel.passport.PassportViewModel
 import com.chad.library.adapter.base.model.BaseData
 import kotlinx.android.synthetic.main.activity_autofill_selector.*
 
@@ -41,14 +38,6 @@ class AutofillSelectorActivity : BaseActivity() {
     private var mSelectItem: PassWordItem? = null
     private val autofillFields = AutofillFieldMetadataCollection()
 
-    private val mPassportViewModel: PassportViewModel by lazy {
-        ViewModelProvider(
-            this@AutofillSelectorActivity,
-            InjectorUtil.getPassportModelFactory()
-        ).get(
-            PassportViewModel::class.java
-        )
-    }
 
     override fun getLayoutResId(): Int {
         return R.layout.activity_autofill_selector

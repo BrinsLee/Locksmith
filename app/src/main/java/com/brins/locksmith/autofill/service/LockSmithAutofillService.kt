@@ -17,8 +17,6 @@ import com.brins.locksmith.autofill.module.*
 import com.brins.locksmith.data.AppConfig.FROMAPP
 import com.brins.locksmith.data.AppConfig.FROMWEBSITE
 import com.brins.locksmith.ui.activity.EditPassActivity
-import com.brins.locksmith.ui.activity.Main2Activity
-import com.brins.locksmith.ui.activity.MainActivity
 import com.brins.locksmith.utils.AccountIconUtil
 
 
@@ -33,6 +31,11 @@ class LockSmithAutofillService : AutofillService() {
     companion object {
         var fillContext: FillContext? = null
         lateinit var autofillFields: AutofillFieldMetadataCollection
+        var AUTO_FILL_TYPE = "AUTO_FILL_TYPE"
+        var AUTO_FILL_URL = "AUTO_FILL_URL"
+        var AUTO_FILL_UESRNAME = "AUTO_FILL_UESRNAME"
+        var AUTO_FILL_PASSWORD = "AUTO_FILL_PASSWORD"
+
     }
 
     private var mPackageName: String? = null
@@ -98,9 +101,9 @@ class LockSmithAutofillService : AutofillService() {
         val intent = Intent(context, EditPassActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        intent.putExtra("autofillFrameworkType", autofillFields.saveType)
+        intent.putExtra(AUTO_FILL_TYPE, autofillFields.saveType)
         intent.putExtra(
-            "autofillFrameworkUrl", uri
+            AUTO_FILL_URL, uri
                 ?.replace("https://", "")
                 ?.replace("http://", "")
         )
@@ -117,11 +120,11 @@ class LockSmithAutofillService : AutofillService() {
                         when (hint) {
                             "username" -> {
                                 username = savedAutofillValue?.textValue ?: ""
-                                intent.putExtra("autofillFrameworkUsername", username)
+                                intent.putExtra(AUTO_FILL_UESRNAME, username)
                             }
                             "password" -> {
                                 password = savedAutofillValue?.textValue ?: ""
-                                intent.putExtra("autofillFrameworkPassword", password)
+                                intent.putExtra(AUTO_FILL_PASSWORD, password)
                             }
                         }
                     }
@@ -129,11 +132,11 @@ class LockSmithAutofillService : AutofillService() {
                         when (hint) {
                             "username" -> {
                                 username = savedAutofillValue?.textValue ?: ""
-                                intent.putExtra("autofillFrameworkUsername", username)
+                                intent.putExtra(AUTO_FILL_UESRNAME, username)
                             }
                             "password" -> {
                                 password = savedAutofillValue?.textValue ?: ""
-                                intent.putExtra("autofillFrameworkPassword", password)
+                                intent.putExtra(AUTO_FILL_PASSWORD, password)
                             }
                         }
 
@@ -201,20 +204,18 @@ class LockSmithAutofillService : AutofillService() {
                     || hint.contains(getString(R.string.auto_hint_email))
                     || hint.contains(getString(R.string.auto_hint_username))
                     || hint.contains(getString(R.string.auto_hint_account))
-                    || hint.contains(getString(R.string.auto_hint_member))
-                ) {
+                    || hint.contains(getString(R.string.auto_hint_member))) {
+
                     val hints = arrayOf(View.AUTOFILL_HINT_USERNAME)
-                    val autofillFieldMetadata = AutofillFieldMetadata(viewNode, hints)
                     filledAutofillFieldCollection.add(AutofillFilledField(viewNode, hints))
                     fields.add(viewNode)
-                    autofillFields.add(autofillFieldMetadata)
-                } else if (idEntry.contains("password") || idEntry.contains("pwd") || hint.contains(
-                        getString(R.string.auto_hint_password)
-                    )
-                ) {
-                    val hints = arrayOf(View.AUTOFILL_HINT_PASSWORD)
                     val autofillFieldMetadata = AutofillFieldMetadata(viewNode, hints)
+                    autofillFields.add(autofillFieldMetadata)
+                } else if (idEntry.contains("password") || idEntry.contains("pwd") || hint.contains(getString(R.string.auto_hint_password))) {
+                    val hints = arrayOf(View.AUTOFILL_HINT_PASSWORD)
+                    filledAutofillFieldCollection.add(AutofillFilledField(viewNode, hints))
                     fields.add(viewNode)
+                    val autofillFieldMetadata = AutofillFieldMetadata(viewNode, hints)
                     autofillFields.add(autofillFieldMetadata)
                 }
             }

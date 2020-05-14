@@ -26,6 +26,7 @@ class PassportViewModel(private val repository: PassportRepository) : ViewModel(
 
     }
 
+
     fun createPassport() = repository.createPassport()
 
 }

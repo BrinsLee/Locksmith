@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import android.widget.EditText
@@ -14,14 +13,15 @@ import androidx.core.widget.NestedScrollView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.brins.locksmith.R
+import com.brins.locksmith.autofill.service.LockSmithAutofillService.Companion.AUTO_FILL_PASSWORD
+import com.brins.locksmith.autofill.service.LockSmithAutofillService.Companion.AUTO_FILL_UESRNAME
+import com.brins.locksmith.autofill.service.LockSmithAutofillService.Companion.AUTO_FILL_URL
 import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.AppConfig.LOCATION
 import com.brins.locksmith.data.AppConfig.NOTE
 import com.brins.locksmith.data.AppConfig.PHONE
 import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.ui.base.BaseMainItemType
-import com.brins.locksmith.utils.EventBusUtils
-import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.TimeUtils
 import com.brins.locksmith.utils.getStatusBarHeight
 import kotlinx.android.synthetic.main.activity_edit_card.*
@@ -83,6 +83,7 @@ class EditPassActivity : BaseActivity() {
     override fun onCreateAfterBinding(savedInstanceState: Bundle?) {
         super.onCreateAfterBinding(savedInstanceState)
         header_layout.setPadding(0, getStatusBarHeight(this), 0, 0)
+        mPassportViewModel.loadPassport()
         initView()
         ButterKnife.bind(this)
         setListener()
@@ -103,7 +104,12 @@ class EditPassActivity : BaseActivity() {
                             "创建日期：${TimeUtils.getDateByCurrentTime(it.meta!!.creationDate * 1000)}"
 
                     }
+                }else{
+                    name_edit_et.setText(intent.getStringExtra(AUTO_FILL_URL))
+                    account_edit_et.setText(intent.getStringExtra(AUTO_FILL_UESRNAME))
+                    password_edit_et.setText(intent.getStringExtra(AUTO_FILL_PASSWORD))
                 }
+
             }
             BaseMainItemType.ITEM_NORMAL_CARD -> {
                 title_tv.text = "银行卡"
