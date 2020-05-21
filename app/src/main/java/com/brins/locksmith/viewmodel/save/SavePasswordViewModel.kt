@@ -130,6 +130,9 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
             }
         }
         mPassWordData.value!!.sortBy { it.getSort() }
+        for (i in 0 until  mPassWordData.value!!.size){
+            mPassWordData.value!![i].setPosition(i)
+        }
         return mPassWordData.value!!
     }
 

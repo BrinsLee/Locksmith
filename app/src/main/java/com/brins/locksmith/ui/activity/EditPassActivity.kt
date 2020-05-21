@@ -1,6 +1,7 @@
 package com.brins.locksmith.ui.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -105,9 +106,12 @@ class EditPassActivity : BaseActivity() {
 
                     }
                 }else{
-                    name_edit_et.setText(intent.getStringExtra(AUTO_FILL_URL))
-                    account_edit_et.setText(intent.getStringExtra(AUTO_FILL_UESRNAME))
-                    password_edit_et.setText(intent.getStringExtra(AUTO_FILL_PASSWORD))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        name_edit_et.setText(intent.getStringExtra(AUTO_FILL_URL))
+                        account_edit_et.setText(intent.getStringExtra(AUTO_FILL_UESRNAME))
+                        password_edit_et.setText(intent.getStringExtra(AUTO_FILL_PASSWORD))
+                    }
+
                 }
 
             }

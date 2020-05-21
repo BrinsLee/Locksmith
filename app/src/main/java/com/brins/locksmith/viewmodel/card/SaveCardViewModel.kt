@@ -62,6 +62,7 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
 
     fun updateCard(item: CardItem, finish: () -> Unit) {
         saveData(getAccountDirectory(), item, finish)
+        loadCardItem()
     }
 
     /***创建密码对象*/
@@ -140,6 +141,9 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
             }
         }
         mCardData.value!!.sortBy { it.getSort() }
+        for (i in 0 until  mCardData.value!!.size){
+            mCardData.value!![i].setPosition(i)
+        }
         return mCardData.value!!
     }
 
