@@ -138,6 +138,18 @@ class EditPassActivity : BaseActivity() {
                 }
             }
         }
+        nested_root.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
+            override fun onScrollChange(
+                v: NestedScrollView?,
+                scrollX: Int,
+                scrollY: Int,
+                oldScrollX: Int,
+                oldScrollY: Int
+            ) {
+                header_layout.y = scrollY.toFloat()
+            }
+
+        })
     }
 
 
