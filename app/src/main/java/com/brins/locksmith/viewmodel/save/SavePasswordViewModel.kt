@@ -69,8 +69,21 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
         }
     }
 
+    /***更新密码*/
     fun updatePassWord(item: PassWordItem, finish: () -> Unit) {
         saveData(getAccountDirectory(), item, finish)
+    }
+
+    /***删除密码*/
+    fun deletePassword(mPos: Int, finish: () -> Unit) {
+        val password = mPassWordData.value?.get(mPos)
+        password?.let {
+            deleteData(getAccountDirectory(), it, finish)
+            mPassWordData.value!!.remove(password)
+            for (i in mPos until mPassWordData.value!!.size) {
+                mPassWordData.value!![i].setPosition(mPassWordData.value!![i].pos - 1)
+            }
+        }
     }
 
     /***创建密码对象*/
@@ -130,7 +143,7 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
             }
         }
         mPassWordData.value!!.sortBy { it.getSort() }
-        for (i in 0 until  mPassWordData.value!!.size){
+        for (i in 0 until mPassWordData.value!!.size) {
             mPassWordData.value!![i].setPosition(i)
         }
         return mPassWordData.value!!

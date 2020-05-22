@@ -83,13 +83,18 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
         main_recycler.adapter = mAdapter
         mSavePasswordViewModel.mPassWordData.observe(this,
             Observer {
-                if (mAdapter.data.isNotEmpty()){
-                    mAdapter.addData(it.size, it[it.size - 1])
-                    mData.add(it.size, it[it.size - 1])
+                if (mAdapter.data.isNotEmpty()) {
+                    val mCardSize = mSaveCardViewModel.mCardData.value?.size ?: 0
+                    val mPassWordSize = mData.size - mCardSize - 3
+                    if (it.size > mPassWordSize){
+                        //添加
+                        mAdapter.addData(it.size, it[it.size - 1])
+                        mData.add(it.size, it[it.size - 1])
+                    }
                 }
             })
         mSaveCardViewModel.mCardData.observe(this, Observer {
-            if (mAdapter.data.isNotEmpty()){
+            if (mAdapter.data.isNotEmpty()) {
                 mAdapter.addData(mSavePasswordViewModel.dataSize() + it.size + 1, it[it.size - 1])
                 mData.add(mSavePasswordViewModel.dataSize() + it.size + 1, it[it.size - 1])
             }
@@ -139,13 +144,40 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
         when (message.code) {
             EventMessage.CODE_UPDATE_PASSWORD -> mAdapter.notifyItemChanged(message.data as Int + 1)
             EventMessage.CODE_UPDATE_BANK -> {
-                Log.d("bank:","${message.data as Int},size: ${(mSavePasswordViewModel.mPassWordData.value?.size
-                    ?: 0)}")
+                Log.d(
+                    "bank:",
+                    "${message.data as Int},size: ${(mSavePasswordViewModel.mPassWordData.value?.size
+                        ?: 0)}"
+                )
                 val pos = message.data as Int + (mSavePasswordViewModel.mPassWordData.value?.size
-                    ?: 0) +2
+                    ?: 0) + 2
                 mData[pos] = mSaveCardViewModel.mCardData.value?.get(message.data as Int)!!
                 mAdapter.setNewData(mData as? List<BaseData>)
                 mAdapter.notifyItemChanged(pos)
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun deleteData(message: EventMessage<*>) {
+        when (message.code) {
+            EventMessage.CODE_DELETE_PASSWORD ->{
+                val pos = message.data as Int + 1
+                mData.removeAt(pos)
+                mAdapter.remove(pos)
+                mAdapter.notifyItemRemoved(pos)
+            }
+            EventMessage.CODE_DELETE_BANK -> {
+                Log.d(
+                    "bank:",
+                    "${message.data as Int},size: ${(mSavePasswordViewModel.mPassWordData.value?.size
+                        ?: 0)}"
+                )
+                val pos = message.data as Int + (mSavePasswordViewModel.mPassWordData.value?.size
+                    ?: 0) + 2
+                mData.removeAt(pos)
+                mAdapter.remove(pos)
+                mAdapter.notifyItemRemoved(pos)
             }
         }
     }

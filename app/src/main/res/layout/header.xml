@@ -34,18 +34,17 @@
         android:text="@string/password"
         />
 
-    <TextView
-        android:id="@+id/save_account"
+    <ImageView
+        android:id="@+id/more_operate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:textSize="15sp"
+        android:src="@drawable/ic_more"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:layout_marginEnd="6dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:textColor="@android:color/black"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

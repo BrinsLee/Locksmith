@@ -26,9 +26,9 @@ open class BaseViewModel(protected val repository: PassportRepository) : ViewMod
         val TAG = this::class.java.simpleName
     }
 
-/*    val provider: AndroidLifecycleScopeProvider by lazy {
-        AndroidLifecycleScopeProvider.from(getLifeActivity(), Lifecycle.Event.ON_DESTROY)
-    }*/
+    /*    val provider: AndroidLifecycleScopeProvider by lazy {
+            AndroidLifecycleScopeProvider.from(getLifeActivity(), Lifecycle.Event.ON_DESTROY)
+        }*/
     private var filePath: File? = null
 
     @Throws(IOException::class)
@@ -36,7 +36,7 @@ open class BaseViewModel(protected val repository: PassportRepository) : ViewMod
         directory: File,
         password: BaseMainData,
         f: () -> Unit
-    ):Boolean {
+    ): Boolean {
         filePath = File(directory, Hex.toHexString(getAccountId(password.meta)) + ".data")
         val encryptedMeta = encryptMeta(password.meta)
         val encryptedGeneral = encryptGeneral(password.meta!!, password.generalItems)
@@ -53,6 +53,21 @@ open class BaseViewModel(protected val repository: PassportRepository) : ViewMod
         f()
         return true
     }
+
+    protected fun deleteData(
+        directory: File,
+        data: BaseMainData,
+        f: () -> Unit
+    ) {
+        filePath = File(directory, Hex.toHexString(getAccountId(data.meta)) + ".data")
+        filePath?.let {
+            if (it.exists()){
+                it.delete()
+            }
+            f()
+        }
+    }
+
 
 /*    protected fun updateData(item: BaseMainData, directory: File) {
         val encryptedMeta = encryptMeta(item.meta)

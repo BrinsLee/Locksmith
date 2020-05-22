@@ -28,4 +28,7 @@ public class EventMessage<T> {
 
     public static int CODE_UPDATE_PASSWORD = 1;
     public static int CODE_UPDATE_BANK = 2;
+
+    public static int CODE_DELETE_PASSWORD = 3;
+    public static int CODE_DELETE_BANK = 4;
 }

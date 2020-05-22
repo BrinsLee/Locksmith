@@ -59,7 +59,19 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
         }
     }
 
+    /***删除银行卡*/
+    fun deleteCard(mPos: Int, finish: () -> Unit) {
+        val card = mCardData.value?.get(mPos)
+        card?.let {
+            deleteData(getAccountDirectory(), it, finish)
+            mCardData.value!!.remove(card)
+            for (i in mPos until mCardData.value!!.size) {
+                mCardData.value!![i].setPosition(mCardData.value!![i].pos - 1)
+            }
+        }
+    }
 
+    /***更新数据*/
     fun updateCard(item: CardItem, finish: () -> Unit) {
         saveData(getAccountDirectory(), item, finish)
     }
@@ -140,7 +152,7 @@ class SaveCardViewModel(repository: PassportRepository) : BaseViewModel(reposito
             }
         }
         mCardData.value!!.sortBy { it.getSort() }
-        for (i in 0 until  mCardData.value!!.size){
+        for (i in 0 until mCardData.value!!.size) {
             mCardData.value!![i].setPosition(i)
         }
         return mCardData.value!!

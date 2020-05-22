@@ -1,6 +1,7 @@
 package com.brins.locksmith.ui.activity
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -23,6 +24,7 @@ import com.brins.locksmith.data.AppConfig.NOTE
 import com.brins.locksmith.data.AppConfig.PHONE
 import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.ui.base.BaseMainItemType
+import com.brins.locksmith.ui.dialog.CustomPopupWindow
 import com.brins.locksmith.utils.EventBusUtils
 import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.TimeUtils
@@ -97,6 +99,7 @@ class EditPassActivity : BaseActivity() {
             0, BaseMainItemType.ITEM_NORMAL_PASS -> {
                 title_tv.text = "密码"
                 if (mPos != -1) {
+                    more_operate.visibility = View.VISIBLE
                     val data = mSavePasswordViewModel.mPassWordData.value?.get(mPos)
                     data?.let {
                         name_edit_et.setText(it.getAppName())
@@ -107,8 +110,9 @@ class EditPassActivity : BaseActivity() {
                             "创建日期：${TimeUtils.getDateByCurrentTime(it.meta!!.creationDate * 1000)}"
 
                     }
-                }else{
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                } else {
+                    create_date_tv.text = TimeUtils.getDateByCurrentTime(System.currentTimeMillis());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         name_edit_et.setText(intent.getStringExtra(AUTO_FILL_URL))
                         account_edit_et.setText(intent.getStringExtra(AUTO_FILL_UESRNAME))
                         password_edit_et.setText(intent.getStringExtra(AUTO_FILL_PASSWORD))
@@ -120,6 +124,7 @@ class EditPassActivity : BaseActivity() {
             BaseMainItemType.ITEM_NORMAL_CARD -> {
                 title_tv.text = "银行卡"
                 if (mPos != -1) {
+                    more_operate.visibility = View.VISIBLE
                     val data = mSaveCardViewModel.mCardData.value?.get(mPos)
                     data?.let {
                         name_edit_et.setText(it.getAppName())
@@ -147,13 +152,26 @@ class EditPassActivity : BaseActivity() {
 
     @OnClick(
         R.id.return_img,
-        R.id.save_account
+        R.id.save_account,
+        R.id.more_operate
     )
     fun onClickView(v: View) {
         when (v.id) {
             R.id.return_img -> finish()
             R.id.save_account -> {
                 saveAccount()
+            }
+            R.id.more_operate -> {
+                CustomPopupWindow.showOperatePopupWindow(this, object :
+                    CustomPopupWindow.OptionListener {
+                    override fun onDelete() {
+                        deleteAccount()
+                    }
+
+                    override fun onCancel() {
+
+                    }
+                })
             }
         }
     }
@@ -217,7 +235,12 @@ class EditPassActivity : BaseActivity() {
                             it.accountName = mAccountName
                             it.mNote = mNote
                             mSavePasswordViewModel.updatePassWord(it) {
-                                EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, mPos))
+                                EventBusUtils.sendEnvent(
+                                    EventMessage(
+                                        EventMessage.CODE_UPDATE_PASSWORD,
+                                        mPos
+                                    )
+                                )
                                 finish()
                             }
 
@@ -251,7 +274,12 @@ class EditPassActivity : BaseActivity() {
                             it.location = location_edit_et.text.toString()
                             it.phone = phone_edit_et.text.toString()
                             mSaveCardViewModel.updateCard(it) {
-                                EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_BANK, mPos))
+                                EventBusUtils.sendEnvent(
+                                    EventMessage(
+                                        EventMessage.CODE_UPDATE_BANK,
+                                        mPos
+                                    )
+                                )
                                 finish()
                             }
 
@@ -262,6 +290,33 @@ class EditPassActivity : BaseActivity() {
 
         } else {
 
+        }
+    }
+
+    private fun deleteAccount(){
+        when(mType){
+            0, BaseMainItemType.ITEM_NORMAL_PASS -> {
+                mSavePasswordViewModel.deletePassword(mPos){
+                    EventBusUtils.sendEnvent(
+                        EventMessage(
+                            EventMessage.CODE_DELETE_PASSWORD,
+                            mPos
+                        )
+                    )
+                    finish()
+                }
+            }
+            BaseMainItemType.ITEM_NORMAL_CARD -> {
+                mSaveCardViewModel.deleteCard(mPos){
+                    EventBusUtils.sendEnvent(
+                        EventMessage(
+                            EventMessage.CODE_DELETE_BANK,
+                            mPos
+                        )
+                    )
+                    finish()
+                }
+            }
         }
     }
 

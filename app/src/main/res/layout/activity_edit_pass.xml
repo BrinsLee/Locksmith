@@ -227,20 +227,19 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/save_account"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
             android:textSize="15sp"
-            android:textColor="@android:color/holo_red_dark"
-            android:text="@string/delete"
+            android:textColor="@color/common_black_second"
+            android:text="@string/save"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/note_layout_rl"
             android:layout_marginTop="15dp"
-            android:paddingStart="@dimen/dp_10"
-            android:paddingEnd="@dimen/dp_10"
-            android:paddingTop="5dp"
-            android:visibility="gone"
-            android:paddingBottom="5dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/bg_shape_title"
             />
         <include
