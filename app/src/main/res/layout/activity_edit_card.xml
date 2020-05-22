@@ -4,208 +4,269 @@
     android:id="@+id/nested_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/common_grey_second"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
         tools:context=".ui.activity.EditPassActivity">
 
-        <TextView
-            android:id="@+id/name_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/header_layout"
+            android:id="@+id/name_root"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/name"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_layout" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/name_edit_et"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:textCursorDrawable="@drawable/edit_cursor_color"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
-            android:inputType="text"
-            android:background="@drawable/bg_edit_text_selector"
-            android:hint="@string/input_name"
-            android:paddingStart="5dp"
-            app:layout_constraintTop_toBottomOf="@id/name_title_tv">
-
-        </androidx.appcompat.widget.AppCompatEditText>
-
-
-        <TextView
-            android:id="@+id/account_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/account"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name_edit_et" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/account_edit_et"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_shape_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:textCursorDrawable="@drawable/edit_cursor_color"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/bg_edit_text_selector"
-            android:hint="@string/input_card"
-            android:paddingStart="5dp"
-            android:inputType="text"
-            app:layout_constraintTop_toBottomOf="@id/account_title_tv"></androidx.appcompat.widget.AppCompatEditText>
-
-        <TextView
-            android:id="@+id/password_title_tv"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/password"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/account_edit_et" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/name_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/name"
+                android:textColor="@color/common_black_second"
+                android:textSize="12sp" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/password_edit_et"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/name_edit_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@null"
+                android:hint="@string/input_name"
+                android:inputType="text"
+                android:textSize="15sp"
+                android:textCursorDrawable="@drawable/edit_cursor_color">
+
+            </androidx.appcompat.widget.AppCompatEditText>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/name_root"
+            android:id="@+id/account_root"
             android:layout_marginStart="15dp"
-            android:textCursorDrawable="@drawable/edit_cursor_color"
-            android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/bg_edit_text_selector"
-            android:hint="@string/input_pass"
-            android:importantForAutofill="no"
-            android:inputType="textPassword"
-            android:paddingStart="5dp"
-            app:layout_constraintTop_toBottomOf="@id/password_title_tv">
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_shape_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/account_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/bank_card"
+                android:textColor="@color/common_black_second"
+                android:textSize="12sp" />
 
-        </androidx.appcompat.widget.AppCompatEditText>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/account_edit_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@null"
+                android:hint="@string/input_card"
+                android:inputType="text"
+                android:textSize="15sp"
+                android:textCursorDrawable="@drawable/edit_cursor_color">
+
+            </androidx.appcompat.widget.AppCompatEditText>
+
+
+        </LinearLayout>
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/account_root"
+            android:id="@+id/password_root"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_shape_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/password_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/password"
+                android:textSize="12sp"
+                android:textColor="@color/common_black_second" />
+
+            <EditText
+                android:id="@+id/password_edit_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@null"
+                android:hint="@string/input_pass"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
+                android:textSize="15sp">
+
+            </EditText>
+
+        </LinearLayout>
+
+
 
         <ImageView
             android:id="@+id/iv_password_visible_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_password_visible"
-            app:layout_constraintEnd_toEndOf="@id/password_edit_et"
-            app:layout_constraintTop_toTopOf="@id/password_edit_et"
-            app:layout_constraintBottom_toBottomOf="@id/password_edit_et"
+            app:layout_constraintEnd_toEndOf="@id/password_root"
+            app:layout_constraintBottom_toBottomOf="@id/password_root"
+            android:layout_marginBottom="20dp"
             android:layout_marginEnd="@dimen/dp_10"
-            android:onClick="onCardVisibleClick"
-            />
+            android:onClick="onVisibleClick" />
 
-
-        <TextView
-            android:id="@+id/location_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/password_root"
+            android:id="@+id/location_root"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/location"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password_edit_et" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/location_edit_et"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="15dp"
-            android:textCursorDrawable="@drawable/edit_cursor_color"
-            android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/bg_edit_text_selector"
-            android:hint="@string/input_location"
-            android:inputType="text"
-            android:paddingStart="5dp"
-            app:layout_constraintTop_toBottomOf="@id/location_title_tv">
-
-        </androidx.appcompat.widget.AppCompatEditText>
-
-        <TextView
-            android:id="@+id/phone_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/phone"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/location_edit_et" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/phone_edit_et"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_shape_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/location_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/location"
+                android:textSize="12sp"
+                android:textColor="@color/common_black_second" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+
+                android:id="@+id/location_edit_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@null"
+                android:hint="@string/input_location"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
+                android:textSize="15sp">
+            </androidx.appcompat.widget.AppCompatEditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/location_root"
+            android:id="@+id/phone_root"
             android:layout_marginStart="15dp"
-            android:textCursorDrawable="@drawable/edit_cursor_color"
-            android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/bg_edit_text_selector"
-            android:importantForAutofill="no"
-            android:hint="@string/input_phone"
-            android:inputType="phone"
-            android:paddingStart="5dp"
-            app:layout_constraintTop_toBottomOf="@id/phone_title_tv">
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_shape_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </androidx.appcompat.widget.AppCompatEditText>
+            <TextView
+                android:id="@+id/phone_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/phone"
+                android:textSize="12sp"
+                android:textColor="@color/common_black_second"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/location_root" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/phone_edit_et"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="15dp"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:background="@null"
+                android:importantForAutofill="no"
+                android:hint="@string/input_phone"
+                android:inputType="phone"
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp"
+                >
+
+            </androidx.appcompat.widget.AppCompatEditText>
+
+        </LinearLayout>
 
 
-
-
-        <com.brins.locksmith.ui.widget.RoundConstraintLayout
-            app:layout_constraintTop_toBottomOf="@id/phone_edit_et"
+        <LinearLayout
             android:id="@+id/note_layout_rl"
-            android:paddingBottom="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            app:round_corner="5dp"
-            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/bg_shape_title"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/phone_root">
 
             <TextView
                 android:id="@+id/note_title_tv"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/note"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:textColor="@color/common_black_second"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/note_edit_et"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="12dp"
+                android:background="@null"
                 android:gravity="top"
-                android:textCursorDrawable="@drawable/edit_cursor_color"
-                android:background="@drawable/bg_edit_text_selector"
                 android:hint=""
-                android:paddingStart="5dp"
-                android:paddingTop="5dp"
                 android:maxLines="4"
+                android:paddingTop="5dp"
+                android:textSize="15sp"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
                 app:layout_constraintTop_toBottomOf="@id/note_title_tv">
 
             </androidx.appcompat.widget.AppCompatEditText>
-        </com.brins.locksmith.ui.widget.RoundConstraintLayout>
+
+        </LinearLayout>
 
         <include
             android:id="@+id/header_layout"

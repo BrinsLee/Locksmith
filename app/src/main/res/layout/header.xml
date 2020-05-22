@@ -4,7 +4,7 @@
     android:id="@+id/header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/common_grey_second"
     app:layout_constraintTop_toTopOf="parent">
 
     <ImageView
