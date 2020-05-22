@@ -1,6 +1,7 @@
 package com.brins.locksmith.ui.main
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,6 +45,10 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
         super.onAttach(context)
         mSavePasswordViewModel = (activity as MainActivity).getSavePasswordViewModel()
         mSaveCardViewModel = (activity as MainActivity).getSaveCardViewModel()
+    }
+
+    override fun isRegisterEventBus(): Boolean {
+        return true
     }
 
     override fun initEventAndData() {
@@ -127,6 +132,22 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
 
         mAdapter.setNewData(mData as? List<BaseData>)
         mAdapter.notifyDataSetChanged()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun refreshPassWordData(message: EventMessage<*>) {
+        when (message.code) {
+            EventMessage.CODE_UPDATE_PASSWORD -> mAdapter.notifyItemChanged(message.data as Int + 1)
+            EventMessage.CODE_UPDATE_BANK -> {
+                Log.d("bank:","${message.data as Int},size: ${(mSavePasswordViewModel.mPassWordData.value?.size
+                    ?: 0)}")
+                val pos = message.data as Int + (mSavePasswordViewModel.mPassWordData.value?.size
+                    ?: 0) +2
+                mData[pos] = mSaveCardViewModel.mCardData.value?.get(message.data as Int)!!
+                mAdapter.setNewData(mData as? List<BaseData>)
+                mAdapter.notifyItemChanged(pos)
+            }
+        }
     }
 }
 

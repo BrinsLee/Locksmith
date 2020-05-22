@@ -23,6 +23,8 @@ import com.brins.locksmith.data.AppConfig.NOTE
 import com.brins.locksmith.data.AppConfig.PHONE
 import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.ui.base.BaseMainItemType
+import com.brins.locksmith.utils.EventBusUtils
+import com.brins.locksmith.utils.EventMessage
 import com.brins.locksmith.utils.TimeUtils
 import com.brins.locksmith.utils.getStatusBarHeight
 import kotlinx.android.synthetic.main.activity_edit_card.*
@@ -209,9 +211,13 @@ class EditPassActivity : BaseActivity() {
                         data?.let {
                             it.generalItems[APPNAME] = mName
                             it.generalItems[USERNAME] = mAccountName
-                            it.setPasswordData(mPassword)
                             it.generalItems[NOTE] = mNote
+                            it.setPasswordData(mPassword)
+                            it.setAppName(mName)
+                            it.accountName = mAccountName
+                            it.mNote = mNote
                             mSavePasswordViewModel.updatePassWord(it) {
+                                EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_PASSWORD, mPos))
                                 finish()
                             }
 
@@ -239,7 +245,13 @@ class EditPassActivity : BaseActivity() {
                             it.generalItems[NOTE] = mNote
                             it.generalItems[PHONE] = phone_edit_et.text.toString()
                             it.generalItems[LOCATION] = location_edit_et.text.toString()
+                            it.setAppName(mName)
+                            it.accountName = mAccountName
+                            it.mNote = mNote
+                            it.location = location_edit_et.text.toString()
+                            it.phone = phone_edit_et.text.toString()
                             mSaveCardViewModel.updateCard(it) {
+                                EventBusUtils.sendEnvent(EventMessage(EventMessage.CODE_UPDATE_BANK, mPos))
                                 finish()
                             }
 
