@@ -43,4 +43,5 @@
 
     <color name="normal_text_color">#ffcacaca</color>
     <color name="default_btn_text">#757575</color>
+    <color name="black">#000000</color>
 </resources>

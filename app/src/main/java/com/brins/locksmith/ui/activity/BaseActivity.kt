@@ -5,6 +5,7 @@ import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Looper
 import android.os.Process
@@ -204,7 +205,10 @@ abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setStatusBarTranslucent() {
         setTranslucent(this)
-        setTextDark(this.window, true)
+/*        if (isDarkTheme())
+            setTextDark(this.window, false)
+        else*/
+            setTextDark(this.window, true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -212,5 +216,10 @@ abstract class BaseActivity : AppCompatActivity(), View.OnClickListener {
             authencitatedCallback()
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun isDarkTheme(): Boolean {
+        val flag = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return flag == Configuration.UI_MODE_NIGHT_YES
     }
 }

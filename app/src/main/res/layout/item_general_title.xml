@@ -17,7 +17,7 @@
         android:id="@+id/tv_title"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="@color/black"
         android:text="这是密码"
         android:padding="8dp"
         />

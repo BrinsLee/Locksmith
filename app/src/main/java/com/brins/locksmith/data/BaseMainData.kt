@@ -1,6 +1,7 @@
 package com.brins.locksmith.data
 
 import android.util.Log
+import com.brins.locksmith.AccountItemOuterClass
 import com.brins.locksmith.data.AppConfig.APPNAME
 import com.brins.locksmith.data.AppConfig.NOTE
 import com.brins.locksmith.data.AppConfig.PASSWORD
@@ -8,7 +9,6 @@ import com.brins.locksmith.data.AppConfig.USERNAME
 import com.brins.locksmith.utils.*
 import com.chad.library.adapter.base.model.BaseData
 import com.google.protobuf.ByteString
-import tech.bluespace.id_guard.AccountItemOuterClass
 import java.io.Serializable
 import java.nio.charset.StandardCharsets
 import java.util.*

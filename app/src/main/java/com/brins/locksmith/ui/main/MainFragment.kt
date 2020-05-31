@@ -62,10 +62,10 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             getString(R.string.bank),
             type = ITEM_TITLE_CARD
         ).setListener(this)
-        mCertificate = GeneralTitleItem(
-            getString(R.string.certificate),
-            type = ITEM_TITLE_CERTIFICATE
-        ).setListener(this)
+//        mCertificate = GeneralTitleItem(
+//            getString(R.string.certificate),
+//            type = ITEM_TITLE_CERTIFICATE
+//        ).setListener(this)
 
         mAdapter.setEnableRefresh(false)
         main_recycler.setHasFixedSize(true)
@@ -77,7 +77,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             mData.addAll(mSavePasswordViewModel.loadPasswordItem())
             mData.add(mCardTitleItem)
             mData.addAll(mSaveCardViewModel.loadCardItem())
-            mData.add(mCertificate)
+//            mData.add(mCertificate)
             onLoadDataCompleteCallback.onLoadDataSuccess(mData as? List<BaseData>)
         }
         main_recycler.adapter = mAdapter
@@ -85,7 +85,7 @@ class MainFragment : BaseDBFragment<FragmentMainBinding>(), View.OnClickListener
             Observer {
                 if (mAdapter.data.isNotEmpty()) {
                     val mCardSize = mSaveCardViewModel.mCardData.value?.size ?: 0
-                    val mPassWordSize = mData.size - mCardSize - 3
+                    val mPassWordSize = mData.size - mCardSize - 2
                     if (it.size > mPassWordSize){
                         //添加
                         mAdapter.addData(it.size, it[it.size - 1])

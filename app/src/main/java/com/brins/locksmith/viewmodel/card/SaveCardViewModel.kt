@@ -3,6 +3,7 @@ package com.brins.locksmith.viewmodel.card
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
+import com.brins.locksmith.AccountItemOuterClass
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.AppConfig.APPNAME
@@ -15,7 +16,6 @@ import com.brins.locksmith.viewmodel.base.BaseViewModel
 import com.brins.locksmith.viewmodel.passport.PassportRepository
 import com.google.protobuf.InvalidProtocolBufferException
 import org.bouncycastle.util.encoders.Hex
-import tech.bluespace.id_guard.AccountItemOuterClass
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException

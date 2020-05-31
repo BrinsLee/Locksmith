@@ -70,6 +70,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/how_protect_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -92,6 +93,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/benefit_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -127,6 +129,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/import_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -149,6 +152,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/use_autofill_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -171,6 +175,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/faq_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -193,6 +198,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/secure_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -227,6 +233,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/service_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -249,6 +256,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/prolicy_rl"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 

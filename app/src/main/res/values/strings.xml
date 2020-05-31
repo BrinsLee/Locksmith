@@ -62,5 +62,6 @@
     <string name="match_title">你是否要找</string>
     <string name="all_title">所有账号密码</string>
     <string name="delete">删除</string>
+    <string name="load_passport_fail">通行证加载失败，请先创建</string>
 
 </resources>

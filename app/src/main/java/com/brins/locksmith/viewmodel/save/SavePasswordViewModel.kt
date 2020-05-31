@@ -3,6 +3,7 @@ package com.brins.locksmith.viewmodel.save
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.Lifecycle
+import com.brins.locksmith.AccountItemOuterClass
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.data.AesEncryptedData
 import com.brins.locksmith.data.AppConfig
@@ -28,8 +29,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.bouncycastle.util.encoders.Hex
-import tech.bluespace.id_guard.AccountItemOuterClass
-import tech.bluespace.id_guard.AccountItemOuterClass.AccountGeneralData
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -282,7 +281,7 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
             data.general.data.toByteArray(),
             data.general.iv.toByteArray()
         )
-        val general = AccountGeneralData.parseFrom(decrypted)
+        val general = AccountItemOuterClass.AccountGeneralData.parseFrom(decrypted)
         val generals: MutableMap<String, String> = HashMap()
         for (item in general.itemsList) {
             generals[item.key] = item.value
