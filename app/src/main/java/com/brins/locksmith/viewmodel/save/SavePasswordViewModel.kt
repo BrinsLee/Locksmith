@@ -32,6 +32,7 @@ import org.bouncycastle.util.encoders.Hex
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.io.InputStream
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.util.*
@@ -60,6 +61,16 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
     ) {
         val password = createItem(mName, mAccountName, mPassword, mNote)
         if (saveData(getAccountDirectory(), password, finish)) {
+            val list = ArrayList<PassWordItem>()
+            list.addAll(mPassWordData.value!!)
+            list.add(password.setPosition(list.size))
+//            list.sortBy { getSortKey(it.generalItems[APPNAME]!!.first()) }
+            mPassWordData.value = list
+        }
+    }
+
+    fun savePassWord(password: PassWordItem) {
+        if (saveData(getAccountDirectory(), password) {}) {
             val list = ArrayList<PassWordItem>()
             list.addAll(mPassWordData.value!!)
             list.add(password.setPosition(list.size))
@@ -112,7 +123,51 @@ class SavePasswordViewModel(repository: PassportRepository) : BaseViewModel(repo
         return directory
     }
 
+    /****从Chrome导入密码
+     *
+     */
+    fun loadPasswordItem(
+        path: InputStream,
+        action: (result: String) -> Unit) : ArrayList<PassWordItem> {
+        val readerArr = ArrayList<PassWordItem>()
+        val items = mPassWordData.value
+        var newAccount = 0
+        var repeatAccount = 0
+        val scannerIn = Scanner(path, "UTF-8")
+        scannerIn.nextLine()
+        while (scannerIn.hasNext()) {
+            val lines = scannerIn.nextLine().split(",".toRegex()).toTypedArray()
+            if (lines.size >= 4) {
+                val password = createItem(lines[0], lines[2], lines[3], "")
+                if (items.isNullOrEmpty()) {
+                    readerArr.add(password)
+                    newAccount++
+                } else {
+                    if (isContainsAccountItem(items, password)) {
+                        repeatAccount++
+                    } else {
+                        readerArr.add(password)
+                        newAccount++
+                    }
+                }
+            }
+        }
+        action("导入完成，新增$newAccount 个账号，$repeatAccount 个重复")
+        return readerArr
+    }
 
+    fun isContainsAccountItem(items: List<PassWordItem>, item: PassWordItem): Boolean {
+        var i = 0
+        while (i < items.size) {
+            if (item.getAppName() == items[i].getAppName() && item.accountName == items[i].accountName && item.password == items[i].password) {
+                return true
+            }
+            i++
+        }
+        return false
+    }
+
+    /***从文件中加载密码*/
     fun loadPasswordItem(): ArrayList<PassWordItem> {
 
         if (mPassWordData.value == null)

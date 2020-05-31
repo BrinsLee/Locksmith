@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.brins.locksmith.BaseApplication
 import com.brins.locksmith.R
 import com.brins.locksmith.ui.activity.AuthRequestActivity
+import com.brins.locksmith.ui.activity.ChromeImportActivity
 import com.brins.locksmith.utils.*
 import kotlinx.android.synthetic.main.dialog_finger_authentication.*
 
@@ -150,6 +151,8 @@ class FingerAuthDialogFragment : BaseDialogFragment(),
         if (activity != null) {
             if (activity is AuthRequestActivity) {
                 (activity!! as AuthRequestActivity).authencitatedCallback()
+            } else if (activity is ChromeImportActivity) {
+                (activity!! as ChromeImportActivity).authencitatedCallback()
             }
         }
         dismissAllowingStateLoss()
